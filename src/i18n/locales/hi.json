@@ -1,0 +1,47 @@
+{
+  "common": {
+    "darkMode": "डार्क मोड",
+    "chat": "हमसे चैट करें",
+    "close": "बंद करें",
+    "chatGreeting": "नमस्ते! मैं आपकी कैसे मदद कर सकता हूं?",
+    "send": "भेजें"
+  },
+  "birthDetails": {
+    "birthDate": "जन्म तिथि",
+    "birthTime": "जन्म समय",
+    "birthPlace": "जन्म स्थान"
+  },
+  "tabs": {
+    "personality": "व्यक्तित्व",
+    "career": "कैरियर",
+    "relationships": "रिश्ते",
+    "health": "स्वास्थ्य",
+    "spirituality": "आध्यात्मिकता",
+    "challenges": "चुनौतियां"
+  },
+  "personality": {
+    "keyTraits": "प्रमुख विशेषताएं",
+    "socialPerception": "सामाजिक धारणा"
+  },
+  "career": {
+    "idealProfessions": "आदर्श व्यवसाय",
+    "financialGrowth": "वित्तीय विकास",
+    "careerTransformation": "कैरियर परिवर्तन"
+  },
+  "relationships": {
+    "relationshipTraits": "रिश्तों की विशेषताएं",
+    "marriagePrediction": "विवाह की भविष्यवाणी",
+    "partnerTraits": "साथी की विशेषताएं"
+  },
+  "health": {
+    "healthConcerns": "स्वास्थ्य संबंधी चिंताएं",
+    "recommendations": "सुझाव"
+  },
+  "challenges": {
+    "challenges": "चुनौतियां",
+    "mantras": {
+      "title": "मंत्र"
+    },
+    "spiritualPractices": "आध्यात्मिक अभ्यास"
+  }
+}

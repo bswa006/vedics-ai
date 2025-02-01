@@ -1,0 +1,76 @@
+{
+  "common": {
+    "darkMode": "Dark Mode",
+    "chat": "Chat with us",
+    "close": "Close",
+    "chatGreeting": "Hello! How can I help you today?",
+    "send": "Send"
+  },
+  "birthDetails": {
+    "birthDate": "Birth Date",
+    "birthTime": "Birth Time",
+    "birthPlace": "Birth Place"
+  },
+  "tabs": {
+    "personality": "Personality",
+    "career": "Career",
+    "relationships": "Relationships",
+    "health": "Health",
+    "spirituality": "Spirituality",
+    "challenges": "Challenges",
+    "predictions": "Predictions",
+    "lifePeriods": "Life Periods"
+  },
+  "personality": {
+    "keyTraits": "Key Traits",
+    "socialPerception": "Social Perception",
+    "pastLifeInfluence": "Past Life Influence"
+  },
+  "career": {
+    "idealProfessions": "Ideal Professions",
+    "financialGrowth": "Financial Growth",
+    "careerTransformation": "Career Transformation",
+    "trend": "Trend",
+    "wealthAccumulation": "Wealth Accumulation",
+    "expectedAgeRange": "Expected Age Range",
+    "transformationPrediction": "Transformation Prediction",
+    "foreignOpportunities": "Foreign Opportunities",
+    "businessVsJob": "Business vs Job"
+  },
+  "relationships": {
+    "relationshipTraits": "Relationship Traits",
+    "marriagePrediction": "Marriage Prediction",
+    "partnerTraits": "Partner Traits",
+    "challenges": "Challenges",
+    "romanticInfluences": "Romantic Influences",
+    "marriage": "Marriage"
+  },
+  "health": {
+    "healthConcerns": "Health Concerns",
+    "recommendations": "Recommendations",
+    "longTermHealth": "Long Term Health"
+  },
+  "challenges": {
+    "challenges": "Challenges",
+    "mantras": "Mantras",
+    "spiritualPractices": "Spiritual Practices",
+    "astrologicalRecommendations": "Astrological Recommendations"
+  },
+  "lifePeriods": {
+    "earlyLife": "Early Life",
+    "midLife": "Mid Life",
+    "laterYears": "Later Years"
+  },
+  "predictions": {
+    "daily": "Daily Predictions",
+    "monthly": "Monthly Predictions",
+    "generalFuture": "General Predictions",
+    "opportunities": "Opportunities",
+    "challenges": "Challenges",
+    "recommendations": "Recommendations",
+    "overview": "Overview",
+    "career": "Career",
+    "relationships": "Relationships",
+    "health": "Health"
+  }
+}
