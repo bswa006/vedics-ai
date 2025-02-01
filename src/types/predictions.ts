@@ -10,7 +10,7 @@ export interface BasePrediction {
   id: number;
   created_at: string;
   type: PredictionType;
-  content: Record<PredictionType, CorePersonalityContent | CareerSuccessContent | RelationshipsContent | HealthContent | ChallengesContent | MajorLifePeriodsContent>;
+  content: Record<string, any>;
 }
 
 export interface CorePersonalityContent {
