@@ -7,6 +7,7 @@ export interface UserBirthDetails {
   date_of_birth: string;
   birth_time: string;
   place_of_birth: string;
+  phone: string;
 }
 
 export const api = {

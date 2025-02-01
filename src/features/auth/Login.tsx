@@ -1,9 +1,14 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Sun, Moon, Clock, MapPin } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useUserApi } from '../../hooks/useUserApi';
 
 export function Login() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { createUser, loading, error: apiError } = useUserApi();
+  const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     phoneNumber: '',
     dateOfBirth: '',
@@ -11,9 +16,30 @@ export function Login() {
     locationOfBirth: '',
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement login logic
+    setError('');
+
+    try {
+      const userResponse = await createUser({
+        date_of_birth: formData.dateOfBirth,
+        birth_time: formData.timeOfBirth,
+        place_of_birth: formData.locationOfBirth,
+        phone: formData.phoneNumber.replace(/\D/g, ''), // Remove non-digits
+      });
+
+      if (userResponse.user_id) {
+        localStorage.setItem('userId', userResponse.user_id.toString());
+        navigate('/');
+        window.location.reload();
+      } else {
+        setError('Invalid response from server');
+      }
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'An error occurred during login');
+    } finally {
+      // setLoading(false); // Removed this line
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,6 +69,11 @@ export function Login() {
           </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          {(error || apiError) && (
+            <div className="rounded-lg bg-red-50 p-3 text-center text-sm text-red-500 dark:bg-red-900/20 dark:text-red-400">
+              {error || apiError}
+            </div>
+          )}
           <div className="border-border-light bg-surface-light/60 shadow-light-md hover:bg-surface-light/70 dark:border-border-dark dark:bg-surface-dark/40 dark:shadow-dark-md dark:hover:bg-surface-dark/50 space-y-6 rounded-2xl border p-8 backdrop-blur-md transition-all duration-200">
             <div>
               <label
@@ -132,6 +163,7 @@ export function Login() {
             <button
               type="submit"
               className="group relative flex w-full justify-center overflow-hidden rounded-xl border border-oriental-500/30 bg-gradient-to-r from-oriental-600 to-oriental-700 px-6 py-3.5 text-sm font-medium text-white shadow-lg shadow-oriental-500/20 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-oriental-500/30 focus:outline-none focus:ring-2 focus:ring-oriental-500 focus:ring-offset-2 active:scale-[0.98] dark:border-oriental-500/20 dark:from-oriental-700 dark:to-oriental-600 dark:shadow-oriental-900/20 dark:hover:shadow-oriental-900/30"
+              disabled={loading}
             >
               <div className="absolute inset-0 -z-10 bg-gradient-to-r from-oriental-400/0 via-white/10 to-oriental-400/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 dark:from-white/0 dark:via-white/5 dark:to-white/0"></div>
               <span className="mr-2 transition-transform duration-500 group-hover:rotate-[360deg]">

@@ -22,26 +22,30 @@ function App() {
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [userResponse, readingsResponse] = await Promise.all([
-          getUser(6),
-          getUserReadings(6),
-        ]);
+    const storedUserId = localStorage.getItem('userId');
 
+    if (!storedUserId) {
+      return;
+    }
+
+    const userId = parseInt(storedUserId);
+
+    Promise.all([getUser(userId), getUserReadings(userId)])
+      .then(([userResponse, readingsResponse]) => {
         setUserData(userResponse.user);
+        localStorage.setItem('userId', userResponse.user.id.toString());
 
         const modifiedData = readingsResponse.map((prediction: any) => {
           return { ...prediction, content: prediction.content[prediction.type] };
         });
         setPredictions(modifiedData);
-      } catch (err) {
+      })
+      .catch(err => {
         console.error('Failed to fetch data:', err);
-      }
-    };
-
-    fetchData();
-  }, []);
+        localStorage.removeItem('userId');
+        setUserData(null);
+      });
+  }, []); // Only run once on mount
 
   useEffect(() => {
     if (darkMode) {
@@ -51,10 +55,23 @@ function App() {
     }
   }, [darkMode]);
 
+  const getuserId = () => {
+    const storedUserId = localStorage.getItem('userId');
+    return storedUserId ? parseInt(storedUserId) : null;
+  };
+
+  if (loading) {
+    return (
+      <div className="text-text-light-primary dark:text-text-dark-primary text-center transition-colors duration-200">
+        {t('common.loading')}
+      </div>
+    );
+  }
+
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={!userData ? <Login /> : <Navigate to="/" />} />
+        <Route path="/login" element={!getuserId() ? <Login /> : <Navigate to="/" />} />
         <Route
           path="/*"
           element={
