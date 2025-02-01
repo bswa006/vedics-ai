@@ -21,30 +21,53 @@ function App() {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
 
+  const fetchUserData = async (userId: number) => {
+    try {
+      const [userResponse, readingsResponse] = await Promise.all([getUser(userId), getUserReadings(userId)]);
+      setUserData(userResponse.user);
+      localStorage.setItem('userId', userResponse.user.id.toString());
+
+      const modifiedData = readingsResponse.map((prediction: any) => {
+        return { ...prediction, content: prediction.content[prediction.type] };
+      });
+      setPredictions(modifiedData);
+
+      return userResponse.user;
+    } catch (err) {
+      console.error('Failed to fetch data:', err);
+      localStorage.removeItem('userId');
+      setUserData(null);
+      throw err;
+    }
+  };
+
   useEffect(() => {
     const storedUserId = localStorage.getItem('userId');
-
-    if (!storedUserId) {
-      return;
-    }
+    if (!storedUserId) return;
 
     const userId = parseInt(storedUserId);
+    let pollTimeout: NodeJS.Timeout;
 
-    Promise.all([getUser(userId), getUserReadings(userId)])
-      .then(([userResponse, readingsResponse]) => {
-        setUserData(userResponse.user);
-        localStorage.setItem('userId', userResponse.user.id.toString());
+    const pollUserStatus = async () => {
+      try {
+        const user = await fetchUserData(userId);
+        
+        if (user.status === 'pending') {
+          pollTimeout = setTimeout(pollUserStatus, 5000); // Poll every 5 seconds
+        }
+      } catch (err) {
+        console.error('Polling failed:', err);
+      }
+    };
 
-        const modifiedData = readingsResponse.map((prediction: any) => {
-          return { ...prediction, content: prediction.content[prediction.type] };
-        });
-        setPredictions(modifiedData);
-      })
-      .catch(err => {
-        console.error('Failed to fetch data:', err);
-        localStorage.removeItem('userId');
-        setUserData(null);
-      });
+    pollUserStatus();
+
+    // Cleanup function to clear timeout when component unmounts
+    return () => {
+      if (pollTimeout) {
+        clearTimeout(pollTimeout);
+      }
+    };
   }, []); // Only run once on mount
 
   useEffect(() => {
@@ -94,11 +117,23 @@ function App() {
                     </div>
                   )}
                   {userData && <BirthDetails user={userData} />}
-                  {predictions && Array.isArray(predictions) && predictions.length > 0 && (
-                    <>
-                      <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
-                      <PredictionContent activeTab={activeTab} predictions={predictions} />
-                    </>
+                  {userData?.status === 'pending' ? (
+                    <div className="text-center p-8 space-y-4">
+                      <div className="text-2xl font-semibold">
+                        {t('common.gathering_data')}
+                      </div>
+                      <div className="text-text-light-secondary dark:text-text-dark-secondary">
+                        {t('common.please_wait')}
+                      </div>
+                      <div className="animate-pulse text-3xl">✨</div>
+                    </div>
+                  ) : (
+                    predictions && Array.isArray(predictions) && predictions.length > 0 && (
+                      <>
+                        <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
+                        <PredictionContent activeTab={activeTab} predictions={predictions} />
+                      </>
+                    )
                   )}
                 </div>
               </Layout>

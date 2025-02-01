@@ -7,7 +7,9 @@
     "send": "Send",
     "loading": "Loading...",
     "error": "Error",
-    "submit": "Submit"
+    "submit": "Submit",
+    "gathering_data": "We're Gathering Your Cosmic Data",
+    "please_wait": "Please wait while we analyze your birth details and prepare your personalized readings"
   },
   "login": {
     "title": "Welcome Seeker",

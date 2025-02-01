@@ -2,13 +2,27 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Sun, Moon, Clock, MapPin } from 'lucide-react';
 import { useUserApi } from '../../hooks/useUserApi';
+import { AxiosError } from 'axios';
+
+interface FormData {
+  phoneNumber: string;
+  dateOfBirth: string;
+  timeOfBirth: string;
+  locationOfBirth: string;
+}
+
+interface ValidationResponse {
+  user?: {
+    id: number;
+  };
+}
 
 export function Login() {
   const navigate = useNavigate();
   const { createUser, validatePhoneNumber, loading, error: apiError } = useUserApi();
   const [error, setError] = useState('');
   const [showAdditionalFields, setShowAdditionalFields] = useState(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     phoneNumber: '',
     dateOfBirth: '',
     timeOfBirth: '',
@@ -20,11 +34,30 @@ export function Login() {
     setError('');
 
     try {
+      // Validate required fields
+      if (
+        !formData.dateOfBirth ||
+        !formData.timeOfBirth ||
+        !formData.locationOfBirth ||
+        !formData.phoneNumber
+      ) {
+        setError('All fields are required');
+        return;
+      }
+
+      // Combine date and time into a single UTC datetime
+      const localDateTime = new Date(`${formData.dateOfBirth}T${formData.timeOfBirth}`);
+      const utcDateTime = localDateTime.toISOString();
+
+      // Format the date and time strings according to the API requirements
+      const [datePart = '', timePart = ''] = utcDateTime.split('T');
+      const timeWithoutSeconds: string = timePart.substring(0, 5); // Get only HH:mm
+
       const userResponse = await createUser({
-        date_of_birth: formData.dateOfBirth,
-        birth_time: formData.timeOfBirth,
-        place_of_birth: formData.locationOfBirth,
-        phone: formData.phoneNumber.replace(/\D/g, ''), // Remove non-digits
+        date_of_birth: datePart,
+        birth_time: timeWithoutSeconds,
+        place_of_birth: formData.locationOfBirth?.trim() || '',
+        phone: formData.phoneNumber.replace(/\D/g, ''),
       });
 
       if (userResponse.user_id) {
@@ -34,8 +67,9 @@ export function Login() {
       } else {
         setError('Invalid response from server');
       }
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'An error occurred during login');
+    } catch (err) {
+      const error = err as AxiosError<{ message: string }>;
+      setError(error.response?.data?.message || 'An error occurred during login');
     } finally {
       // setLoading(false); // Removed this line
     }
@@ -44,8 +78,7 @@ export function Login() {
   const validateAndShowFields = async (phoneNumber: string) => {
     try {
       setError('');
-      const response: Awaited<ReturnType<typeof validatePhoneNumber>> =
-        await validatePhoneNumber(phoneNumber);
+      const response = (await validatePhoneNumber(phoneNumber)) as ValidationResponse;
 
       console.log('validateAndShowFields response:', response);
       if (response.user) {
@@ -55,13 +88,14 @@ export function Login() {
       } else {
         setShowAdditionalFields(true);
       }
-    } catch (err: any) {
-      setError(err.message || 'Failed to validate phone number');
+    } catch (err) {
+      const error = err as Error;
+      setError(error.message || 'Failed to validate phone number');
       setShowAdditionalFields(true);
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
