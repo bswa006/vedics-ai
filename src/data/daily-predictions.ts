@@ -124,5 +124,39 @@ export const dailyPredictions: VedicReading = {
       "later_years": "A shift toward spiritual growth and deeper life reflections. Possibility of mentoring or guiding others."
     },
     "general_predictions": "Your life path suggests a balanced and fulfilling existence, with opportunities for personal growth and fulfillment. Expect a steady course of success, wealth accumulation, and a balanced life."
-  }
+  },
+  "content": [
+    {
+      "id": 1,
+      "created_at": "2025-02-01T00:00:00Z",
+      "type": "health_and_wellbeing",
+      "content": {
+        "concerns": [
+          "stress-related issues",
+          "mental exhaustion"
+        ],
+        "recommendations": [
+          "Practice meditation",
+          "Balance work-life"
+        ],
+        "long_term_health": "Good overall health with proper management."
+      }
+    },
+    {
+      "id": 2,
+      "created_at": "2025-02-01T00:00:00Z",
+      "type": "challenges_and_remedies",
+      "content": {
+        "challenges": [
+          "Success requires patience",
+          "Tendency to overthink"
+        ],
+        "remedies": {
+          "mantras": ["Maha Mrityunjaya Mantra"],
+          "spiritual_practices": ["Daily meditation"],
+          "astrological_recommendations": ["Wear Blue Sapphire"]
+        }
+      }
+    }
+  ]
 }

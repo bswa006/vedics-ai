@@ -124,5 +124,40 @@ export const monthlyPredictions: VedicReading = {
       "later_years": "A shift toward spiritual growth and deeper life reflections. Possibility of mentoring or guiding others."
     },
     "general_predictions": "Your life path suggests a balanced and fulfilling existence, with opportunities for personal growth and fulfillment. Expect a steady course of success, wealth accumulation, and a balanced life."
-  }
+  },
+  "content": [
+    {
+      "id": 1,
+      "created_at": "2025-02-01T00:00:00Z",
+      "type": "core_personality_and_life_path",
+      "content": {
+        "traits": [
+          "ambitious",
+          "determined",
+          "strong willpower",
+          "analytical mind"
+        ],
+        "social_perception": "You are seen as responsible, disciplined, and highly capable.",
+        "past_life_influence": "Your past life karma suggests leadership and responsibility."
+      }
+    },
+    {
+      "id": 2,
+      "created_at": "2025-02-01T00:00:00Z",
+      "type": "relationships_love_and_marriage",
+      "content": {
+        "traits_in_relationships": [
+          "loyal",
+          "committed",
+          "takes time to open up emotionally"
+        ],
+        "marriage": {
+          "prediction": "Marriage brings stability and emotional depth.",
+          "partner_traits": ["intelligent", "responsible"],
+          "challenges": "Communication styles need balancing."
+        },
+        "romantic_influences": "Strong need for deep emotional connection."
+      }
+    }
+  ]
 }
