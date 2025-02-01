@@ -12,6 +12,22 @@ export interface UserBirthDetails {
 
 export const api = {
   users: {
+    validatePhoneNumber: async (phoneNumber: string) => {
+      try {
+        const response = await axios.get(`${API_BASE_URL}/users/phone_number`, {
+          params: { phone_number: phoneNumber },
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        return response.data;
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          throw new Error(error.response?.data?.message || 'Failed to validate phone number');
+        }
+        throw error;
+      }
+    },
     create: async (birthDetails: UserBirthDetails) => {
       try {
         const response = await axios.post(`${API_BASE_URL}/users`, birthDetails, {

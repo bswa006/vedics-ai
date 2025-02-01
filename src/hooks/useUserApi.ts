@@ -5,6 +5,20 @@ export const useUserApi = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const validatePhoneNumber = async (phoneNumber: string) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const result = await api.users.validatePhoneNumber(phoneNumber);
+      return result;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const createUser = async (birthDetails: UserBirthDetails) => {
     try {
       setLoading(true);
@@ -48,6 +62,7 @@ export const useUserApi = () => {
   };
 
   return {
+    validatePhoneNumber,
     createUser,
     getUser,
     getUserReadings,

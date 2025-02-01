@@ -28,37 +28,37 @@ export function TabNavigation({ activeTab, setActiveTab }: TabNavigationProps) {
     {
       id: "core_personality_and_life_path",
       label: t("tabs.personality"),
-      icon: <User className="w-4 h-4" />,
+      icon: <User className="w-6 h-6" />,
       color: "from-oriental-500 to-oriental-500",
     },
     {
       id: "career_success_and_wealth",
       label: t("tabs.career"),
-      icon: <Briefcase className="w-4 h-4" />,
+      icon: <Briefcase className="w-6 h-6" />,
       color: "from-blue-500 to-cyan-500",
     },
     {
       id: "relationships_love_and_marriage",
       label: t("tabs.relationships"),
-      icon: <Users className="w-4 h-4" />,
+      icon: <Users className="w-6 h-6" />,
       color: "from-rose-500 to-pink-500",
     },
     {
       id: "health_and_wellbeing",
       label: t("tabs.health"),
-      icon: <Heart className="w-4 h-4" />,
+      icon: <Heart className="w-6 h-6" />,
       color: "from-emerald-500 to-teal-500",
     },
     {
       id: "challenges_and_remedies",
       label: t("tabs.challenges"),
-      icon: <GraduationCap className="w-4 h-4" />,
+      icon: <GraduationCap className="w-6 h-6" />,
       color: "from-amber-500 to-orange-500",
     },
     {
       id: "major_life_periods",
       label: t("tabs.lifePeriods"),
-      icon: <Clock className="w-4 h-4" />,
+      icon: <Clock className="w-6 h-6" />,
       color: "from-fuchsia-500 to-pink-500",
     },
   ];
@@ -70,7 +70,7 @@ export function TabNavigation({ activeTab, setActiveTab }: TabNavigationProps) {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`group relative flex flex-col items-center justify-center p-3 rounded-xl transition-all duration-300
+            className={`group relative flex flex-col items-center justify-center p-4 rounded-xl transition-all duration-300
               ${
                 activeTab === tab.id
                   ? `bg-gradient-to-br ${tab.color} ring-2 ring-white/20 dark:ring-black/20 ring-offset-2 ring-offset-gray-50 dark:ring-offset-gray-900 text-white shadow-lg transform scale-105`
@@ -84,7 +84,7 @@ export function TabNavigation({ activeTab, setActiveTab }: TabNavigationProps) {
             >
               {tab.icon}
             </div>
-            <span className="text-xs font-medium tracking-wide whitespace-nowrap">
+            <span className="text-sm font-medium tracking-wide whitespace-nowrap">
               {tab.label}
             </span>
             {activeTab === tab.id && (
