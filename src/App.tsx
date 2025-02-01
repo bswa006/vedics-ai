@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import { Layout } from './features/layout/Layout';
@@ -12,6 +13,7 @@ import { PredictionResponse, PredictionType } from './types/predictions';
 import { User } from './types/user';
 
 function App() {
+  const { t } = useTranslation();
   const { getUserReadings, getUser, loading, error } = useUserApi();
   const [predictions, setPredictions] = useState<PredictionResponse | null>(null);
   const [userData, setUserData] = useState<User | null>(null);
@@ -29,7 +31,7 @@ function App() {
 
         setUserData(userResponse.user);
 
-        let modifiedData = readingsResponse.map((prediction: any) => {
+        const modifiedData = readingsResponse.map((prediction: any) => {
           return { ...prediction, content: prediction.content[prediction.type] };
         });
         setPredictions(modifiedData);
@@ -63,9 +65,17 @@ function App() {
                 isChatOpen={isChatOpen}
                 setIsChatOpen={setIsChatOpen}
               >
-                <div className="mx-auto max-w-5xl space-y-4 py-4">
-                  {loading && <div className="text-center">Loading readings...</div>}
-                  {error && <div className="text-center text-red-500">{error}</div>}
+                <div className="text-text-light-primary dark:text-text-dark-primary mx-auto max-w-5xl space-y-4 py-4 transition-colors duration-200">
+                  {loading && (
+                    <div className="text-text-light-secondary dark:text-text-dark-secondary text-center transition-colors duration-200">
+                      {t('common.loading')}
+                    </div>
+                  )}
+                  {error && (
+                    <div className="text-center text-red-500 transition-colors duration-200 dark:text-red-400">
+                      {t('common.error')}: {error}
+                    </div>
+                  )}
                   {userData && <BirthDetails user={userData} />}
                   {predictions && Array.isArray(predictions) && predictions.length > 0 && (
                     <>

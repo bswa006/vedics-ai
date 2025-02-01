@@ -4,7 +4,23 @@
     "chat": "हमसे चैट करें",
     "close": "बंद करें",
     "chatGreeting": "नमस्ते! मैं आपकी कैसे मदद कर सकता हूं?",
-    "send": "भेजें"
+    "send": "भेजें",
+    "loading": "लोड हो रहा है...",
+    "error": "त्रुटि",
+    "submit": "जमा करें"
+  },
+  "login": {
+    "title": "स्वागत है साधक",
+    "subtitle": "आत्म-खोज की यात्रा शुरू करें",
+    "phoneNumber": "फ़ोन नंबर",
+    "dateOfBirth": "जन्म तिथि",
+    "timeOfBirth": "जन्म समय",
+    "locationOfBirth": "जन्म स्थान",
+    "placeholders": {
+      "phoneNumber": "+91XXXXXXXXXX",
+      "locationOfBirth": "शहर, देश"
+    },
+    "submit": "यात्रा जारी रखें"
   },
   "birthDetails": {
     "birthDate": "जन्म तिथि",
@@ -21,27 +37,59 @@
   },
   "personality": {
     "keyTraits": "प्रमुख विशेषताएं",
-    "socialPerception": "सामाजिक धारणा"
+    "traits": "विशेषताएं",
+    "socialPerception": "सामाजिक धारणा",
+    "pastLifeInfluence": "पिछले जन्म का प्रभाव"
   },
   "career": {
     "idealProfessions": "आदर्श व्यवसाय",
     "financialGrowth": "वित्तीय विकास",
-    "careerTransformation": "कैरियर परिवर्तन"
+    "careerTransformation": "कैरियर परिवर्तन",
+    "trend": "प्रवृत्ति",
+    "wealthAccumulation": "धन संचय",
+    "expectedAgeRange": "अपेक्षित आयु सीमा",
+    "transformationPrediction": "परिवर्तन की भविष्यवाणी",
+    "foreignOpportunities": "विदेशी अवसर",
+    "businessVsJob": "व्यवसाय बनाम नौकरी",
+    "expectedAgeRangeLabel": "अपेक्षित आयु सीमा:"
   },
   "relationships": {
     "relationshipTraits": "रिश्तों की विशेषताएं",
     "marriagePrediction": "विवाह की भविष्यवाणी",
-    "partnerTraits": "साथी की विशेषताएं"
+    "partnerTraits": "साथी की विशेषताएं",
+    "challenges": "चुनौतियां",
+    "romanticInfluences": "रोमांटिक प्रभाव",
+    "marriage": "विवाह"
   },
   "health": {
     "healthConcerns": "स्वास्थ्य संबंधी चिंताएं",
-    "recommendations": "सुझाव"
+    "recommendations": "सुझाव",
+    "longTermHealth": "दीर्घकालिक स्वास्थ्य"
   },
   "challenges": {
     "challenges": "चुनौतियां",
-    "mantras": {
-      "title": "मंत्र"
-    },
-    "spiritualPractices": "आध्यात्मिक अभ्यास"
+    "mantras": "मंत्र",
+    "spiritualPractices": "आध्यात्मिक अभ्यास",
+    "astrologicalRecommendations": "ज्योतिषीय सिफारिशें"
+  },
+  "majorLifePeriods": {
+    "earlyLife": "प्रारंभिक जीवन",
+    "midLife": "मध्य जीवन",
+    "laterYears": "बाद के वर्ष"
+  },
+  "predictions": {
+    "daily": "दैनिक भविष्यवाणी",
+    "monthly": "मासिक भविष्यवाणी",
+    "generalFuture": "सामान्य भविष्यवाणी",
+    "opportunities": "अवसर",
+    "challenges": "चुनौतियां",
+    "recommendations": "सिफारिशें",
+    "overview": "अवलोकन",
+    "career": "कैरियर",
+    "relationships": "रिश्ते",
+    "health": "स्वास्थ्य",
+    "no_yearly_predictions": "वार्षिक भविष्यवाणी उपलब्ध नहीं है",
+    "no_monthly_predictions": "मासिक भविष्यवाणी उपलब्ध नहीं है",
+    "focus_areas": "फोकस क्षेत्र"
   }
 }

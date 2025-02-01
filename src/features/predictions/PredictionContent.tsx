@@ -28,14 +28,13 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
       | CorePersonalityPrediction
       | undefined;
 
-    console.log('------------', personalityPrediction);
 
     if (!personalityPrediction) return null;
 
     return (
       <div className="space-y-4 text-gray-900 dark:text-gray-100">
         <div>
-          <h3 className="mb-2 font-semibold text-gray-900 dark:text-gray-100">Traits</h3>
+          <h3 className="mb-2 font-semibold text-gray-900 dark:text-gray-100">{t('personality.traits')}</h3>
           <div className="flex flex-wrap gap-2">
             {personalityPrediction.content.traits.map((trait: string, index: number) => (
               <span key={index} className="rounded-full bg-purple-100 dark:bg-purple-900 px-3 py-1 text-purple-800 dark:text-purple-100">
@@ -46,12 +45,12 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
         </div>
 
         <div>
-          <h3 className="mb-2 font-semibold text-gray-900 dark:text-gray-100">Social Perception</h3>
+          <h3 className="mb-2 font-semibold text-gray-900 dark:text-gray-100">{t('personality.socialPerception')}</h3>
           <p className="text-gray-900 dark:text-gray-100">{personalityPrediction.content.social_perception}</p>
         </div>
 
         <div>
-          <h3 className="mb-2 font-semibold text-gray-900 dark:text-gray-100">Past Life Influence</h3>
+          <h3 className="mb-2 font-semibold text-gray-900 dark:text-gray-100">{t('personality.pastLifeInfluence')}</h3>
           <p className="text-gray-900 dark:text-gray-100">{personalityPrediction.content.past_life_influence}</p>
         </div>
       </div>
@@ -109,7 +108,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
             {t('career.careerTransformation')}
           </h3>
           <p className="leading-relaxed text-gray-700 dark:text-gray-300">
-            <strong>Expected Age Range:</strong>{' '}
+            <strong>{t('career.expectedAgeRangeLabel')}</strong>{' '}
             {careerPrediction.content.career_transformation.expected_age_range}
           </p>
           <p className="mt-2 leading-relaxed text-gray-700 dark:text-gray-300">
@@ -140,7 +139,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
       <div className="animate-fadeIn space-y-8">
         <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900">
           <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
-            {t('relationships.traits')}
+            {t('relationships.relationshipTraits')}
           </h3>
           <div className="flex flex-wrap gap-3">
             {relationsPrediction.content.traits_in_relationships.map((trait, index) => (
@@ -199,7 +198,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
       <div className="animate-fadeIn space-y-8">
         <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900">
           <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
-            {t('health.concerns')}
+            {t('health.healthConcerns')}
           </h3>
           <div className="flex flex-wrap gap-3">
             {healthPrediction.content.concerns.map((concern, index) => (

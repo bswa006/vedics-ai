@@ -1,7 +1,7 @@
 export interface ReadingResponse {
   id: number;
   type: string;
-  content: Record<string, any>;
+  content: Record<string, PersonalityContent | CareerContent | RelationsContent | HealthContent | StrengthsWeaknessesContent>;
   created_at: string;
 }
 

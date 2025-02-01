@@ -4,7 +4,23 @@
     "chat": "Chat with us",
     "close": "Close",
     "chatGreeting": "Hello! How can I help you today?",
-    "send": "Send"
+    "send": "Send",
+    "loading": "Loading...",
+    "error": "Error",
+    "submit": "Submit"
+  },
+  "login": {
+    "title": "Welcome Seeker",
+    "subtitle": "Begin your journey of self-discovery",
+    "phoneNumber": "Phone Number",
+    "dateOfBirth": "Date of Birth",
+    "timeOfBirth": "Time of Birth",
+    "locationOfBirth": "Location of Birth",
+    "placeholders": {
+      "phoneNumber": "+1234567890",
+      "locationOfBirth": "City, Country"
+    },
+    "submit": "Continue Journey"
   },
   "birthDetails": {
     "birthDate": "Birth Date",
@@ -23,6 +39,7 @@
   },
   "personality": {
     "keyTraits": "Key Traits",
+    "traits": "Traits",
     "socialPerception": "Social Perception",
     "pastLifeInfluence": "Past Life Influence"
   },
@@ -35,7 +52,8 @@
     "expectedAgeRange": "Expected Age Range",
     "transformationPrediction": "Transformation Prediction",
     "foreignOpportunities": "Foreign Opportunities",
-    "businessVsJob": "Business vs Job"
+    "businessVsJob": "Business vs Job",
+    "expectedAgeRangeLabel": "Expected Age Range:"
   },
   "relationships": {
     "relationshipTraits": "Relationship Traits",
@@ -56,7 +74,7 @@
     "spiritualPractices": "Spiritual Practices",
     "astrologicalRecommendations": "Astrological Recommendations"
   },
-  "lifePeriods": {
+  "majorLifePeriods": {
     "earlyLife": "Early Life",
     "midLife": "Mid Life",
     "laterYears": "Later Years"
@@ -71,6 +89,9 @@
     "overview": "Overview",
     "career": "Career",
     "relationships": "Relationships",
-    "health": "Health"
+    "health": "Health",
+    "no_yearly_predictions": "No yearly predictions available",
+    "no_monthly_predictions": "No monthly predictions available",
+    "focus_areas": "Focus Areas"
   }
 }

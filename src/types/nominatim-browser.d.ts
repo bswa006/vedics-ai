@@ -16,14 +16,14 @@ declare module 'nominatim-browser' {
   interface SearchOptions {
     q: string;
     limit?: number;
-    [key: string]: any;
+    [key: string]: string | number | boolean | undefined;
   }
 
   interface ReverseOptions {
     lat: number;
     lon: number;
     addressdetails?: boolean;
-    [key: string]: any;
+    [key: string]: string | number | boolean | undefined;
   }
 
   const Nominatim: {
