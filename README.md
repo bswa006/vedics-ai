@@ -1,0 +1,2 @@
+# vedics-ai
+Astrology app
