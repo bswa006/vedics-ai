@@ -80,7 +80,6 @@ export function Login() {
       setError('');
       const response = (await validatePhoneNumber(phoneNumber)) as ValidationResponse;
 
-      console.log('validateAndShowFields response:', response);
       if (response.user) {
         localStorage.setItem('userId', response.user.id.toString());
         navigate('/');

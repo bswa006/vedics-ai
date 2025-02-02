@@ -5,6 +5,8 @@
     "close": "Close",
     "chatGreeting": "Hello! How can I help you today?",
     "send": "Send",
+    "sending": "Sending...",
+    "chatError": "Sorry, there was an error. Please try again.",
     "loading": "Loading...",
     "error": "Error",
     "submit": "Submit",
@@ -84,6 +86,7 @@
   "predictions": {
     "daily": "Daily Predictions",
     "monthly": "Monthly Predictions",
+    "yearly": "Yearly Predictions",
     "generalFuture": "General Predictions",
     "opportunities": "Opportunities",
     "challenges": "Challenges",

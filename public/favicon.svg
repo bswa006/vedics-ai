@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle with gradient -->
+  <circle cx="16" cy="16" r="16" fill="url(#gradient)" />
+  
+  <!-- Sri Yantra inspired design -->
+  <g transform="translate(16 16) scale(0.8)">
+    <!-- Outer triangles -->
+    <path d="M0,-14 L12,7 L-12,7 Z" stroke="#FFF" stroke-width="1" fill="none" opacity="0.9"/>
+    <path d="M0,14 L-12,-7 L12,-7 Z" stroke="#FFF" stroke-width="1" fill="none" opacity="0.9"/>
+    
+    <!-- Middle triangles -->
+    <path d="M0,-10 L8,5 L-8,5 Z" stroke="#FFF" stroke-width="1" fill="none" opacity="0.8"/>
+    <path d="M0,10 L-8,-5 L8,-5 Z" stroke="#FFF" stroke-width="1" fill="none" opacity="0.8"/>
+    
+    <!-- Inner triangles -->
+    <path d="M0,-6 L5,3 L-5,3 Z" stroke="#FFF" stroke-width="1" fill="none" opacity="0.7"/>
+    <path d="M0,6 L-5,-3 L5,-3 Z" stroke="#FFF" stroke-width="1" fill="none" opacity="0.7"/>
+    
+    <!-- Center dot -->
+    <circle cx="0" cy="0" r="1" fill="#FFF"/>
+  </g>
+  
+  <!-- Gradient definition -->
+  <defs>
+    <linearGradient id="gradient" x1="0" y1="0" x2="32" y2="32">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#6366f1"/>
+    </linearGradient>
+  </defs>
+</svg>
