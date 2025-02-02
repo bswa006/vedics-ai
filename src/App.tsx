@@ -10,6 +10,7 @@ import { Login } from './features/auth/Login';
 import './i18n/config';
 import { PredictionType } from './types/predictions';
 import { useUserData } from './hooks/useUserData';
+import { Modal } from './components/Modal';
 
 function App() {
   const { t } = useTranslation();
@@ -18,6 +19,7 @@ function App() {
   const [darkMode, setDarkMode] = useState(false);
 
   const [userId, setUserId] = useState<number | null>(null);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   useEffect(() => {
     // TODO: Replace this with your actual authentication logic
@@ -36,8 +38,13 @@ function App() {
   const { userData, predictions, loading, error } = useUserData(userId);
 
   const handleLogout = () => {
+    setShowLogoutModal(true);
+  };
+
+  const confirmLogout = () => {
     localStorage.removeItem('userId');
     setUserId(null);
+    setShowLogoutModal(false);
   };
 
   return (
@@ -93,6 +100,15 @@ function App() {
           }
         />
       </Routes>
+      <Modal
+        isOpen={showLogoutModal}
+        onClose={() => setShowLogoutModal(false)}
+        title="Confirm Logout"
+        onConfirm={confirmLogout}
+        confirmText="Logout"
+      >
+        Are you sure you want to logout?
+      </Modal>
     </Router>
   );
 }
