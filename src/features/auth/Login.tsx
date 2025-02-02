@@ -100,12 +100,12 @@ export function Login() {
   };
 
   return (
-    <div className="from-background-light via-surface-light dark:from-background-dark dark:via-surface-dark relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br to-oriental-100 px-4 py-12 transition-colors duration-200 dark:to-oriental-950 sm:px-6 lg:px-8">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-background-light via-surface-light to-oriental-100 px-4 py-12 transition-colors duration-200 dark:from-background-dark dark:via-surface-dark dark:to-oriental-950 sm:px-6 lg:px-8">
       <div className="absolute inset-0 animate-[pulse_15s_ease-in-out_infinite] bg-[url('/sacred-geometry.png')] bg-repeat opacity-[0.03] dark:opacity-[0.07]"></div>
-      <div className="from-background-light/80 dark:from-background-dark/80 absolute inset-0 bg-gradient-to-t to-transparent backdrop-blur-[2px] transition-colors duration-200"></div>
+      <div className="absolute inset-0 bg-gradient-to-t from-background-light/80 to-transparent backdrop-blur-[2px] transition-colors duration-200 dark:from-background-dark/80"></div>
       <div className="relative w-full max-w-md space-y-8">
-        <div className="from-accent-light dark:from-accent-dark absolute left-1/2 top-0 flex h-24 w-24 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-gradient-to-br to-oriental-600 shadow-xl shadow-oriental-500/20 transition-all duration-200 hover:scale-105 dark:to-oriental-800 dark:shadow-oriental-900/20">
-          <div className="bg-background-light/90 dark:bg-background-dark/90 absolute inset-[3px] rounded-full transition-colors duration-200"></div>
+        <div className="absolute left-1/2 top-2 flex h-24 w-24 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-gradient-to-br from-accent-light to-oriental-600 shadow-xl shadow-oriental-500/20 transition-all duration-200 hover:scale-105 dark:from-accent-dark dark:to-oriental-800 dark:shadow-oriental-900/20">
+          <div className="absolute inset-[3px] rounded-full bg-background-light/90 transition-colors duration-200 dark:bg-background-dark/90"></div>
           <img
             src="/astrology-icon.png"
             alt="Sacred Geometry"
@@ -113,10 +113,13 @@ export function Login() {
           />
         </div>
         <div>
-          <h2 className="text-text-light-primary dark:text-text-dark-primary mt-16 text-center font-serif text-4xl font-light tracking-tight transition-colors duration-200">
+          <h2 className="mt-16 text-center font-serif text-2xl font-light tracking-tight text-text-light-primary transition-colors duration-200 dark:text-text-dark-primary">
+            vedics.ai
+          </h2>
+          <h2 className="text-center font-serif text-4xl font-light tracking-tight text-text-light-primary transition-colors duration-200 dark:text-text-dark-primary">
             Welcome Seeker
           </h2>
-          <p className="text-text-light-secondary dark:text-text-dark-secondary mt-4 text-center text-sm font-light leading-6 transition-colors duration-200">
+          <p className="mt-4 text-center text-sm font-light leading-6 text-text-light-secondary transition-colors duration-200 dark:text-text-dark-secondary">
             Begin your journey of self-discovery
           </p>
         </div>
@@ -126,12 +129,12 @@ export function Login() {
               {error || apiError}
             </div>
           )}
-          <div className="border-border-light bg-surface-light/60 shadow-light-md hover:bg-surface-light/70 dark:border-border-dark dark:bg-surface-dark/40 dark:shadow-dark-md dark:hover:bg-surface-dark/50 space-y-6 rounded-2xl border p-8 backdrop-blur-md transition-all duration-200">
+          <div className="space-y-6 rounded-2xl border border-border-light bg-surface-light/60 p-8 shadow-light-md backdrop-blur-md transition-all duration-200 hover:bg-surface-light/70 dark:border-border-dark dark:bg-surface-dark/40 dark:shadow-dark-md dark:hover:bg-surface-dark/50">
             {/* Phone Number Field with Validation */}
             <div>
               <label
                 htmlFor="phoneNumber"
-                className="text-text-light-primary dark:text-text-dark-primary mb-1.5 block text-sm font-medium transition-colors duration-200"
+                className="mb-1.5 block text-sm font-medium text-text-light-primary transition-colors duration-200 dark:text-text-dark-primary"
               >
                 Phone Number
               </label>
@@ -141,15 +144,15 @@ export function Login() {
                   name="phoneNumber"
                   type="tel"
                   required
-                  className="border-border-light bg-background-light/80 text-text-light-primary placeholder-text-light-secondary/80 shadow-light-sm focus:border-accent-light focus:bg-background-light focus:ring-accent-light/20 hover:bg-background-light/90 dark:border-border-dark dark:bg-background-dark/50 dark:text-text-dark-primary dark:placeholder-text-dark-secondary/50 dark:shadow-dark-sm dark:focus:border-accent-dark dark:focus:bg-background-dark/70 dark:focus:ring-accent-dark/20 dark:hover:bg-background-dark/60 relative block w-full appearance-none rounded-xl border py-3 pl-11 pr-4 transition-all duration-200 focus:outline-none focus:ring-2 sm:text-sm"
+                  className="relative block w-full appearance-none rounded-xl border border-border-light bg-background-light/80 py-3 pl-11 pr-4 text-text-light-primary placeholder-text-light-secondary/80 shadow-light-sm transition-all duration-200 hover:bg-background-light/90 focus:border-accent-light focus:bg-background-light focus:outline-none focus:ring-2 focus:ring-accent-light/20 dark:border-border-dark dark:bg-background-dark/50 dark:text-text-dark-primary dark:placeholder-text-dark-secondary/50 dark:shadow-dark-sm dark:hover:bg-background-dark/60 dark:focus:border-accent-dark dark:focus:bg-background-dark/70 dark:focus:ring-accent-dark/20 sm:text-sm"
                   placeholder="Enter your phone number"
                   value={formData.phoneNumber}
                   onChange={handleChange}
                 />
-                <Sun className="text-text-light-secondary dark:text-text-dark-secondary absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 transition-colors duration-200" />
+                <Sun className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-light-secondary transition-colors duration-200 dark:text-text-dark-secondary" />
               </div>
               {!showAdditionalFields && (
-                <div className="mt-2">
+                <div className="mt-6">
                   <button
                     type="button"
                     onClick={() => validateAndShowFields(formData.phoneNumber)}
@@ -167,7 +170,7 @@ export function Login() {
                 <div>
                   <label
                     htmlFor="dateOfBirth"
-                    className="text-text-light-primary dark:text-text-dark-primary mb-1.5 block text-sm font-medium transition-colors duration-200"
+                    className="mb-1.5 block text-sm font-medium text-text-light-primary transition-colors duration-200 dark:text-text-dark-primary"
                   >
                     Date of Birth
                   </label>
@@ -177,7 +180,7 @@ export function Login() {
                       name="dateOfBirth"
                       type="date"
                       required
-                      className="border-border-light bg-background-light/80 text-text-light-primary placeholder-text-light-secondary/80 shadow-light-sm focus:border-accent-light focus:bg-background-light focus:ring-accent-light/20 hover:bg-background-light/90 dark:border-border-dark dark:bg-background-dark/50 dark:text-text-dark-primary dark:placeholder-text-dark-secondary/50 dark:shadow-dark-sm dark:focus:border-accent-dark dark:focus:bg-background-dark/70 dark:focus:ring-accent-dark/20 dark:hover:bg-background-dark/60 relative block w-full appearance-none rounded-xl border py-3 pl-11 pr-4 transition-all duration-200 focus:outline-none focus:ring-2 sm:text-sm"
+                      className="relative block w-full appearance-none rounded-xl border border-border-light bg-background-light/80 py-3 pl-11 pr-4 text-text-light-primary placeholder-text-light-secondary/80 shadow-light-sm transition-all duration-200 hover:bg-background-light/90 focus:border-accent-light focus:bg-background-light focus:outline-none focus:ring-2 focus:ring-accent-light/20 dark:border-border-dark dark:bg-background-dark/50 dark:text-text-dark-primary dark:placeholder-text-dark-secondary/50 dark:shadow-dark-sm dark:hover:bg-background-dark/60 dark:focus:border-accent-dark dark:focus:bg-background-dark/70 dark:focus:ring-accent-dark/20 sm:text-sm"
                       value={formData.dateOfBirth}
                       onChange={handleChange}
                     />
@@ -187,7 +190,7 @@ export function Login() {
                 <div>
                   <label
                     htmlFor="timeOfBirth"
-                    className="text-text-light-primary dark:text-text-dark-primary mb-1.5 block text-sm font-medium transition-colors duration-200"
+                    className="mb-1.5 block text-sm font-medium text-text-light-primary transition-colors duration-200 dark:text-text-dark-primary"
                   >
                     Time of Birth
                   </label>
@@ -197,7 +200,7 @@ export function Login() {
                       name="timeOfBirth"
                       type="time"
                       required
-                      className="border-border-light bg-background-light/80 text-text-light-primary placeholder-text-light-secondary/80 shadow-light-sm focus:border-accent-light focus:bg-background-light focus:ring-accent-light/20 hover:bg-background-light/90 dark:border-border-dark dark:bg-background-dark/50 dark:text-text-dark-primary dark:placeholder-text-dark-secondary/50 dark:shadow-dark-sm dark:focus:border-accent-dark dark:focus:bg-background-dark/70 dark:focus:ring-accent-dark/20 dark:hover:bg-background-dark/60 relative block w-full appearance-none rounded-xl border py-3 pl-11 pr-4 transition-all duration-200 focus:outline-none focus:ring-2 sm:text-sm"
+                      className="relative block w-full appearance-none rounded-xl border border-border-light bg-background-light/80 py-3 pl-11 pr-4 text-text-light-primary placeholder-text-light-secondary/80 shadow-light-sm transition-all duration-200 hover:bg-background-light/90 focus:border-accent-light focus:bg-background-light focus:outline-none focus:ring-2 focus:ring-accent-light/20 dark:border-border-dark dark:bg-background-dark/50 dark:text-text-dark-primary dark:placeholder-text-dark-secondary/50 dark:shadow-dark-sm dark:hover:bg-background-dark/60 dark:focus:border-accent-dark dark:focus:bg-background-dark/70 dark:focus:ring-accent-dark/20 sm:text-sm"
                       value={formData.timeOfBirth}
                       onChange={handleChange}
                     />
@@ -207,7 +210,7 @@ export function Login() {
                 <div>
                   <label
                     htmlFor="locationOfBirth"
-                    className="text-text-light-primary dark:text-text-dark-primary mb-1.5 block text-sm font-medium transition-colors duration-200"
+                    className="mb-1.5 block text-sm font-medium text-text-light-primary transition-colors duration-200 dark:text-text-dark-primary"
                   >
                     Location of Birth
                   </label>
@@ -217,7 +220,7 @@ export function Login() {
                       name="locationOfBirth"
                       type="text"
                       required
-                      className="border-border-light bg-background-light/80 text-text-light-primary placeholder-text-light-secondary/80 shadow-light-sm focus:border-accent-light focus:bg-background-light focus:ring-accent-light/20 hover:bg-background-light/90 dark:border-border-dark dark:bg-background-dark/50 dark:text-text-dark-primary dark:placeholder-text-dark-secondary/50 dark:shadow-dark-sm dark:focus:border-accent-dark dark:focus:bg-background-dark/70 dark:focus:ring-accent-dark/20 dark:hover:bg-background-dark/60 relative block w-full appearance-none rounded-xl border py-3 pl-11 pr-4 transition-all duration-200 focus:outline-none focus:ring-2 sm:text-sm"
+                      className="relative block w-full appearance-none rounded-xl border border-border-light bg-background-light/80 py-3 pl-11 pr-4 text-text-light-primary placeholder-text-light-secondary/80 shadow-light-sm transition-all duration-200 hover:bg-background-light/90 focus:border-accent-light focus:bg-background-light focus:outline-none focus:ring-2 focus:ring-accent-light/20 dark:border-border-dark dark:bg-background-dark/50 dark:text-text-dark-primary dark:placeholder-text-dark-secondary/50 dark:shadow-dark-sm dark:hover:bg-background-dark/60 dark:focus:border-accent-dark dark:focus:bg-background-dark/70 dark:focus:ring-accent-dark/20 sm:text-sm"
                       placeholder="Enter your birth place"
                       value={formData.locationOfBirth}
                       onChange={handleChange}
