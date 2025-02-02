@@ -43,6 +43,8 @@
   "personality": {
     "keyTraits": "प्रमुख विशेषताएं",
     "traits": "विशेषताएं",
+    "strengths": "शक्तियां",
+    "weaknesses": "सुधार के क्षेत्र",
     "socialPerception": "सामाजिक धारणा",
     "pastLifeInfluence": "पिछले जन्म का प्रभाव"
   },

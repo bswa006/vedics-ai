@@ -6,8 +6,10 @@ export interface ReadingResponse {
 }
 
 export interface PersonalityContent {
-  key_traits: string[];
+  traits: string[];
   social_perception: string;
+  strengths?: string[];
+  weaknesses?: string[];
 }
 
 export interface CareerContent {

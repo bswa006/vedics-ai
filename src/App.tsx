@@ -23,7 +23,10 @@ function App() {
 
   const fetchUserData = async (userId: number) => {
     try {
-      const [userResponse, readingsResponse] = await Promise.all([getUser(userId), getUserReadings(userId)]);
+      const [userResponse, readingsResponse] = await Promise.all([
+        getUser(userId),
+        getUserReadings(userId),
+      ]);
       setUserData(userResponse.user);
       localStorage.setItem('userId', userResponse.user.id.toString());
 
@@ -47,12 +50,15 @@ function App() {
 
     const userId = parseInt(storedUserId);
     let pollTimeout: NodeJS.Timeout;
+    let isSubscribed = true;
 
     const pollUserStatus = async () => {
+      if (!isSubscribed) return;
+
       try {
         const user = await fetchUserData(userId);
-        
-        if (user.status === 'pending') {
+
+        if (user.status === 'pending' && isSubscribed) {
           pollTimeout = setTimeout(pollUserStatus, 5000); // Poll every 5 seconds
         }
       } catch (err) {
@@ -60,10 +66,12 @@ function App() {
       }
     };
 
+    // Start initial poll
     pollUserStatus();
 
     // Cleanup function to clear timeout when component unmounts
     return () => {
+      isSubscribed = false;
       if (pollTimeout) {
         clearTimeout(pollTimeout);
       }
@@ -85,7 +93,7 @@ function App() {
 
   if (loading) {
     return (
-      <div className="text-text-light-primary dark:text-text-dark-primary text-center transition-colors duration-200">
+      <div className="text-center text-text-light-primary transition-colors duration-200 dark:text-text-dark-primary">
         {t('common.loading')}
       </div>
     );
@@ -105,9 +113,9 @@ function App() {
                 isChatOpen={isChatOpen}
                 setIsChatOpen={setIsChatOpen}
               >
-                <div className="text-text-light-primary dark:text-text-dark-primary mx-auto max-w-5xl space-y-4 py-4 transition-colors duration-200">
+                <div className="mx-auto max-w-5xl space-y-4 py-4 text-text-light-primary transition-colors duration-200 dark:text-text-dark-primary">
                   {loading && (
-                    <div className="text-text-light-secondary dark:text-text-dark-secondary text-center transition-colors duration-200">
+                    <div className="text-center text-text-light-secondary transition-colors duration-200 dark:text-text-dark-secondary">
                       {t('common.loading')}
                     </div>
                   )}
@@ -118,17 +126,17 @@ function App() {
                   )}
                   {userData && <BirthDetails user={userData} />}
                   {userData?.status === 'pending' ? (
-                    <div className="text-center p-8 space-y-4">
-                      <div className="text-2xl font-semibold">
-                        {t('common.gathering_data')}
-                      </div>
+                    <div className="space-y-4 p-8 text-center">
+                      <div className="text-2xl font-semibold">{t('common.gathering_data')}</div>
                       <div className="text-text-light-secondary dark:text-text-dark-secondary">
                         {t('common.please_wait')}
                       </div>
                       <div className="animate-pulse text-3xl">✨</div>
                     </div>
                   ) : (
-                    predictions && Array.isArray(predictions) && predictions.length > 0 && (
+                    predictions &&
+                    Array.isArray(predictions) &&
+                    predictions.length > 0 && (
                       <>
                         <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
                         <PredictionContent activeTab={activeTab} predictions={predictions} />

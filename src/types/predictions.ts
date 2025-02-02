@@ -17,6 +17,8 @@ export interface CorePersonalityContent {
   past_life_influence: string;
   social_perception: string;
   traits: string[];
+  strengths?: string[];
+  weaknesses?: string[];
 }
 
 export interface CareerSuccessContent {

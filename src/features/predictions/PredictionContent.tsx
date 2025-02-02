@@ -24,42 +24,92 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
   const { t } = useTranslation();
 
   const renderPersonalityTab = (predictions: Prediction[]): JSX.Element | null => {
-    const cardStyle = "rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20";
+    const cardStyle =
+      'rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20';
     const personalityPrediction = predictions.find(isCorePersonalityPrediction) as
       | CorePersonalityPrediction
       | undefined;
-
 
     if (!personalityPrediction) return null;
 
     return (
       <div className="animate-fadeIn space-y-8">
         <div className={cardStyle}>
-          <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">{t('personality.traits')}</h3>
+          <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
+            {t('personality.traits')}
+          </h3>
           <div className="flex flex-wrap gap-3">
-            {personalityPrediction.content.traits.map((trait: string, index: number) => (
-              <span key={index} className="rounded-lg bg-oriental-100/80 px-3 py-1 text-sm font-medium text-oriental-800 dark:bg-oriental-900/50 dark:text-oriental-300 transition-all duration-300 hover:scale-105 hover:bg-oriental-200 dark:hover:bg-oriental-800/50">
+            {personalityPrediction.content?.traits?.map((trait: string, index: number) => (
+              <span
+                key={index}
+                className="rounded-lg bg-oriental-100/80 px-3 py-1 text-sm font-medium text-oriental-800 transition-all duration-300 hover:scale-105 hover:bg-oriental-200 dark:bg-oriental-900/50 dark:text-oriental-300 dark:hover:bg-oriental-800/50"
+              >
                 {trait}
               </span>
             ))}
           </div>
         </div>
 
-        <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
-          <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">{t('personality.socialPerception')}</h3>
-          <p className="leading-relaxed text-gray-700 dark:text-gray-300">{personalityPrediction.content.social_perception}</p>
+        <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
+          <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
+            {t('personality.socialPerception')}
+          </h3>
+          <p className="leading-relaxed text-gray-700 dark:text-gray-300">
+            {personalityPrediction.content.social_perception}
+          </p>
         </div>
 
-        <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
-          <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">{t('personality.pastLifeInfluence')}</h3>
-          <p className="leading-relaxed text-gray-700 dark:text-gray-300">{personalityPrediction.content.past_life_influence}</p>
+        <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
+          <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
+            {t('personality.pastLifeInfluence')}
+          </h3>
+          <p className="leading-relaxed text-gray-700 dark:text-gray-300">
+            {personalityPrediction.content.past_life_influence}
+          </p>
         </div>
+
+        {personalityPrediction.content.strengths && (
+          <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
+            <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
+              {t('personality.strengths')}
+            </h3>
+            <div className="flex flex-wrap gap-3">
+              {personalityPrediction.content.strengths.map((strength: string, index: number) => (
+                <span
+                  key={index}
+                  className="rounded-lg bg-emerald-100/80 px-3 py-1 text-sm font-medium text-emerald-800 transition-all duration-300 hover:scale-105 hover:bg-emerald-200 dark:bg-emerald-900/50 dark:text-emerald-300 dark:hover:bg-emerald-800/50"
+                >
+                  {strength}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {personalityPrediction.content.weaknesses && (
+          <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
+            <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
+              {t('personality.weaknesses')}
+            </h3>
+            <div className="flex flex-wrap gap-3">
+              {personalityPrediction.content.weaknesses.map((weakness: string, index: number) => (
+                <span
+                  key={index}
+                  className="rounded-lg bg-rose-100/80 px-3 py-1 text-sm font-medium text-rose-800 transition-all duration-300 hover:scale-105 hover:bg-rose-200 dark:bg-rose-900/50 dark:text-rose-300 dark:hover:bg-rose-800/50"
+                >
+                  {weakness}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     );
   };
 
   const renderCareerTab = (predictions: Prediction[]): JSX.Element | null => {
-    const cardStyle = "rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-blue-900/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-blue-50 hover:to-cyan-100 dark:hover:from-blue-900/20 dark:hover:to-cyan-800/20";
+    const cardStyle =
+      'rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-blue-900/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-blue-50 hover:to-cyan-100 dark:hover:from-blue-900/20 dark:hover:to-cyan-800/20';
     const careerPrediction = predictions.find(isCareerSuccessPrediction) as
       | CareerSuccessPrediction
       | undefined;
@@ -76,7 +126,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
             {careerPrediction.content.ideal_professions.map((profession, index) => (
               <span
                 key={index}
-                className="rounded-lg bg-oriental-100/80 px-3 py-1 text-sm font-medium text-oriental-800 dark:bg-oriental-900/50 dark:text-oriental-300 transition-all duration-300 hover:scale-105 hover:bg-oriental-200 dark:hover:bg-oriental-800/50"
+                className="rounded-lg bg-oriental-100/80 px-3 py-1 text-sm font-medium text-oriental-800 transition-all duration-300 hover:scale-105 hover:bg-oriental-200 dark:bg-oriental-900/50 dark:text-oriental-300 dark:hover:bg-oriental-800/50"
               >
                 {profession}
               </span>
@@ -84,7 +134,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
           </div>
         </div>
 
-        <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
+        <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
           <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
             {t('career.financialGrowth')}
           </h3>
@@ -96,7 +146,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
           </p>
         </div>
 
-        <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
+        <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
           <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
             {t('career.foreignOpportunities')}
           </h3>
@@ -105,7 +155,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
           </p>
         </div>
 
-        <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
+        <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
           <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
             {t('career.careerTransformation')}
           </h3>
@@ -118,7 +168,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
           </p>
         </div>
 
-        <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
+        <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
           <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
             {t('career.businessVsJob')}
           </h3>
@@ -131,7 +181,8 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
   };
 
   const renderRelationshipsTab = (predictions: Prediction[]): JSX.Element | null => {
-    const cardStyle = "rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-rose-900/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-rose-50 hover:to-pink-100 dark:hover:from-rose-900/20 dark:hover:to-pink-800/20";
+    const cardStyle =
+      'rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-rose-900/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-rose-50 hover:to-pink-100 dark:hover:from-rose-900/20 dark:hover:to-pink-800/20';
     const relationsPrediction = predictions.find(isRelationshipsPrediction) as
       | RelationshipsPrediction
       | undefined;
@@ -148,7 +199,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
             {relationsPrediction.content.traits_in_relationships.map((trait, index) => (
               <span
                 key={index}
-                className="rounded-lg bg-oriental-100/80 px-3 py-1 text-sm font-medium text-oriental-800 dark:bg-oriental-900/50 dark:text-oriental-300 transition-all duration-300 hover:scale-105 hover:bg-oriental-200 dark:hover:bg-oriental-800/50"
+                className="rounded-lg bg-oriental-100/80 px-3 py-1 text-sm font-medium text-oriental-800 transition-all duration-300 hover:scale-105 hover:bg-oriental-200 dark:bg-oriental-900/50 dark:text-oriental-300 dark:hover:bg-oriental-800/50"
               >
                 {trait}
               </span>
@@ -156,7 +207,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
           </div>
         </div>
 
-        <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
+        <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
           <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
             {t('relationships.marriage')}
           </h3>
@@ -168,7 +219,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
             {relationsPrediction.content.marriage.partner_traits.map((trait, index) => (
               <span
                 key={index}
-                className="rounded-lg bg-oriental-100/80 px-3 py-1 text-sm font-medium text-oriental-800 dark:bg-oriental-900/50 dark:text-oriental-300 transition-all duration-300 hover:scale-105 hover:bg-oriental-200 dark:hover:bg-oriental-800/50"
+                className="rounded-lg bg-oriental-100/80 px-3 py-1 text-sm font-medium text-oriental-800 transition-all duration-300 hover:scale-105 hover:bg-oriental-200 dark:bg-oriental-900/50 dark:text-oriental-300 dark:hover:bg-oriental-800/50"
               >
                 {trait}
               </span>
@@ -180,7 +231,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
           </p>
         </div>
 
-        <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
+        <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
           <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
             {t('relationships.romanticInfluences')}
           </h3>
@@ -193,7 +244,8 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
   };
 
   const renderHealthTab = (predictions: Prediction[]): JSX.Element | null => {
-    const cardStyle = "rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-emerald-900/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-emerald-50 hover:to-teal-100 dark:hover:from-emerald-900/20 dark:hover:to-teal-800/20";
+    const cardStyle =
+      'rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-emerald-900/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-emerald-50 hover:to-teal-100 dark:hover:from-emerald-900/20 dark:hover:to-teal-800/20';
     const healthPrediction = predictions.find(isHealthPrediction) as HealthPrediction | undefined;
 
     if (!healthPrediction) return null;
@@ -208,7 +260,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
             {healthPrediction.content.concerns.map((concern, index) => (
               <span
                 key={index}
-                className="rounded-lg bg-oriental-100/80 px-3 py-1 text-sm font-medium text-oriental-800 dark:bg-oriental-900/50 dark:text-oriental-300 transition-all duration-300 hover:scale-105 hover:bg-oriental-200 dark:hover:bg-oriental-800/50"
+                className="rounded-lg bg-oriental-100/80 px-3 py-1 text-sm font-medium text-oriental-800 transition-all duration-300 hover:scale-105 hover:bg-oriental-200 dark:bg-oriental-900/50 dark:text-oriental-300 dark:hover:bg-oriental-800/50"
               >
                 {concern}
               </span>
@@ -216,7 +268,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
           </div>
         </div>
 
-        <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
+        <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
           <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
             {t('health.longTermHealth')}
           </h3>
@@ -225,7 +277,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
           </p>
         </div>
 
-        <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
+        <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
           <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
             {t('health.recommendations')}
           </h3>
@@ -233,7 +285,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
             {healthPrediction.content.recommendations.map((recommendation, index) => (
               <span
                 key={index}
-                className="rounded-lg bg-oriental-100/80 px-3 py-1 text-sm font-medium text-oriental-800 dark:bg-oriental-900/50 dark:text-oriental-300 transition-all duration-300 hover:scale-105 hover:bg-oriental-200 dark:hover:bg-oriental-800/50"
+                className="rounded-lg bg-oriental-100/80 px-3 py-1 text-sm font-medium text-oriental-800 transition-all duration-300 hover:scale-105 hover:bg-oriental-200 dark:bg-oriental-900/50 dark:text-oriental-300 dark:hover:bg-oriental-800/50"
               >
                 {recommendation}
               </span>
@@ -245,7 +297,8 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
   };
 
   const renderChallengesTab = (predictions: Prediction[]): JSX.Element | null => {
-    const cardStyle = "rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-amber-900/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-amber-50 hover:to-orange-100 dark:hover:from-amber-900/20 dark:hover:to-orange-800/20";
+    const cardStyle =
+      'rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-amber-900/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-amber-50 hover:to-orange-100 dark:hover:from-amber-900/20 dark:hover:to-orange-800/20';
     const challengesPrediction = predictions.find(isChallengesPrediction) as
       | ChallengesPrediction
       | undefined;
@@ -262,7 +315,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
             {challengesPrediction.content.challenges.map((challenge, index) => (
               <span
                 key={index}
-                className="rounded-lg bg-oriental-100/80 px-3 py-1 text-sm font-medium text-oriental-800 dark:bg-oriental-900/50 dark:text-oriental-300 transition-all duration-300 hover:scale-105 hover:bg-oriental-200 dark:hover:bg-oriental-800/50"
+                className="rounded-lg bg-oriental-100/80 px-3 py-1 text-sm font-medium text-oriental-800 transition-all duration-300 hover:scale-105 hover:bg-oriental-200 dark:bg-oriental-900/50 dark:text-oriental-300 dark:hover:bg-oriental-800/50"
               >
                 {challenge}
               </span>
@@ -270,18 +323,20 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
           </div>
         </div>
 
-        <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
+        <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
           <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
             {t('challenges.remedies')}
           </h3>
           <div className="space-y-4">
             <div>
-              <h4 className="mb-2 text-lg font-semibold text-gray-900 dark:text-gray-100">{t('challenges.mantras')}</h4>
+              <h4 className="mb-2 text-lg font-semibold text-gray-900 dark:text-gray-100">
+                {t('challenges.mantras')}
+              </h4>
               <div className="flex flex-wrap gap-2">
                 {challengesPrediction.content.remedies.mantras.map((mantra, index) => (
                   <span
                     key={index}
-                    className="rounded-lg bg-blue-100/80 px-3 py-1 text-sm font-medium text-blue-800 dark:bg-blue-900/50 dark:text-blue-300 transition-all duration-300 hover:scale-105 hover:bg-blue-200 dark:hover:bg-blue-800/50"
+                    className="rounded-lg bg-blue-100/80 px-3 py-1 text-sm font-medium text-blue-800 transition-all duration-300 hover:scale-105 hover:bg-blue-200 dark:bg-blue-900/50 dark:text-blue-300 dark:hover:bg-blue-800/50"
                   >
                     {mantra}
                   </span>
@@ -290,13 +345,15 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
             </div>
 
             <div>
-              <h4 className="mb-2 text-lg font-semibold text-gray-900 dark:text-gray-100">{t('challenges.spiritualPractices')}</h4>
+              <h4 className="mb-2 text-lg font-semibold text-gray-900 dark:text-gray-100">
+                {t('challenges.spiritualPractices')}
+              </h4>
               <div className="flex flex-wrap gap-2">
                 {challengesPrediction.content.remedies.spiritual_practices.map(
                   (practice, index) => (
                     <span
                       key={index}
-                      className="rounded-lg bg-blue-100/80 px-3 py-1 text-sm font-medium text-blue-800 dark:bg-blue-900/50 dark:text-blue-300 transition-all duration-300 hover:scale-105 hover:bg-blue-200 dark:hover:bg-blue-800/50"
+                      className="rounded-lg bg-blue-100/80 px-3 py-1 text-sm font-medium text-blue-800 transition-all duration-300 hover:scale-105 hover:bg-blue-200 dark:bg-blue-900/50 dark:text-blue-300 dark:hover:bg-blue-800/50"
                     >
                       {practice}
                     </span>
@@ -312,7 +369,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
                   (recommendation, index) => (
                     <span
                       key={index}
-                      className="rounded-lg bg-blue-100/80 px-3 py-1 text-sm font-medium text-blue-800 dark:bg-blue-900/50 dark:text-blue-300 transition-all duration-300 hover:scale-105 hover:bg-blue-200 dark:hover:bg-blue-800/50"
+                      className="rounded-lg bg-blue-100/80 px-3 py-1 text-sm font-medium text-blue-800 transition-all duration-300 hover:scale-105 hover:bg-blue-200 dark:bg-blue-900/50 dark:text-blue-300 dark:hover:bg-blue-800/50"
                     >
                       {recommendation}
                     </span>
@@ -327,7 +384,8 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
   };
 
   const renderMajorLifePeriodsTab = (predictions: Prediction[]): JSX.Element | null => {
-    const cardStyle = "rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-fuchsia-900/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-fuchsia-50 hover:to-pink-100 dark:hover:from-fuchsia-900/20 dark:hover:to-pink-800/20";
+    const cardStyle =
+      'rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-fuchsia-900/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-fuchsia-50 hover:to-pink-100 dark:hover:from-fuchsia-900/20 dark:hover:to-pink-800/20';
     const majorLifePeriodsPrediction = predictions.find(isMajorLifePeriodsPrediction) as
       | MajorLifePeriodsPrediction
       | undefined;
@@ -345,7 +403,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
           </p>
         </div>
 
-        <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
+        <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
           <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
             {t('majorLifePeriods.midLife')}
           </h3>
@@ -354,7 +412,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
           </p>
         </div>
 
-        <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
+        <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
           <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
             {t('majorLifePeriods.laterYears')}
           </h3>

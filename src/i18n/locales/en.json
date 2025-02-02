@@ -10,6 +10,9 @@
     "loading": "Loading...",
     "error": "Error",
     "submit": "Submit",
+    "typing": "typing...",
+    "online": "online",
+    "typeMessage": "Type your message...",
     "gathering_data": "We're Gathering Your Cosmic Data",
     "please_wait": "Please wait while we analyze your birth details and prepare your personalized readings"
   },
@@ -44,6 +47,8 @@
   "personality": {
     "keyTraits": "Key Traits",
     "traits": "Traits",
+    "strengths": "Strengths",
+    "weaknesses": "Areas for Growth",
     "socialPerception": "Social Perception",
     "pastLifeInfluence": "Past Life Influence"
   },
