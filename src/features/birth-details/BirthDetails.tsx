@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { User } from '../../types/user';
+import { useEffect } from 'react';
 
 interface BirthDetailsProps {
   user: User;
@@ -7,6 +8,10 @@ interface BirthDetailsProps {
 
 export function BirthDetails({ user }: BirthDetailsProps) {
   const { t } = useTranslation();
+
+  useEffect(() => {
+    console.log('-----------', user);
+  }, [user]);
 
   return (
     <div className="mb-3 rounded-lg bg-white p-3 shadow dark:bg-gray-800">
@@ -23,7 +28,23 @@ export function BirthDetails({ user }: BirthDetailsProps) {
           <div className="text-xs font-medium text-oriental-800 dark:text-oriental-300">
             {t('birthDetails.birthTime')}
           </div>
-          <div className="font-medium text-gray-900 dark:text-gray-200">{user.birth_time}</div>
+          <div className="font-medium text-gray-900 dark:text-gray-200">
+            {(() => {
+              // Create a UTC date using today's date and the birth time
+              const timeParts = user.birth_time.split(':');
+              const hours = parseInt(timeParts[0] || '0', 10);
+              const minutes = parseInt(timeParts[1] || '0', 10);
+              const utcDate = new Date();
+              utcDate.setUTCHours(hours, minutes, 0);
+
+              // Format the time in 12-hour format
+              return utcDate.toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true,
+              });
+            })()}
+          </div>
         </div>
         <div>
           <div className="text-xs font-medium text-oriental-800 dark:text-oriental-300">
