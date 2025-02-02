@@ -56,16 +56,25 @@ export function ChatWidget({ onClose }: ChatWidgetProps) {
 
       // Show typing indicator
       setIsTyping(true);
-      setMessages(prev => [...prev, { text: '', isUser: false, timestamp: new Date(), isTyping: true }]);
+      setMessages(prev => [
+        ...prev,
+        { text: '', isUser: false, timestamp: new Date(), isTyping: true },
+      ]);
 
       const response = await sendMessage(message, sessionId);
-      
+
       // Remove typing indicator and add response
       setMessages(prev => prev.filter(msg => !msg.isTyping));
-      setMessages(prev => [...prev, { text: response.reply, isUser: false, timestamp: new Date() }]);
+      setMessages(prev => [
+        ...prev,
+        { text: response.reply, isUser: false, timestamp: new Date() },
+      ]);
     } catch (error) {
       setMessages(prev => prev.filter(msg => !msg.isTyping));
-      setMessages(prev => [...prev, { text: t('common.chatError'), isUser: false, timestamp: new Date() }]);
+      setMessages(prev => [
+        ...prev,
+        { text: t('common.chatError'), isUser: false, timestamp: new Date() },
+      ]);
     } finally {
       setIsLoading(false);
       setIsTyping(false);
@@ -73,59 +82,62 @@ export function ChatWidget({ onClose }: ChatWidgetProps) {
   };
 
   return (
-    <div className="animate-slideIn fixed inset-0 z-50 flex flex-col bg-gradient-to-b from-oriental-900 to-oriental-800">
+    <div className="animate-slideIn fixed bottom-4 right-4 z-50 flex h-[500px] w-[350px] flex-col overflow-hidden rounded-2xl bg-[#2B3990] shadow-2xl">
       {/* Chat Header */}
-      <div className="flex items-center justify-between bg-white/5 p-4 backdrop-blur-lg border-b border-white/10">
+      <div className="flex items-center justify-between p-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10">
+          <div>
             <Bot className="h-5 w-5 text-white" />
           </div>
           <div>
-            <h3 className="text-lg font-medium text-white">{t('common.chat')}</h3>
-            <p className="text-sm text-white/60">{isTyping ? t('common.typing') : t('common.online')}</p>
+            <h3 className="text-xl font-semibold text-white">Chat with us</h3>
+            <p className="text-sm text-white/80">
+              {isTyping ? t('common.typing') : t('common.online')}
+            </p>
           </div>
         </div>
         <button
           onClick={onClose}
-          className="flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-white/10"
+          className="flex h-8 w-8 items-center justify-center rounded-full transition-colors hover:bg-white/20"
         >
           <X className="h-5 w-5 text-white" aria-label={t('common.close')} />
         </button>
       </div>
 
       {/* Chat Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-3">
+      <div className="flex-1 space-y-4 overflow-y-auto p-4">
         {messages.map((message, index) => (
-          <div key={index} className={`flex items-end gap-2 ${message.isUser ? 'justify-end' : 'justify-start'}`}>
+          <div
+            key={index}
+            className={`flex items-end gap-2 ${message.isUser ? 'justify-end' : 'justify-start'}`}
+          >
             {!message.isUser && (
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 flex-shrink-0">
+              <div className="hidden">
                 <Bot className="h-5 w-5 text-white" />
               </div>
             )}
             <div className="flex flex-col gap-1">
               {message.isTyping ? (
-                <div className="flex gap-2 rounded-2xl bg-white/10 px-4 py-3">
+                <div className="flex gap-2 rounded-2xl bg-[#3A4DB1] px-4 py-3">
                   <div className="h-2 w-2 animate-bounce rounded-full bg-white/60 [animation-delay:-0.3s]"></div>
                   <div className="h-2 w-2 animate-bounce rounded-full bg-white/60 [animation-delay:-0.15s]"></div>
                   <div className="h-2 w-2 animate-bounce rounded-full bg-white/60"></div>
                 </div>
               ) : (
                 <div
-                  className={`max-w-[280px] md:max-w-[400px] break-words rounded-2xl px-4 py-3 ${
-                    message.isUser
-                      ? 'bg-white text-oriental-900'
-                      : 'bg-white/10 text-white'
+                  className={`max-w-[280px] break-words rounded-2xl px-4 py-3 ${
+                    message.isUser ? 'bg-white text-[#2B3990]' : 'bg-[#3A4DB1] text-white'
                   }`}
                 >
                   {message.text}
                 </div>
               )}
-              <span className="text-xs text-white/40 px-1">
+              <span className="px-1 text-xs text-white/60">
                 {format(message.timestamp, 'HH:mm')}
               </span>
             </div>
             {message.isUser && (
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white flex-shrink-0">
+              <div className="hidden">
                 <User className="h-5 w-5 text-oriental-900" />
               </div>
             )}
@@ -135,25 +147,25 @@ export function ChatWidget({ onClose }: ChatWidgetProps) {
       </div>
 
       {/* Chat Input */}
-      <div className="bg-white/5 p-4 backdrop-blur-lg border-t border-white/10">
-        <div className="flex gap-3 max-w-3xl mx-auto">
+      <div className="border-t border-white/10 bg-[#3A4DB1] p-4">
+        <div className="flex gap-2">
           <input
             type="text"
             value={inputValue}
             onChange={e => setInputValue(e.target.value)}
             onKeyPress={e => e.key === 'Enter' && !e.shiftKey && handleSend()}
-            className="flex-1 rounded-full bg-white/10 px-6 py-3 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200"
+            className="flex-1 rounded-full bg-white/20 px-4 py-3 text-white placeholder-white/60 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/20"
             placeholder={t('common.typeMessage')}
           />
           <button
             onClick={() => handleSend()}
             disabled={isLoading || !inputValue.trim()}
-            className="flex h-12 w-12 items-center justify-center rounded-full bg-white transition-all duration-200 hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-50 hover:scale-105 active:scale-95"
+            className="flex h-11 w-11 items-center justify-center rounded-full bg-[#536DFE] transition-all duration-200 hover:scale-105 hover:bg-white/90 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isLoading ? (
-              <Loader2 className="h-5 w-5 animate-spin text-oriental-900" />
+              <Loader2 className="h-5 w-5 animate-spin text-white" />
             ) : (
-              <Send className="h-5 w-5 text-oriental-900" />
+              <Send className="h-5 w-5 text-white" />
             )}
           </button>
         </div>
