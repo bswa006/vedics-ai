@@ -9,6 +9,7 @@ interface LayoutProps {
   setDarkMode: (value: boolean) => void;
   isChatOpen: boolean;
   setIsChatOpen: (value: boolean) => void;
+  onLogout: () => void;
 }
 
 export function Layout({
@@ -17,10 +18,11 @@ export function Layout({
   setDarkMode,
   isChatOpen,
   setIsChatOpen,
+  onLogout,
 }: LayoutProps) {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
-      <Header darkMode={darkMode} setDarkMode={setDarkMode} />
+      <Header darkMode={darkMode} setDarkMode={setDarkMode} onLogout={onLogout} />
 
       <div className="max-w-lg mx-auto px-4 -mt-8">{children}</div>
 

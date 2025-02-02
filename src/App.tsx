@@ -35,6 +35,11 @@ function App() {
 
   const { userData, predictions, loading, error } = useUserData(userId);
 
+  const handleLogout = () => {
+    localStorage.removeItem('userId');
+    setUserId(null);
+  };
+
   return (
     <Router>
       <Routes>
@@ -49,6 +54,7 @@ function App() {
                 darkMode={darkMode}
                 setDarkMode={setDarkMode}
                 isChatOpen={isChatOpen}
+                onLogout={handleLogout}
                 setIsChatOpen={setIsChatOpen}
               >
                 <div className="mx-auto max-w-5xl space-y-4 py-4 text-text-light-primary transition-colors duration-200 dark:text-text-dark-primary">
