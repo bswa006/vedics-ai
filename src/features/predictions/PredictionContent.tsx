@@ -37,14 +37,14 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
     return (
       <div className="animate-fadeIn space-y-8">
         <div className={cardStyle}>
-          <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
+          <h3 className="mb-4 text-xl font-bold text-black dark:text-white">
             {t('personality.traits')}
           </h3>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-2">
             {traits.map((trait: string, index: number) => (
               <span
                 key={index}
-                className="rounded-lg bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-fuchsia-500/10 px-3 py-1 text-sm font-medium text-indigo-700 transition-all duration-300 hover:scale-105 hover:from-indigo-500/20 hover:via-purple-500/20 hover:to-fuchsia-500/20 dark:from-indigo-500/20 dark:via-purple-500/20 dark:to-fuchsia-500/20 dark:text-indigo-300 dark:hover:from-indigo-500/30 dark:hover:via-purple-500/30 dark:hover:to-fuchsia-500/30"
+                className="inline-block px-3 py-1 mb-2 mr-2 text-sm font-medium bg-indigo-50 rounded-full dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300"
               >
                 {trait}
               </span>
@@ -53,33 +53,33 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
         </div>
 
         <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
-          <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
+          <h3 className="mb-4 text-xl font-bold text-black dark:text-white">
             {t('personality.socialPerception')}
           </h3>
-          <p className="leading-relaxed text-gray-700 dark:text-gray-300">
+          <p className="leading-relaxed text-black dark:text-white">
             {personalityPrediction.content.social_perception}
           </p>
         </div>
 
         <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
-          <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
+          <h3 className="mb-4 text-xl font-bold text-black dark:text-white">
             {t('personality.pastLifeInfluence')}
           </h3>
-          <p className="leading-relaxed text-gray-700 dark:text-gray-300">
+          <p className="leading-relaxed text-black dark:text-white">
             {personalityPrediction.content.past_life_influence}
           </p>
         </div>
 
         {personalityPrediction.content.strengths && (
           <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
-            <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
+            <h3 className="mb-4 text-xl font-bold text-black dark:text-white">
               {t('personality.strengths')}
             </h3>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2">
               {personalityPrediction.content.strengths.map((strength: string, index: number) => (
                 <span
                   key={index}
-                  className="rounded-lg bg-emerald-100/80 px-3 py-1 text-sm font-medium text-emerald-800 transition-all duration-300 hover:scale-105 hover:bg-emerald-200 dark:bg-emerald-900/50 dark:text-emerald-300 dark:hover:bg-emerald-800/50"
+                  className="inline-block px-3 py-1 mb-2 mr-2 text-sm font-medium bg-emerald-50 rounded-full dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300"
                 >
                   {strength}
                 </span>
@@ -90,14 +90,14 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
 
         {personalityPrediction.content.weaknesses && (
           <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
-            <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
+            <h3 className="mb-4 text-xl font-bold text-black dark:text-white">
               {t('personality.weaknesses')}
             </h3>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2">
               {personalityPrediction.content.weaknesses.map((weakness: string, index: number) => (
                 <span
                   key={index}
-                  className="rounded-lg bg-rose-100/80 px-3 py-1 text-sm font-medium text-rose-800 transition-all duration-300 hover:scale-105 hover:bg-rose-200 dark:bg-rose-900/50 dark:text-rose-300 dark:hover:bg-rose-800/50"
+                  className="inline-block px-3 py-1 mb-2 mr-2 text-sm font-medium bg-rose-50 rounded-full dark:bg-rose-900/30 text-rose-700 dark:text-rose-300"
                 >
                   {weakness}
                 </span>
@@ -123,14 +123,14 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
     return (
       <div className="animate-fadeIn space-y-8">
         <div className={cardStyle}>
-          <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
+          <h3 className="mb-4 text-xl font-bold text-black dark:text-white">
             {t('career.idealProfessions')}
           </h3>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-2">
             {idealProfessions.map((profession, index) => (
               <span
                 key={index}
-                className="rounded-lg bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-fuchsia-500/10 px-3 py-1 text-sm font-medium text-indigo-700 transition-all duration-300 hover:scale-105 hover:from-indigo-500/20 hover:via-purple-500/20 hover:to-fuchsia-500/20 dark:from-indigo-500/20 dark:via-purple-500/20 dark:to-fuchsia-500/20 dark:text-indigo-300 dark:hover:from-indigo-500/30 dark:hover:via-purple-500/30 dark:hover:to-fuchsia-500/30"
+                className="inline-block px-3 py-1 mb-2 mr-2 text-sm font-medium bg-amber-50 rounded-full dark:bg-amber-900/30 text-amber-700 dark:text-amber-300"
               >
                 {profession}
               </span>
@@ -139,10 +139,10 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
         </div>
 
         <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
-          <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
+          <h3 className="mb-4 text-xl font-bold text-black dark:text-white">
             {t('career.financialGrowth')}
           </h3>
-          <p className="leading-relaxed text-gray-700 dark:text-gray-300">
+          <p className="leading-relaxed text-black dark:text-white">
             {careerPrediction.content.financial_growth.trend}
           </p>
           <p className="mt-2 leading-relaxed text-gray-700 dark:text-gray-300">
@@ -151,19 +151,19 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
         </div>
 
         <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
-          <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
+          <h3 className="mb-4 text-xl font-bold text-black dark:text-white">
             {t('career.foreignOpportunities')}
           </h3>
-          <p className="leading-relaxed text-gray-700 dark:text-gray-300">
+          <p className="leading-relaxed text-black dark:text-white">
             {careerPrediction.content.foreign_opportunities}
           </p>
         </div>
 
         <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
-          <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
+          <h3 className="mb-4 text-xl font-bold text-black dark:text-white">
             {t('career.careerTransformation')}
           </h3>
-          <p className="leading-relaxed text-gray-700 dark:text-gray-300">
+          <p className="leading-relaxed text-black dark:text-white">
             <strong>{t('career.expectedAgeRangeLabel')}</strong>{' '}
             {careerPrediction.content.career_transformation.expected_age_range}
           </p>
@@ -173,10 +173,10 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
         </div>
 
         <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
-          <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
+          <h3 className="mb-4 text-xl font-bold text-black dark:text-white">
             {t('career.businessVsJob')}
           </h3>
-          <p className="leading-relaxed text-gray-700 dark:text-gray-300">
+          <p className="leading-relaxed text-black dark:text-white">
             {careerPrediction.content.business_vs_job}
           </p>
         </div>
@@ -198,14 +198,14 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
     return (
       <div className="animate-fadeIn space-y-8">
         <div className={cardStyle}>
-          <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
+          <h3 className="mb-4 text-xl font-bold text-black dark:text-white">
             {t('relationships.relationshipTraits')}
           </h3>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-2">
             {relationsPrediction.content.traits_in_relationships.map((trait, index) => (
               <span
                 key={index}
-                className="rounded-lg bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-fuchsia-500/10 px-3 py-1 text-sm font-medium text-indigo-700 transition-all duration-300 hover:scale-105 hover:from-indigo-500/20 hover:via-purple-500/20 hover:to-fuchsia-500/20 dark:from-indigo-500/20 dark:via-purple-500/20 dark:to-fuchsia-500/20 dark:text-indigo-300 dark:hover:from-indigo-500/30 dark:hover:via-purple-500/30 dark:hover:to-fuchsia-500/30"
+                className="inline-block px-3 py-1 mb-2 mr-2 text-sm font-medium bg-indigo-50 rounded-full dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300"
               >
                 {trait}
               </span>
@@ -214,10 +214,10 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
         </div>
 
         <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
-          <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
+          <h3 className="mb-4 text-xl font-bold text-black dark:text-white">
             {t('relationships.marriage')}
           </h3>
-          <p className="leading-relaxed text-gray-700 dark:text-gray-300">
+          <p className="leading-relaxed text-black dark:text-white">
             {relationsPrediction.content.marriage.prediction}
           </p>
           <h4 className="mb-2 mt-4 font-semibold">{t('relationships.partnerTraits')}</h4>
@@ -225,23 +225,23 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
             {partnerTraits.map((trait, index) => (
               <span
                 key={index}
-                className="rounded-lg bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-fuchsia-500/10 px-3 py-1 text-sm font-medium text-indigo-700 transition-all duration-300 hover:scale-105 hover:from-indigo-500/20 hover:via-purple-500/20 hover:to-fuchsia-500/20 dark:from-indigo-500/20 dark:via-purple-500/20 dark:to-fuchsia-500/20 dark:text-indigo-300 dark:hover:from-indigo-500/30 dark:hover:via-purple-500/30 dark:hover:to-fuchsia-500/30"
+                className="inline-block px-3 py-1 mb-2 mr-2 text-sm font-medium bg-indigo-50 rounded-full dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300"
               >
                 {trait}
               </span>
             ))}
           </div>
           <h4 className="mb-2 mt-4 font-semibold">{t('relationships.challenges')}</h4>
-          <p className="leading-relaxed text-gray-700 dark:text-gray-300">
+          <p className="leading-relaxed text-black dark:text-white">
             {relationsPrediction.content.marriage.challenges}
           </p>
         </div>
 
         <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
-          <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
+          <h3 className="mb-4 text-xl font-bold text-black dark:text-white">
             {t('relationships.romanticInfluences')}
           </h3>
-          <p className="leading-relaxed text-gray-700 dark:text-gray-300">
+          <p className="leading-relaxed text-black dark:text-white">
             {relationsPrediction.content.romantic_influences}
           </p>
         </div>
@@ -261,42 +261,42 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
     return (
       <div className="animate-fadeIn space-y-8">
         <div className={cardStyle}>
-          <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
+          <h3 className="mb-4 text-xl font-bold text-black dark:text-white">
             {t('health.healthConcerns')}
           </h3>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-2">
             {concerns.map((concern, index) => (
-              <span
+              <p
                 key={index}
-                className="rounded-lg bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-fuchsia-500/10 px-3 py-1 text-sm font-medium text-indigo-700 transition-all duration-300 hover:scale-105 hover:from-indigo-500/20 hover:via-purple-500/20 hover:to-fuchsia-500/20 dark:from-indigo-500/20 dark:via-purple-500/20 dark:to-fuchsia-500/20 dark:text-indigo-300 dark:hover:from-indigo-500/30 dark:hover:via-purple-500/30 dark:hover:to-fuchsia-500/30"
+                className="text-[15px] leading-relaxed text-gray-700 dark:text-gray-300"
               >
                 {concern}
-              </span>
+              </p>
             ))}
           </div>
         </div>
 
         <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
-          <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
+          <h3 className="mb-4 text-xl font-bold text-black dark:text-white">
             {t('health.longTermHealth')}
           </h3>
-          <p className="leading-relaxed text-gray-700 dark:text-gray-300">
+          <p className="leading-relaxed text-black dark:text-white">
             {healthPrediction.content.long_term_health}
           </p>
         </div>
 
         <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
-          <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
+          <h3 className="mb-4 text-xl font-bold text-black dark:text-white">
             {t('health.recommendations')}
           </h3>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-2">
             {healthPrediction.content.recommendations.map((recommendation, index) => (
-              <span
+              <p
                 key={index}
-                className="rounded-lg bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-fuchsia-500/10 px-3 py-1 text-sm font-medium text-indigo-700 transition-all duration-300 hover:scale-105 hover:from-indigo-500/20 hover:via-purple-500/20 hover:to-fuchsia-500/20 dark:from-indigo-500/20 dark:via-purple-500/20 dark:to-fuchsia-500/20 dark:text-indigo-300 dark:hover:from-indigo-500/30 dark:hover:via-purple-500/30 dark:hover:to-fuchsia-500/30"
+                className="text-[15px] leading-relaxed text-gray-700 dark:text-gray-300"
               >
                 {recommendation}
-              </span>
+              </p>
             ))}
           </div>
         </div>
@@ -321,55 +321,55 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
     return (
       <div className="animate-fadeIn space-y-8">
         <div className={cardStyle}>
-          <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
+          <h3 className="mb-4 text-xl font-bold text-black dark:text-white">
             {t('challenges.challenges')}
           </h3>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-2">
             {challenges.map((challenge, index) => (
-              <span
+              <p
                 key={index}
-                className="rounded-lg bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-fuchsia-500/10 px-3 py-1 text-sm font-medium text-indigo-700 transition-all duration-300 hover:scale-105 hover:from-indigo-500/20 hover:via-purple-500/20 hover:to-fuchsia-500/20 dark:from-indigo-500/20 dark:via-purple-500/20 dark:to-fuchsia-500/20 dark:text-indigo-300 dark:hover:from-indigo-500/30 dark:hover:via-purple-500/30 dark:hover:to-fuchsia-500/30"
+                className="text-[15px] leading-relaxed text-gray-700 dark:text-gray-300"
               >
                 {challenge}
-              </span>
+              </p>
             ))}
           </div>
         </div>
 
         <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
-          <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
+          <h3 className="mb-4 text-xl font-bold text-black dark:text-white">
             {t('challenges.remedies')}
           </h3>
           <div className="space-y-4">
             <div>
-              <h4 className="mb-2 text-lg font-semibold text-gray-900 dark:text-gray-100">
+              <h4 className="mb-2 text-lg font-semibold text-black dark:text-white">
                 {t('challenges.mantras')}
               </h4>
               <div className="flex flex-wrap gap-2">
                 {mantras.map((mantra, index) => (
-                  <span
+                  <p
                     key={index}
-                    className="rounded-lg bg-blue-100/80 px-3 py-1 text-sm font-medium text-blue-800 transition-all duration-300 hover:scale-105 hover:bg-blue-200 dark:bg-blue-900/50 dark:text-blue-300 dark:hover:bg-blue-800/50"
+                    className="text-[15px] leading-relaxed text-gray-700 dark:text-gray-300"
                   >
                     {mantra}
-                  </span>
+                  </p>
                 ))}
               </div>
             </div>
 
             <div>
-              <h4 className="mb-2 text-lg font-semibold text-gray-900 dark:text-gray-100">
+              <h4 className="mb-2 text-lg font-semibold text-black dark:text-white">
                 {t('challenges.spiritualPractices')}
               </h4>
               <div className="flex flex-wrap gap-2">
                 {spiritualPractices.map(
                   (practice, index) => (
-                    <span
+                    <p
                       key={index}
-                      className="rounded-lg bg-blue-100/80 px-3 py-1 text-sm font-medium text-blue-800 transition-all duration-300 hover:scale-105 hover:bg-blue-200 dark:bg-blue-900/50 dark:text-blue-300 dark:hover:bg-blue-800/50"
+                      className="text-[15px] leading-relaxed text-gray-700 dark:text-gray-300"
                     >
                       {practice}
-                    </span>
+                    </p>
                   )
                 )}
               </div>
@@ -380,12 +380,12 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
               <div className="flex flex-wrap gap-2">
                 {astrologicalRecommendations.map(
                   (recommendation, index) => (
-                    <span
+                    <p
                       key={index}
-                      className="rounded-lg bg-blue-100/80 px-3 py-1 text-sm font-medium text-blue-800 transition-all duration-300 hover:scale-105 hover:bg-blue-200 dark:bg-blue-900/50 dark:text-blue-300 dark:hover:bg-blue-800/50"
+                      className="text-[15px] leading-relaxed text-gray-700 dark:text-gray-300"
                     >
                       {recommendation}
-                    </span>
+                    </p>
                   )
                 )}
               </div>
@@ -408,28 +408,28 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
     return (
       <div className="animate-fadeIn space-y-8">
         <div className={cardStyle}>
-          <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
+          <h3 className="mb-4 text-xl font-bold text-black dark:text-white">
             {t('majorLifePeriods.earlyLife')}
           </h3>
-          <p className="leading-relaxed text-gray-700 dark:text-gray-300">
+          <p className="leading-relaxed text-black dark:text-white">
             {majorLifePeriodsPrediction.content.early_life}
           </p>
         </div>
 
         <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
-          <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
+          <h3 className="mb-4 text-xl font-bold text-black dark:text-white">
             {t('majorLifePeriods.midLife')}
           </h3>
-          <p className="leading-relaxed text-gray-700 dark:text-gray-300">
+          <p className="leading-relaxed text-black dark:text-white">
             {majorLifePeriodsPrediction.content.mid_life}
           </p>
         </div>
 
         <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
-          <h3 className="mb-4 text-xl font-bold text-slate-800 dark:text-gray-100">
+          <h3 className="mb-4 text-xl font-bold text-black dark:text-white">
             {t('majorLifePeriods.laterYears')}
           </h3>
-          <p className="leading-relaxed text-gray-700 dark:text-gray-300">
+          <p className="leading-relaxed text-black dark:text-white">
             {majorLifePeriodsPrediction.content.later_years}
           </p>
         </div>

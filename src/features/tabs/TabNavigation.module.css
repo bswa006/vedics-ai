@@ -1,0 +1,53 @@
+/* Base tab styles */
+.tab-hover {
+  position: relative;
+  transition: all 0.4s ease;
+  border-radius: 20px;
+  background-color: transparent;
+}
+
+/* Active tab styles */
+.tab-hover[data-state='active'] {
+  background-color: #2435b3;
+}
+
+/* Active tab indicator */
+.tab-indicator {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: #2435b3;
+  transition: all 0.4s ease;
+  opacity: 0;
+  transform: translateX(-50%);
+}
+
+.tab-hover[data-state='active'] .tab-indicator {
+  width: 40%;
+  opacity: 1;
+}
+
+/* Icon styles */
+.tab-hover svg {
+  stroke-width: 1.5px;
+  width: 24px;
+  height: 24px;
+  opacity: 0.9;
+  transition: all 0.4s ease;
+}
+
+.tab-hover:hover svg {
+  opacity: 1;
+}
+
+.tab-hover[data-state='active'] svg {
+  opacity: 1;
+}
+
+/* Text transition */
+.tab-hover span {
+  transition: all 0.4s ease;
+}
+

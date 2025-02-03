@@ -10,6 +10,10 @@
     "loading": "लोड हो रहा है...",
     "error": "त्रुटि",
     "submit": "जमा करें",
+    "processing": "प्रोसेस हो रहा है...",
+    "typing": "टाइप कर रहा है...",
+    "online": "ऑनलाइन",
+    "typeMessage": "अपना संदेश टाइप करें...",
     "gathering_data": "हम आपका कॉस्मिक डेटा एकत्र कर रहे हैं",
     "please_wait": "कृपया प्रतीक्षा करें जब तक हम आपके जन्म विवरण का विश्लेषण करते हैं और आपकी व्यक्तिगत रीडिंग तैयार करते हैं"
   },
@@ -29,7 +33,9 @@
   "birthDetails": {
     "birthDate": "जन्म तिथि",
     "birthTime": "जन्म समय",
-    "birthPlace": "जन्म स्थान"
+    "birthPlace": "जन्म स्थान",
+    "unavailable": "उपलब्ध नहीं",
+    "invalidFormat": "अमान्य प्रारूप"
   },
   "tabs": {
     "personality": "व्यक्तित्व",
@@ -77,7 +83,8 @@
     "challenges": "चुनौतियां",
     "mantras": "मंत्र",
     "spiritualPractices": "आध्यात्मिक अभ्यास",
-    "astrologicalRecommendations": "ज्योतिषीय सिफारिशें"
+    "astrologicalRecommendations": "ज्योतिषीय सिफारिशें",
+    "remedies": "उपाय"
   },
   "majorLifePeriods": {
     "earlyLife": "प्रारंभिक जीवन",

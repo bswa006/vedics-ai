@@ -10,6 +10,7 @@
     "loading": "Loading...",
     "error": "Error",
     "submit": "Submit",
+    "processing": "Processing...",
     "typing": "typing...",
     "online": "online",
     "typeMessage": "Type your message...",
@@ -32,7 +33,9 @@
   "birthDetails": {
     "birthDate": "Birth Date",
     "birthTime": "Birth Time",
-    "birthPlace": "Birth Place"
+    "birthPlace": "Birth Place",
+    "unavailable": "Not Available",
+    "invalidFormat": "Invalid Format"
   },
   "tabs": {
     "personality": "Personality",
@@ -81,7 +84,8 @@
     "challenges": "Challenges",
     "mantras": "Mantras",
     "spiritualPractices": "Spiritual Practices",
-    "astrologicalRecommendations": "Astrological Recommendations"
+    "astrologicalRecommendations": "Astrological Recommendations",
+    "remedies": "Remedies"
   },
   "majorLifePeriods": {
     "earlyLife": "Early Life",

@@ -1,6 +1,7 @@
 import { Briefcase, Clock, GraduationCap, Heart, User, Users } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { PredictionType } from '../../types/predictions';
+import styles from './TabNavigation.module.css';
 
 interface Tab {
   id: PredictionType;
@@ -22,64 +23,63 @@ export function TabNavigation({ activeTab, setActiveTab }: TabNavigationProps) {
       id: 'core_personality_and_life_path',
       label: t('tabs.personality'),
       icon: <User className="h-6 w-6" />,
-      color: 'from-indigo-500 via-purple-500 to-fuchsia-500', // Mystical cosmic energy for personality
+      color: 'bg-[#2435b3]'
     },
     {
       id: 'career_success_and_wealth',
       label: t('tabs.career'),
       icon: <Briefcase className="h-6 w-6" />,
-      color: 'from-amber-400 via-yellow-500 to-orange-500', // Solar energy for career success
+      color: 'bg-[#2435b3]'
     },
     {
       id: 'relationships_love_and_marriage',
       label: t('tabs.relationships'),
       icon: <Users className="h-6 w-6" />,
-      color: 'from-rose-500 via-pink-500 to-purple-500', // Venus-inspired colors for relationships
+      color: 'bg-[#2435b3]'
     },
     {
       id: 'health_and_wellbeing',
       label: t('tabs.health'),
       icon: <Heart className="h-6 w-6" />,
-      color: 'from-emerald-400 via-teal-500 to-cyan-500', // Earth's healing aura for health
+      color: 'bg-[#2435b3]'
     },
     {
       id: 'challenges_and_remedies',
       label: t('tabs.challenges'),
       icon: <GraduationCap className="h-6 w-6" />,
-      color: 'from-blue-600 via-indigo-600 to-violet-600', // Deep space energy for challenges
+      color: 'bg-[#2435b3]'
     },
     {
       id: 'major_life_periods',
       label: t('tabs.lifePeriods'),
       icon: <Clock className="h-6 w-6" />,
-      color: 'from-cyan-400 via-blue-500 to-indigo-500', // Time-space continuum colors
+      color: 'bg-[#2435b3]'
     },
   ];
 
   return (
-    <div className="mb-4 rounded-2xl bg-gradient-to-b from-white to-gray-50 p-3 shadow-xl shadow-gray-200/50 dark:from-gray-800 dark:to-gray-900 dark:shadow-black/10">
-      <div className="grid grid-cols-3 gap-4">
+    <div className="mb-6 rounded-[24px] bg-white/10 p-3 shadow-2xl backdrop-blur-lg">
+      <div className="grid grid-cols-3 gap-2">
         {tabs.map(tab => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`group relative flex flex-col items-center justify-center rounded-xl p-4 transition-all duration-300 ${
+            data-state={activeTab === tab.id ? 'active' : 'inactive'}
+            className={`group relative flex flex-col items-center justify-center transition-all duration-300 ${styles['tab-hover']} ${
               activeTab === tab.id
-                ? `bg-gradient-to-r ${tab.color} scale-105 transform text-white shadow-lg ring-2 ring-white/30 ring-offset-2 ring-offset-gray-50 dark:ring-white/20 dark:ring-offset-gray-900`
-                : 'text-gray-600 hover:bg-white hover:shadow-md dark:text-gray-300 dark:hover:bg-gray-800'
+                ? 'text-white'
+                : 'text-[#8B93B8] hover:text-white'
             }`}
           >
-            <div
-              className={`mb-2 transition-transform duration-300 ${
-                activeTab !== tab.id && 'group-hover:scale-110'
-              }`}
-            >
-              {tab.icon}
+            <div className="relative z-10 flex flex-col items-center space-y-2 py-4 px-3">
+              <div className="transition-all duration-300 mb-1.5">
+                {tab.icon}
+              </div>
+              <span className="block text-center text-[13px] font-medium tracking-wide transition-colors duration-300">
+                {tab.label}
+              </span>
             </div>
-            <span className="whitespace-nowrap text-sm font-medium tracking-wide">{tab.label}</span>
-            {activeTab === tab.id && (
-              <div className={`absolute -inset-0.5 rounded-xl bg-gradient-to-r ${tab.color} opacity-20 blur animate-pulse`} />
-            )}
+            <div className={styles['tab-indicator']} />
           </button>
         ))}
       </div>
