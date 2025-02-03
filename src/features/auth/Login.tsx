@@ -19,7 +19,7 @@ interface ValidationResponse {
 
 export function Login() {
   const navigate = useNavigate();
-  const { createUser, validatePhoneNumber, loading, error: apiError } = useUserApi();
+  const { createUser, validatePhoneNumber, loading } = useUserApi();
   const [error, setError] = useState('');
   const [showAdditionalFields, setShowAdditionalFields] = useState(false);
   const [formData, setFormData] = useState<FormData>({
@@ -228,6 +228,11 @@ export function Login() {
                     <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-oriental-400 dark:text-oriental-600" />
                   </div>
                 </div>
+                {error && (
+                  <div className="mt-4 text-sm text-red-500 dark:text-red-400">
+                    {error}
+                  </div>
+                )}
               </>
             )}
           </div>
