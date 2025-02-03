@@ -30,7 +30,9 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
       | CorePersonalityPrediction
       | undefined;
 
-    if (!personalityPrediction) return null;
+    if (!personalityPrediction || !personalityPrediction.content) return null;
+    
+    const traits = personalityPrediction.content.traits || [];
 
     return (
       <div className="animate-fadeIn space-y-8">
@@ -39,7 +41,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
             {t('personality.traits')}
           </h3>
           <div className="flex flex-wrap gap-3">
-            {personalityPrediction.content?.traits?.map((trait: string, index: number) => (
+            {traits.map((trait: string, index: number) => (
               <span
                 key={index}
                 className="rounded-lg bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-fuchsia-500/10 px-3 py-1 text-sm font-medium text-indigo-700 transition-all duration-300 hover:scale-105 hover:from-indigo-500/20 hover:via-purple-500/20 hover:to-fuchsia-500/20 dark:from-indigo-500/20 dark:via-purple-500/20 dark:to-fuchsia-500/20 dark:text-indigo-300 dark:hover:from-indigo-500/30 dark:hover:via-purple-500/30 dark:hover:to-fuchsia-500/30"
@@ -114,7 +116,9 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
       | CareerSuccessPrediction
       | undefined;
 
-    if (!careerPrediction) return null;
+    if (!careerPrediction || !careerPrediction.content) return null;
+    
+    const idealProfessions = careerPrediction.content.ideal_professions || [];
 
     return (
       <div className="animate-fadeIn space-y-8">
@@ -123,7 +127,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
             {t('career.idealProfessions')}
           </h3>
           <div className="flex flex-wrap gap-3">
-            {careerPrediction.content.ideal_professions.map((profession, index) => (
+            {idealProfessions.map((profession, index) => (
               <span
                 key={index}
                 className="rounded-lg bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-fuchsia-500/10 px-3 py-1 text-sm font-medium text-indigo-700 transition-all duration-300 hover:scale-105 hover:from-indigo-500/20 hover:via-purple-500/20 hover:to-fuchsia-500/20 dark:from-indigo-500/20 dark:via-purple-500/20 dark:to-fuchsia-500/20 dark:text-indigo-300 dark:hover:from-indigo-500/30 dark:hover:via-purple-500/30 dark:hover:to-fuchsia-500/30"
@@ -187,7 +191,9 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
       | RelationshipsPrediction
       | undefined;
 
-    if (!relationsPrediction) return null;
+    if (!relationsPrediction || !relationsPrediction.content || !relationsPrediction.content.marriage) return null;
+    
+    const partnerTraits = relationsPrediction.content.marriage.partner_traits || [];
 
     return (
       <div className="animate-fadeIn space-y-8">
@@ -216,7 +222,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
           </p>
           <h4 className="mb-2 mt-4 font-semibold">{t('relationships.partnerTraits')}</h4>
           <div className="flex flex-wrap gap-2">
-            {relationsPrediction.content.marriage.partner_traits.map((trait, index) => (
+            {partnerTraits.map((trait, index) => (
               <span
                 key={index}
                 className="rounded-lg bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-fuchsia-500/10 px-3 py-1 text-sm font-medium text-indigo-700 transition-all duration-300 hover:scale-105 hover:from-indigo-500/20 hover:via-purple-500/20 hover:to-fuchsia-500/20 dark:from-indigo-500/20 dark:via-purple-500/20 dark:to-fuchsia-500/20 dark:text-indigo-300 dark:hover:from-indigo-500/30 dark:hover:via-purple-500/30 dark:hover:to-fuchsia-500/30"
@@ -305,7 +311,12 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
       | ChallengesPrediction
       | undefined;
 
-    if (!challengesPrediction) return null;
+    if (!challengesPrediction || !challengesPrediction.content || !challengesPrediction.content.remedies) return null;
+    
+    const challenges = challengesPrediction.content.challenges || [];
+    const mantras = challengesPrediction.content.remedies.mantras || [];
+    const spiritualPractices = challengesPrediction.content.remedies.spiritual_practices || [];
+    const astrologicalRecommendations = challengesPrediction.content.remedies.astrological_recommendations || [];
 
     return (
       <div className="animate-fadeIn space-y-8">
@@ -314,7 +325,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
             {t('challenges.challenges')}
           </h3>
           <div className="flex flex-wrap gap-3">
-            {challengesPrediction.content.challenges.map((challenge, index) => (
+            {challenges.map((challenge, index) => (
               <span
                 key={index}
                 className="rounded-lg bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-fuchsia-500/10 px-3 py-1 text-sm font-medium text-indigo-700 transition-all duration-300 hover:scale-105 hover:from-indigo-500/20 hover:via-purple-500/20 hover:to-fuchsia-500/20 dark:from-indigo-500/20 dark:via-purple-500/20 dark:to-fuchsia-500/20 dark:text-indigo-300 dark:hover:from-indigo-500/30 dark:hover:via-purple-500/30 dark:hover:to-fuchsia-500/30"
@@ -335,7 +346,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
                 {t('challenges.mantras')}
               </h4>
               <div className="flex flex-wrap gap-2">
-                {challengesPrediction.content.remedies.mantras.map((mantra, index) => (
+                {mantras.map((mantra, index) => (
                   <span
                     key={index}
                     className="rounded-lg bg-blue-100/80 px-3 py-1 text-sm font-medium text-blue-800 transition-all duration-300 hover:scale-105 hover:bg-blue-200 dark:bg-blue-900/50 dark:text-blue-300 dark:hover:bg-blue-800/50"
@@ -351,7 +362,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
                 {t('challenges.spiritualPractices')}
               </h4>
               <div className="flex flex-wrap gap-2">
-                {challengesPrediction.content.remedies.spiritual_practices.map(
+                {spiritualPractices.map(
                   (practice, index) => (
                     <span
                       key={index}
@@ -367,7 +378,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
             <div>
               <h4 className="mb-2 font-semibold">{t('challenges.astrologicalRecommendations')}</h4>
               <div className="flex flex-wrap gap-2">
-                {challengesPrediction.content.remedies.astrological_recommendations.map(
+                {astrologicalRecommendations.map(
                   (recommendation, index) => (
                     <span
                       key={index}
@@ -392,7 +403,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
       | MajorLifePeriodsPrediction
       | undefined;
 
-    if (!majorLifePeriodsPrediction) return null;
+    if (!majorLifePeriodsPrediction || !majorLifePeriodsPrediction.content) return null;
 
     return (
       <div className="animate-fadeIn space-y-8">

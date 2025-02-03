@@ -7,6 +7,48 @@ export default {
   darkMode: 'class',
   theme: {
     extend: {
+      keyframes: {
+        twinkle: {
+          '0%, 100%': { opacity: 0.2, transform: 'scale(0.95)' },
+          '50%': { opacity: 1, transform: 'scale(1.05)' },
+        },
+        'twinkle-slow': {
+          '0%, 100%': { opacity: 0.3, transform: 'scale(0.9)' },
+          '50%': { opacity: 1, transform: 'scale(1.1)' },
+        },
+        'float-1': {
+          '0%': { transform: 'translate(0, 0) scale(0.95)' },
+          '33%': { transform: 'translate(30px, -20px) scale(1.05)' },
+          '66%': { transform: 'translate(-20px, 20px) scale(0.95)' },
+          '100%': { transform: 'translate(0, 0) scale(1.05)' },
+        },
+        'float-2': {
+          '0%': { transform: 'translate(0, 0) scale(1.05)' },
+          '33%': { transform: 'translate(-25px, -15px) scale(0.95)' },
+          '66%': { transform: 'translate(15px, 25px) scale(1.05)' },
+          '100%': { transform: 'translate(0, 0) scale(0.95)' },
+        },
+        'float-3': {
+          '0%': { transform: 'translate(0, 0) scale(1)' },
+          '33%': { transform: 'translate(20px, 20px) scale(1.1)' },
+          '66%': { transform: 'translate(-30px, -10px) scale(0.9)' },
+          '100%': { transform: 'translate(0, 0) scale(1)' },
+        },
+      },
+      animation: {
+        twinkle: 'twinkle 3s ease-in-out infinite',
+        'twinkle-slow': 'twinkle-slow 4s ease-in-out infinite',
+        'float-1': 'float-1 15s ease-in-out infinite',
+        'float-2': 'float-2 18s ease-in-out infinite',
+        'float-3': 'float-3 20s ease-in-out infinite',
+      },
+      boxShadow: {
+        'glow': '0 0 8px rgba(255, 255, 255, 0.8), 0 0 16px rgba(255, 255, 255, 0.4)',
+        'light-sm': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        'light-md': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+        'dark-sm': '0 1px 2px 0 rgba(0, 0, 0, 0.3)',
+        'dark-md': '0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.2)',
+      },
       colors: {
         oriental: {
           50: '#f5f8ff',
