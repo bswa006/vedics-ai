@@ -88,8 +88,8 @@ export function Login() {
         setShowAdditionalFields(true);
       }
     } catch (err) {
-      const error = err as Error;
-      setError(error.message || 'Failed to validate phone number');
+      // const error = err as Error;
+      // setError(error.message || 'Failed to validate phone number');
       setShowAdditionalFields(true);
     }
   };
@@ -124,11 +124,11 @@ export function Login() {
           </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          {(error || apiError) && (
+          {/* {(error || apiError) && (
             <div className="rounded-lg bg-red-50 p-3 text-center text-sm text-red-500 dark:bg-red-900/20 dark:text-red-400">
               {error || apiError}
             </div>
-          )}
+          )} */}
           <div className="space-y-6 rounded-2xl border border-border-light bg-surface-light/60 p-8 shadow-light-md backdrop-blur-md transition-all duration-200 hover:bg-surface-light/70 dark:border-border-dark dark:bg-surface-dark/40 dark:shadow-dark-md dark:hover:bg-surface-dark/50">
             {/* Phone Number Field with Validation */}
             <div>

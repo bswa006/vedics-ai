@@ -16,7 +16,23 @@ export function BirthDetails({ user }: BirthDetailsProps) {
             {t('birthDetails.birthDate')}
           </div>
           <div className="font-medium text-gray-900 dark:text-gray-200">
-            {new Date(user.date_of_birth).toLocaleDateString()}
+            {(() => {
+              if (!user.birth_time || !user.date_of_birth) {
+                return t('birthDetails.unavailable');
+              }
+              // Convert UTC to local time by adding 5 hours and 30 minutes
+              const [hours = 0, minutes = 0] = user.birth_time.split(':').map(Number);
+              const localHours = hours + 5;
+              const localMinutes = minutes + 30;
+              const adjustedHours = localHours + Math.floor(localMinutes / 60);
+              const adjustedMinutes = localMinutes % 60;
+              try {
+                const localDateTime = new Date(`${user.date_of_birth}T${String(adjustedHours).padStart(2, '0')}:${String(adjustedMinutes).padStart(2, '0')}`);
+                return localDateTime.toLocaleDateString();
+              } catch (error) {
+                return t('birthDetails.invalidFormat');
+              }
+            })()}
           </div>
         </div>
         <div>
@@ -25,19 +41,25 @@ export function BirthDetails({ user }: BirthDetailsProps) {
           </div>
           <div className="font-medium text-gray-900 dark:text-gray-200">
             {(() => {
-              // Create a UTC date using today's date and the birth time
-              const timeParts = user.birth_time.split(':');
-              const hours = parseInt(timeParts[0] || '0', 10);
-              const minutes = parseInt(timeParts[1] || '0', 10);
-              const utcDate = new Date();
-              utcDate.setUTCHours(hours, minutes, 0);
-
-              // Format the time in 12-hour format
-              return utcDate.toLocaleTimeString('en-US', {
-                hour: 'numeric',
-                minute: '2-digit',
-                hour12: true,
-              });
+              if (!user.birth_time || !user.date_of_birth) {
+                return t('birthDetails.unavailable');
+              }
+              // Convert UTC to local time by adding 5 hours and 30 minutes
+              const [hours = 0, minutes = 0] = user.birth_time.split(':').map(Number);
+              const localHours = hours + 5;
+              const localMinutes = minutes + 30;
+              const adjustedHours = localHours + Math.floor(localMinutes / 60);
+              const adjustedMinutes = localMinutes % 60;
+              try {
+                const localDateTime = new Date(`${user.date_of_birth}T${String(adjustedHours).padStart(2, '0')}:${String(adjustedMinutes).padStart(2, '0')}`);
+                return localDateTime.toLocaleTimeString('en-US', {
+                  hour: 'numeric',
+                  minute: '2-digit',
+                  hour12: true
+                });
+              } catch (error) {
+                return t('birthDetails.invalidFormat');
+              }
             })()}
           </div>
         </div>

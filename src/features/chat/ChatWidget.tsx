@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useChatApi, ChatMessage } from '../../hooks/useChatApi';
 import { format } from 'date-fns';
+import ReactMarkdown from 'react-markdown';
 
 interface ChatWidgetProps {
   onClose: () => void;
@@ -129,7 +130,28 @@ export function ChatWidget({ onClose }: ChatWidgetProps) {
                     message.isUser ? 'bg-white text-[#2B3990]' : 'bg-[#3A4DB1] text-white'
                   }`}
                 >
-                  {message.text}
+                  <ReactMarkdown
+                    components={{
+                      p: ({ children }) => <p className="m-0">{children}</p>,
+                      strong: ({ children }) => <span className="font-bold">{children}</span>,
+                      em: ({ children }) => <span className="italic">{children}</span>,
+                      ul: ({ children }) => <ul className="list-disc ml-4 mt-1">{children}</ul>,
+                      ol: ({ children }) => <ol className="list-decimal ml-4 mt-1">{children}</ol>,
+                      li: ({ children }) => <li className="mt-0.5">{children}</li>,
+                      a: ({ children, href }) => (
+                        <a 
+                          href={href} 
+                          className="text-blue-300 hover:underline" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                        >
+                          {children}
+                        </a>
+                      ),
+                    }}
+                  >
+                    {message.text}
+                  </ReactMarkdown>
                 </div>
               )}
               <span className="px-1 text-xs text-white/60">
@@ -153,14 +175,22 @@ export function ChatWidget({ onClose }: ChatWidgetProps) {
             type="text"
             value={inputValue}
             onChange={e => setInputValue(e.target.value)}
-            onKeyPress={e => e.key === 'Enter' && !e.shiftKey && handleSend()}
-            className="flex-1 rounded-full bg-white/20 px-4 py-3 text-white placeholder-white/60 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/20"
-            placeholder={t('common.typeMessage')}
+            onKeyPress={e => {
+              if (e.key === 'Enter' && !e.shiftKey && !isLoading && inputValue.trim()) {
+                e.preventDefault();
+                handleSend();
+              }
+            }}
+            className="flex-1 rounded-full bg-white/20 px-4 py-3 text-white placeholder-white/60 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/20 disabled:opacity-50 disabled:cursor-not-allowed"
+            placeholder={isLoading ? t('common.processing') : t('common.typeMessage')}
+            disabled={isLoading}
+            aria-disabled={isLoading}
           />
           <button
             onClick={() => handleSend()}
             disabled={isLoading || !inputValue.trim()}
             className="flex h-11 w-11 items-center justify-center rounded-full bg-[#536DFE] transition-all duration-200 hover:scale-105 hover:bg-white/90 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+            aria-label={isLoading ? t('common.processing') : t('common.send')}
           >
             {isLoading ? (
               <Loader2 className="h-5 w-5 animate-spin text-white" />

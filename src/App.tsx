@@ -76,21 +76,20 @@ function App() {
                   ) : !userData ? null : (
                     <>
                       <BirthDetails user={userData} />
-                      {userData.status === 'pending' ? (
-                        <div className="space-y-4 p-8 text-center">
+                      {userData.status === 'pending' && (
+                        <div className="space-y-4 p-8 text-center bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-lg shadow-sm">
                           <div className="text-2xl font-semibold">{t('common.gathering_data')}</div>
                           <div className="text-text-light-secondary dark:text-text-dark-secondary">
                             {t('common.please_wait')}
                           </div>
                           <div className="animate-pulse text-3xl">✨</div>
                         </div>
-                      ) : (
-                        predictions && predictions.length > 0 && (
-                          <>
-                            <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
-                            <PredictionContent activeTab={activeTab} predictions={predictions} />
-                          </>
-                        )
+                      )}
+                      {predictions && predictions.length > 0 && (
+                        <>
+                          <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
+                          <PredictionContent activeTab={activeTab} predictions={predictions} />
+                        </>
                       )}
                     </>
                   )}
