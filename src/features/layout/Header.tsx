@@ -9,28 +9,36 @@ interface HeaderProps {
 
 export function Header({ darkMode, setDarkMode, onLogout }: HeaderProps) {
   return (
-    <div className="bg-oriental-800">
-      <div className="max-w-lg mx-auto px-4 pt-4 pb-4">
-        <div className="flex items-center justify-between mb-2">
+    <div className="relative bg-gradient-to-r from-[#0B1026] via-[#2B3990] to-[#0B1026] overflow-hidden z-10">
+      {/* Animated stars background */}
+      <div className="absolute inset-0 opacity-30">
+        <div className="absolute h-1 w-1 bg-white rounded-full animate-twinkle" style={{ top: '10%', left: '15%' }} />
+        <div className="absolute h-1 w-1 bg-white rounded-full animate-twinkle" style={{ top: '50%', left: '75%', animationDelay: '0.5s' }} />
+        <div className="absolute h-1 w-1 bg-white rounded-full animate-twinkle" style={{ top: '30%', left: '45%', animationDelay: '1s' }} />
+      </div>
+      
+      <div className="max-w-lg mx-auto px-4 py-5 relative">
+        <div className="flex items-center justify-between">
           <LanguageSwitcher />
-          <div className="flex gap-2">
+          <div className="flex gap-3">
             <button
               onClick={onLogout}
-              className="w-10 h-10 flex items-center justify-center rounded-xl bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 hover:from-blue-500/30 hover:via-purple-500/30 hover:to-pink-500/30 transition-all"
+              className="w-10 h-10 flex items-center justify-center rounded-xl bg-gradient-to-r from-blue-600/30 via-purple-600/30 to-pink-600/30 hover:from-blue-600/40 hover:via-purple-600/40 hover:to-pink-600/40 transition-all duration-300 backdrop-blur-sm shadow-[0_0_15px_rgba(124,58,237,0.1)]"
               title="Logout"
             >
               <LogOut className="w-5 h-5 text-white" />
             </button>
             <button
-            onClick={() => setDarkMode(!darkMode)}
-            className="w-10 h-10 flex items-center justify-center rounded-xl bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 hover:from-blue-500/30 hover:via-purple-500/30 hover:to-pink-500/30 transition-all"
-          >
-            {darkMode ? (
-              <Sun className="w-5 h-5 text-white" />
-            ) : (
-              <Moon className="w-5 h-5 text-white" />
-            )}
-          </button>
+              onClick={() => setDarkMode(!darkMode)}
+              className="w-10 h-10 flex items-center justify-center rounded-xl bg-gradient-to-r from-blue-600/30 via-purple-600/30 to-pink-600/30 hover:from-blue-600/40 hover:via-purple-600/40 hover:to-pink-600/40 transition-all duration-300 backdrop-blur-sm shadow-[0_0_15px_rgba(124,58,237,0.1)]"
+              title={darkMode ? 'Light Mode' : 'Dark Mode'}
+            >
+              {darkMode ? (
+                <Sun className="w-5 h-5 text-white" />
+              ) : (
+                <Moon className="w-5 h-5 text-white" />
+              )}
+            </button>
           </div>
         </div>
       </div>

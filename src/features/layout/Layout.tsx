@@ -24,7 +24,7 @@ export function Layout({
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
       <Header darkMode={darkMode} setDarkMode={setDarkMode} onLogout={onLogout} />
 
-      <div className="max-w-lg mx-auto px-4 -mt-8">{children}</div>
+      <div className="max-w-lg mx-auto px-4 -mt-8 relative z-20">{children}</div>
 
       <div className="fixed bottom-6 right-6 z-50">
         <button
