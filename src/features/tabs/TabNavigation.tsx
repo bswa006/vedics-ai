@@ -1,4 +1,4 @@
-import { Briefcase, Clock, GraduationCap, Heart, User, Users } from 'lucide-react';
+import { Briefcase, Clock, GraduationCap, Heart, Sun, User, Users } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { PredictionType } from '../../types/predictions';
 import styles from './TabNavigation.module.css';
@@ -19,6 +19,12 @@ export function TabNavigation({ activeTab, setActiveTab }: TabNavigationProps) {
   const { t } = useTranslation();
 
   const tabs: Tab[] = [
+    {
+      id: 'today_readings',
+      label: t('tabs.today'),
+      icon: <Sun className="h-6 w-6" />,
+      color: 'bg-[#2435b3]'
+    },
     {
       id: 'core_personality_and_life_path',
       label: t('tabs.personality'),

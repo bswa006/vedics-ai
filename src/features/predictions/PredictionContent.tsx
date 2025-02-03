@@ -1,29 +1,39 @@
 import { useTranslation } from 'react-i18next';
 import {
-  Prediction,
-  isCorePersonalityPrediction,
-  isCareerSuccessPrediction,
-  isRelationshipsPrediction,
-  isHealthPrediction,
-  isChallengesPrediction,
-  isMajorLifePeriodsPrediction,
-  CorePersonalityPrediction,
   CareerSuccessPrediction,
-  RelationshipsPrediction,
-  HealthPrediction,
   ChallengesPrediction,
+  CorePersonalityPrediction,
+  HealthPrediction,
   MajorLifePeriodsPrediction,
+  PredictionResponse,
+  PredictionType,
+  RelationshipsPrediction,
+  isCareerSuccessPrediction,
+  isChallengesPrediction,
+  isCorePersonalityPrediction,
+  isHealthPrediction,
+  isMajorLifePeriodsPrediction,
+  isRelationshipsPrediction,
 } from '../../types/predictions';
+import { TodayReadings } from './TodayReadings';
 
 interface PredictionContentProps {
-  activeTab: string;
-  predictions: Prediction[];
+  activeTab: PredictionType;
+  predictions: PredictionResponse;
 }
 
 export function PredictionContent({ activeTab, predictions }: PredictionContentProps): JSX.Element {
   const { t } = useTranslation();
 
-  const renderPersonalityTab = (predictions: Prediction[]): JSX.Element | null => {
+  const renderTodayReadingsTab = (): JSX.Element | null => {
+    // Get userId from the first prediction in the array
+    const userId = predictions[0]?.id;
+    if (!userId) return null;
+
+    return <TodayReadings userId={userId} />;
+  };
+
+  const renderPersonalityTab = (): JSX.Element | null => {
     const cardStyle =
       'rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-indigo-500/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-indigo-500/5 hover:via-purple-500/5 hover:to-fuchsia-500/5 dark:hover:from-indigo-500/10 dark:hover:via-purple-500/10 dark:hover:to-fuchsia-500/10';
     const personalityPrediction = predictions.find(isCorePersonalityPrediction) as
@@ -31,7 +41,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
       | undefined;
 
     if (!personalityPrediction || !personalityPrediction.content) return null;
-    
+
     const traits = personalityPrediction.content.traits || [];
 
     return (
@@ -44,7 +54,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
             {traits.map((trait: string, index: number) => (
               <span
                 key={index}
-                className="inline-block px-3 py-1 mb-2 mr-2 text-sm font-medium bg-indigo-50 rounded-full dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300"
+                className="mb-2 mr-2 inline-block rounded-full bg-indigo-50 px-3 py-1 text-sm font-medium text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300"
               >
                 {trait}
               </span>
@@ -79,7 +89,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
               {personalityPrediction.content.strengths.map((strength: string, index: number) => (
                 <span
                   key={index}
-                  className="inline-block px-3 py-1 mb-2 mr-2 text-sm font-medium bg-emerald-50 rounded-full dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300"
+                  className="mb-2 mr-2 inline-block rounded-full bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300"
                 >
                   {strength}
                 </span>
@@ -97,7 +107,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
               {personalityPrediction.content.weaknesses.map((weakness: string, index: number) => (
                 <span
                   key={index}
-                  className="inline-block px-3 py-1 mb-2 mr-2 text-sm font-medium bg-rose-50 rounded-full dark:bg-rose-900/30 text-rose-700 dark:text-rose-300"
+                  className="mb-2 mr-2 inline-block rounded-full bg-rose-50 px-3 py-1 text-sm font-medium text-rose-700 dark:bg-rose-900/30 dark:text-rose-300"
                 >
                   {weakness}
                 </span>
@@ -109,7 +119,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
     );
   };
 
-  const renderCareerTab = (predictions: Prediction[]): JSX.Element | null => {
+  const renderCareerTab = (): JSX.Element | null => {
     const cardStyle =
       'rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-amber-500/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-amber-400/5 hover:via-yellow-500/5 hover:to-orange-500/5 dark:hover:from-amber-400/10 dark:hover:via-yellow-500/10 dark:hover:to-orange-500/10';
     const careerPrediction = predictions.find(isCareerSuccessPrediction) as
@@ -117,7 +127,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
       | undefined;
 
     if (!careerPrediction || !careerPrediction.content) return null;
-    
+
     const idealProfessions = careerPrediction.content.ideal_professions || [];
 
     return (
@@ -130,7 +140,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
             {idealProfessions.map((profession, index) => (
               <span
                 key={index}
-                className="inline-block px-3 py-1 mb-2 mr-2 text-sm font-medium bg-amber-50 rounded-full dark:bg-amber-900/30 text-amber-700 dark:text-amber-300"
+                className="mb-2 mr-2 inline-block rounded-full bg-amber-50 px-3 py-1 text-sm font-medium text-amber-700 dark:bg-amber-900/30 dark:text-amber-300"
               >
                 {profession}
               </span>
@@ -184,15 +194,20 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
     );
   };
 
-  const renderRelationshipsTab = (predictions: Prediction[]): JSX.Element | null => {
+  const renderRelationshipsTab = (): JSX.Element | null => {
     const cardStyle =
       'rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-rose-500/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-rose-500/5 hover:via-pink-500/5 hover:to-purple-500/5 dark:hover:from-rose-500/10 dark:hover:via-pink-500/10 dark:hover:to-purple-500/10';
     const relationsPrediction = predictions.find(isRelationshipsPrediction) as
       | RelationshipsPrediction
       | undefined;
 
-    if (!relationsPrediction || !relationsPrediction.content || !relationsPrediction.content.marriage) return null;
-    
+    if (
+      !relationsPrediction ||
+      !relationsPrediction.content ||
+      !relationsPrediction.content.marriage
+    )
+      return null;
+
     const partnerTraits = relationsPrediction.content.marriage.partner_traits || [];
 
     return (
@@ -205,7 +220,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
             {relationsPrediction.content.traits_in_relationships.map((trait, index) => (
               <span
                 key={index}
-                className="inline-block px-3 py-1 mb-2 mr-2 text-sm font-medium bg-indigo-50 rounded-full dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300"
+                className="mb-2 mr-2 inline-block rounded-full bg-indigo-50 px-3 py-1 text-sm font-medium text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300"
               >
                 {trait}
               </span>
@@ -225,7 +240,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
             {partnerTraits.map((trait, index) => (
               <span
                 key={index}
-                className="inline-block px-3 py-1 mb-2 mr-2 text-sm font-medium bg-indigo-50 rounded-full dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300"
+                className="mb-2 mr-2 inline-block rounded-full bg-indigo-50 px-3 py-1 text-sm font-medium text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300"
               >
                 {trait}
               </span>
@@ -249,13 +264,13 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
     );
   };
 
-  const renderHealthTab = (predictions: Prediction[]): JSX.Element | null => {
+  const renderHealthTab = (): JSX.Element | null => {
     const cardStyle =
       'rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-emerald-500/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-emerald-400/5 hover:via-teal-500/5 hover:to-cyan-500/5 dark:hover:from-emerald-400/10 dark:hover:via-teal-500/10 dark:hover:to-cyan-500/10';
     const healthPrediction = predictions.find(isHealthPrediction) as HealthPrediction | undefined;
 
     if (!healthPrediction || !healthPrediction.content) return null;
-    
+
     const concerns = healthPrediction.content.concerns || [];
 
     return (
@@ -304,19 +319,25 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
     );
   };
 
-  const renderChallengesTab = (predictions: Prediction[]): JSX.Element | null => {
+  const renderChallengesTab = (): JSX.Element | null => {
     const cardStyle =
       'rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-blue-600/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-blue-600/5 hover:via-indigo-600/5 hover:to-violet-600/5 dark:hover:from-blue-600/10 dark:hover:via-indigo-600/10 dark:hover:to-violet-600/10';
     const challengesPrediction = predictions.find(isChallengesPrediction) as
       | ChallengesPrediction
       | undefined;
 
-    if (!challengesPrediction || !challengesPrediction.content || !challengesPrediction.content.remedies) return null;
-    
+    if (
+      !challengesPrediction ||
+      !challengesPrediction.content ||
+      !challengesPrediction.content.remedies
+    )
+      return null;
+
     const challenges = challengesPrediction.content.challenges || [];
     const mantras = challengesPrediction.content.remedies.mantras || [];
     const spiritualPractices = challengesPrediction.content.remedies.spiritual_practices || [];
-    const astrologicalRecommendations = challengesPrediction.content.remedies.astrological_recommendations || [];
+    const astrologicalRecommendations =
+      challengesPrediction.content.remedies.astrological_recommendations || [];
 
     return (
       <div className="animate-fadeIn space-y-8">
@@ -362,32 +383,28 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
                 {t('challenges.spiritualPractices')}
               </h4>
               <div className="flex flex-wrap gap-2">
-                {spiritualPractices.map(
-                  (practice, index) => (
-                    <p
-                      key={index}
-                      className="text-[15px] leading-relaxed text-gray-700 dark:text-gray-300"
-                    >
-                      {practice}
-                    </p>
-                  )
-                )}
+                {spiritualPractices.map((practice, index) => (
+                  <p
+                    key={index}
+                    className="text-[15px] leading-relaxed text-gray-700 dark:text-gray-300"
+                  >
+                    {practice}
+                  </p>
+                ))}
               </div>
             </div>
 
             <div>
               <h4 className="mb-2 font-semibold">{t('challenges.astrologicalRecommendations')}</h4>
               <div className="flex flex-wrap gap-2">
-                {astrologicalRecommendations.map(
-                  (recommendation, index) => (
-                    <p
-                      key={index}
-                      className="text-[15px] leading-relaxed text-gray-700 dark:text-gray-300"
-                    >
-                      {recommendation}
-                    </p>
-                  )
-                )}
+                {astrologicalRecommendations.map((recommendation, index) => (
+                  <p
+                    key={index}
+                    className="text-[15px] leading-relaxed text-gray-700 dark:text-gray-300"
+                  >
+                    {recommendation}
+                  </p>
+                ))}
               </div>
             </div>
           </div>
@@ -396,7 +413,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
     );
   };
 
-  const renderMajorLifePeriodsTab = (predictions: Prediction[]): JSX.Element | null => {
+  const renderMajorLifePeriodsTab = (): JSX.Element | null => {
     const cardStyle =
       'rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-cyan-500/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-cyan-400/5 hover:via-blue-500/5 hover:to-indigo-500/5 dark:hover:from-cyan-400/10 dark:hover:via-blue-500/10 dark:hover:to-indigo-500/10';
     const majorLifePeriodsPrediction = predictions.find(isMajorLifePeriodsPrediction) as
@@ -437,20 +454,24 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
     );
   };
 
-  const renderContent = (tab: string) => {
+  const renderContent = (tab: PredictionType) => {
+    if (!predictions || predictions.length === 0) return null;
+
     switch (tab) {
+      case 'today_readings':
+        return renderTodayReadingsTab();
       case 'core_personality_and_life_path':
-        return renderPersonalityTab(predictions);
+        return renderPersonalityTab();
       case 'career_success_and_wealth':
-        return renderCareerTab(predictions);
+        return renderCareerTab();
       case 'relationships_love_and_marriage':
-        return renderRelationshipsTab(predictions);
+        return renderRelationshipsTab();
       case 'health_and_wellbeing':
-        return renderHealthTab(predictions);
+        return renderHealthTab();
       case 'challenges_and_remedies':
-        return renderChallengesTab(predictions);
+        return renderChallengesTab();
       case 'major_life_periods':
-        return renderMajorLifePeriodsTab(predictions);
+        return renderMajorLifePeriodsTab();
       default:
         return null;
     }

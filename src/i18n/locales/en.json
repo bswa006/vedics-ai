@@ -38,6 +38,7 @@
     "invalidFormat": "Invalid Format"
   },
   "tabs": {
+    "today": "Today's Readings",
     "personality": "Personality",
     "career": "Career",
     "relationships": "Relationships",

@@ -21,6 +21,23 @@ export interface ChatResponse {
 }
 
 export const api = {
+  readings: {
+    getTodayReadings: async (userId: number) => {
+      try {
+        const response = await axios.post(`${API_BASE_URL}/today_readings`, { user_id: userId }, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        return response.data;
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          throw new Error(error.response?.data?.message || 'Failed to fetch today\'s readings');
+        }
+        throw error;
+      }
+    },
+  },
   users: {
     validatePhoneNumber: async (phoneNumber: string) => {
       try {

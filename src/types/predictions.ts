@@ -4,14 +4,35 @@ export type PredictionType =
   | 'relationships_love_and_marriage'
   | 'health_and_wellbeing'
   | 'challenges_and_remedies'
-  | 'major_life_periods';
+  | 'major_life_periods'
+  | 'today_readings';
+
+export type PredictionContent =
+  | CorePersonalityContent
+  | CareerSuccessContent
+  | RelationshipsContent
+  | HealthContent
+  | ChallengesContent
+  | MajorLifePeriodsContent
+  | TodayReadingsContent;
 
 export interface BasePrediction {
   id: number;
   created_at: string;
   type: PredictionType;
-  content: Record<string, any>;
+  content: PredictionContent;
 }
+
+export type Prediction =
+  | CorePersonalityPrediction
+  | CareerSuccessPrediction
+  | RelationshipsPrediction
+  | HealthPrediction
+  | ChallengesPrediction
+  | MajorLifePeriodsPrediction
+  | TodayReadingsPrediction;
+
+export type PredictionResponse = Prediction[];
 
 export interface CorePersonalityContent {
   past_life_influence: string;
@@ -66,20 +87,7 @@ export interface MajorLifePeriodsContent {
   later_years: string;
 }
 
-export type PredictionContent =
-  | CorePersonalityContent
-  | CareerSuccessContent
-  | RelationshipsContent
-  | HealthContent
-  | ChallengesContent
-  | MajorLifePeriodsContent;
 
-export interface Prediction {
-  type: PredictionType;
-  content: PredictionContent;
-}
-
-export type PredictionResponse = Prediction[];
 
 // Type guard functions
 export function isCorePersonalityPrediction(prediction: Prediction): prediction is CorePersonalityPrediction {
@@ -134,4 +142,21 @@ export interface ChallengesPrediction extends BasePrediction {
 export interface MajorLifePeriodsPrediction extends BasePrediction {
   type: 'major_life_periods';
   content: MajorLifePeriodsContent;
+}
+
+export interface TodayReadingsContent {
+  general_insights: string;
+  color_of_the_day: string;
+  favorable_activities: string[];
+  challenging_aspects: string[];
+  remedies_for_the_day: string[];
+}
+
+export interface TodayReadingsPrediction extends BasePrediction {
+  type: 'today_readings';
+  content: TodayReadingsContent;
+}
+
+export function isTodayReadingsPrediction(prediction: Prediction): prediction is TodayReadingsPrediction {
+  return prediction.type === 'today_readings';
 }
