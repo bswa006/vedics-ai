@@ -30,7 +30,7 @@ export function Modal({
           <h2 className="text-xl font-semibold text-white">{title}</h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="text-white/60 hover:text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -39,14 +39,14 @@ export function Modal({
         <div className="flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white transition-colors"
+            className="px-4 py-2 text-sm font-medium rounded-lg bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 text-white hover:from-blue-500/30 hover:via-purple-500/30 hover:to-pink-500/30 transition-all"
           >
             {cancelText}
           </button>
           {onConfirm && (
             <button
               onClick={onConfirm}
-              className="px-4 py-2 text-sm font-medium bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors"
+              className="px-4 py-2 text-sm font-medium rounded-lg bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white hover:opacity-90 transition-all"
             >
               {confirmText}
             </button>

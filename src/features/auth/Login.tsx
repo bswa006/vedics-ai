@@ -224,7 +224,7 @@ export function Login() {
                   name="phoneNumber"
                   type="tel"
                   required
-                  className="relative block w-full appearance-none rounded-xl border border-border-light bg-background-light/80 py-3 pl-11 pr-4 text-text-light-primary placeholder-text-light-secondary/80 shadow-light-sm transition-all duration-200 hover:bg-background-light/90 focus:border-accent-light focus:bg-background-light focus:outline-none focus:ring-2 focus:ring-accent-light/20 dark:border-border-dark dark:bg-background-dark/50 dark:text-text-dark-primary dark:placeholder-text-dark-secondary/50 dark:shadow-dark-sm dark:hover:bg-background-dark/60 dark:focus:border-accent-dark dark:focus:bg-background-dark/70 dark:focus:ring-accent-dark/20 sm:text-sm"
+                  className="relative block w-full appearance-none rounded-xl border border-border-light bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 py-3 pl-11 pr-4 text-text-light-primary placeholder-text-light-secondary/80 shadow-light-sm transition-all duration-200 hover:from-blue-500/20 hover:via-purple-500/20 hover:to-pink-500/20 focus:border-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-500/20 dark:border-border-dark dark:text-text-dark-primary dark:placeholder-text-dark-secondary/50 dark:shadow-dark-sm sm:text-sm"
                   placeholder="Enter your phone number"
                   value={formData.phoneNumber}
                   onChange={handleChange}
@@ -236,7 +236,7 @@ export function Login() {
                   <button
                     type="button"
                     onClick={() => validateAndShowFields(formData.phoneNumber)}
-                    className="group relative flex w-full justify-center overflow-hidden rounded-xl border border-oriental-500/30 bg-gradient-to-r from-oriental-600 to-oriental-700 px-4 py-2 text-sm font-medium text-white shadow-lg shadow-oriental-500/20 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-oriental-500/30 focus:outline-none focus:ring-2 focus:ring-oriental-500 focus:ring-offset-2 active:scale-[0.98] dark:border-oriental-500/20 dark:from-oriental-700 dark:to-oriental-600 dark:shadow-oriental-900/20 dark:hover:shadow-oriental-900/30"
+                    className="group relative flex w-full justify-center overflow-hidden rounded-xl bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 px-4 py-2 text-sm font-medium text-white shadow-lg backdrop-blur-sm transition-all duration-300 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:ring-offset-2 active:scale-[0.98]"
                     disabled={loading || !formData.phoneNumber}
                   >
                     {loading ? 'Validating...' : 'Continue'}
@@ -260,7 +260,7 @@ export function Login() {
                       name="dateOfBirth"
                       type="date"
                       required
-                      className="relative block w-full appearance-none rounded-xl border border-border-light bg-background-light/80 py-3 pl-11 pr-4 text-text-light-primary placeholder-text-light-secondary/80 shadow-light-sm transition-all duration-200 hover:bg-background-light/90 focus:border-accent-light focus:bg-background-light focus:outline-none focus:ring-2 focus:ring-accent-light/20 dark:border-border-dark dark:bg-background-dark/50 dark:text-text-dark-primary dark:placeholder-text-dark-secondary/50 dark:shadow-dark-sm dark:hover:bg-background-dark/60 dark:focus:border-accent-dark dark:focus:bg-background-dark/70 dark:focus:ring-accent-dark/20 sm:text-sm"
+                      className="relative block w-full appearance-none rounded-xl border border-border-light bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 py-3 pl-11 pr-4 text-text-light-primary placeholder-text-light-secondary/80 shadow-light-sm transition-all duration-200 hover:from-blue-500/20 hover:via-purple-500/20 hover:to-pink-500/20 focus:border-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-500/20 dark:border-border-dark dark:text-text-dark-primary dark:placeholder-text-dark-secondary/50 dark:shadow-dark-sm sm:text-sm"
                       value={formData.dateOfBirth}
                       onChange={handleChange}
                     />
@@ -280,7 +280,7 @@ export function Login() {
                       name="timeOfBirth"
                       type="time"
                       required
-                      className="relative block w-full appearance-none rounded-xl border border-border-light bg-background-light/80 py-3 pl-11 pr-4 text-text-light-primary placeholder-text-light-secondary/80 shadow-light-sm transition-all duration-200 hover:bg-background-light/90 focus:border-accent-light focus:bg-background-light focus:outline-none focus:ring-2 focus:ring-accent-light/20 dark:border-border-dark dark:bg-background-dark/50 dark:text-text-dark-primary dark:placeholder-text-dark-secondary/50 dark:shadow-dark-sm dark:hover:bg-background-dark/60 dark:focus:border-accent-dark dark:focus:bg-background-dark/70 dark:focus:ring-accent-dark/20 sm:text-sm"
+                      className="relative block w-full appearance-none rounded-xl border border-border-light bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 py-3 pl-11 pr-4 text-text-light-primary placeholder-text-light-secondary/80 shadow-light-sm transition-all duration-200 hover:from-blue-500/20 hover:via-purple-500/20 hover:to-pink-500/20 focus:border-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-500/20 dark:border-border-dark dark:text-text-dark-primary dark:placeholder-text-dark-secondary/50 dark:shadow-dark-sm sm:text-sm"
                       value={formData.timeOfBirth}
                       onChange={handleChange}
                     />
@@ -300,7 +300,7 @@ export function Login() {
                       name="locationOfBirth"
                       type="text"
                       required
-                      className="relative block w-full appearance-none rounded-xl border border-border-light bg-background-light/80 py-3 pl-11 pr-4 text-text-light-primary placeholder-text-light-secondary/80 shadow-light-sm transition-all duration-200 hover:bg-background-light/90 focus:border-accent-light focus:bg-background-light focus:outline-none focus:ring-2 focus:ring-accent-light/20 dark:border-border-dark dark:bg-background-dark/50 dark:text-text-dark-primary dark:placeholder-text-dark-secondary/50 dark:shadow-dark-sm dark:hover:bg-background-dark/60 dark:focus:border-accent-dark dark:focus:bg-background-dark/70 dark:focus:ring-accent-dark/20 sm:text-sm"
+                      className="relative block w-full appearance-none rounded-xl border border-border-light bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 py-3 pl-11 pr-4 text-text-light-primary placeholder-text-light-secondary/80 shadow-light-sm transition-all duration-200 hover:from-blue-500/20 hover:via-purple-500/20 hover:to-pink-500/20 focus:border-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-500/20 dark:border-border-dark dark:text-text-dark-primary dark:placeholder-text-dark-secondary/50 dark:shadow-dark-sm sm:text-sm"
                       placeholder="Enter your birth place"
                       value={formData.locationOfBirth}
                       onChange={handleChange}
@@ -319,7 +319,7 @@ export function Login() {
             <div>
               <button
                 type="submit"
-                className="group relative flex w-full justify-center overflow-hidden rounded-xl border border-oriental-500/30 bg-gradient-to-r from-oriental-600 to-oriental-700 px-6 py-3.5 text-sm font-medium text-white shadow-lg shadow-oriental-500/20 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-oriental-500/30 focus:outline-none focus:ring-2 focus:ring-oriental-500 focus:ring-offset-2 active:scale-[0.98] dark:border-oriental-500/20 dark:from-oriental-700 dark:to-oriental-600 dark:shadow-oriental-900/20 dark:hover:shadow-oriental-900/30"
+                className="group relative flex w-full justify-center overflow-hidden rounded-xl bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 px-6 py-3.5 text-sm font-medium text-white shadow-lg backdrop-blur-sm transition-all duration-300 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:ring-offset-2 active:scale-[0.98]"
                 disabled={loading}
               >
                 <div className="absolute inset-0 -z-10 bg-gradient-to-r from-oriental-400/0 via-white/10 to-oriental-400/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 dark:from-white/0 dark:via-white/5 dark:to-white/0"></div>

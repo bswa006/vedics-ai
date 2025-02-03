@@ -16,14 +16,14 @@ export function Header({ darkMode, setDarkMode, onLogout }: HeaderProps) {
           <div className="flex gap-2">
             <button
               onClick={onLogout}
-              className="w-10 h-10 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-xl backdrop-blur-lg transition-all"
+              className="w-10 h-10 flex items-center justify-center rounded-xl bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 hover:from-blue-500/30 hover:via-purple-500/30 hover:to-pink-500/30 transition-all"
               title="Logout"
             >
               <LogOut className="w-5 h-5 text-white" />
             </button>
             <button
             onClick={() => setDarkMode(!darkMode)}
-            className="w-10 h-10 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-xl backdrop-blur-lg transition-all"
+            className="w-10 h-10 flex items-center justify-center rounded-xl bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 hover:from-blue-500/30 hover:via-purple-500/30 hover:to-pink-500/30 transition-all"
           >
             {darkMode ? (
               <Sun className="w-5 h-5 text-white" />

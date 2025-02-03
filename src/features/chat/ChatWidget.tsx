@@ -99,7 +99,7 @@ export function ChatWidget({ onClose }: ChatWidgetProps) {
         </div>
         <button
           onClick={onClose}
-          className="flex h-8 w-8 items-center justify-center rounded-full transition-colors hover:bg-white/20"
+          className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 transition-all duration-200 hover:from-blue-500/30 hover:via-purple-500/30 hover:to-pink-500/30"
         >
           <X className="h-5 w-5 text-white" aria-label={t('common.close')} />
         </button>
@@ -189,7 +189,7 @@ export function ChatWidget({ onClose }: ChatWidgetProps) {
           <button
             onClick={() => handleSend()}
             disabled={isLoading || !inputValue.trim()}
-            className="flex h-11 w-11 items-center justify-center rounded-full bg-[#536DFE] transition-all duration-200 hover:scale-105 hover:bg-white/90 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 transition-all duration-200 hover:scale-105 hover:opacity-90 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
             aria-label={isLoading ? t('common.processing') : t('common.send')}
           >
             {isLoading ? (

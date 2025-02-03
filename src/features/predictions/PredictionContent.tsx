@@ -25,7 +25,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
 
   const renderPersonalityTab = (predictions: Prediction[]): JSX.Element | null => {
     const cardStyle =
-      'rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20';
+      'rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-indigo-500/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-indigo-500/5 hover:via-purple-500/5 hover:to-fuchsia-500/5 dark:hover:from-indigo-500/10 dark:hover:via-purple-500/10 dark:hover:to-fuchsia-500/10';
     const personalityPrediction = predictions.find(isCorePersonalityPrediction) as
       | CorePersonalityPrediction
       | undefined;
@@ -42,7 +42,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
             {personalityPrediction.content?.traits?.map((trait: string, index: number) => (
               <span
                 key={index}
-                className="rounded-lg bg-oriental-100/80 px-3 py-1 text-sm font-medium text-oriental-800 transition-all duration-300 hover:scale-105 hover:bg-oriental-200 dark:bg-oriental-900/50 dark:text-oriental-300 dark:hover:bg-oriental-800/50"
+                className="rounded-lg bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-fuchsia-500/10 px-3 py-1 text-sm font-medium text-indigo-700 transition-all duration-300 hover:scale-105 hover:from-indigo-500/20 hover:via-purple-500/20 hover:to-fuchsia-500/20 dark:from-indigo-500/20 dark:via-purple-500/20 dark:to-fuchsia-500/20 dark:text-indigo-300 dark:hover:from-indigo-500/30 dark:hover:via-purple-500/30 dark:hover:to-fuchsia-500/30"
               >
                 {trait}
               </span>
@@ -109,7 +109,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
 
   const renderCareerTab = (predictions: Prediction[]): JSX.Element | null => {
     const cardStyle =
-      'rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-blue-900/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-blue-50 hover:to-cyan-100 dark:hover:from-blue-900/20 dark:hover:to-cyan-800/20';
+      'rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-amber-500/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-amber-400/5 hover:via-yellow-500/5 hover:to-orange-500/5 dark:hover:from-amber-400/10 dark:hover:via-yellow-500/10 dark:hover:to-orange-500/10';
     const careerPrediction = predictions.find(isCareerSuccessPrediction) as
       | CareerSuccessPrediction
       | undefined;
@@ -126,7 +126,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
             {careerPrediction.content.ideal_professions.map((profession, index) => (
               <span
                 key={index}
-                className="rounded-lg bg-oriental-100/80 px-3 py-1 text-sm font-medium text-oriental-800 transition-all duration-300 hover:scale-105 hover:bg-oriental-200 dark:bg-oriental-900/50 dark:text-oriental-300 dark:hover:bg-oriental-800/50"
+                className="rounded-lg bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-fuchsia-500/10 px-3 py-1 text-sm font-medium text-indigo-700 transition-all duration-300 hover:scale-105 hover:from-indigo-500/20 hover:via-purple-500/20 hover:to-fuchsia-500/20 dark:from-indigo-500/20 dark:via-purple-500/20 dark:to-fuchsia-500/20 dark:text-indigo-300 dark:hover:from-indigo-500/30 dark:hover:via-purple-500/30 dark:hover:to-fuchsia-500/30"
               >
                 {profession}
               </span>
@@ -182,7 +182,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
 
   const renderRelationshipsTab = (predictions: Prediction[]): JSX.Element | null => {
     const cardStyle =
-      'rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-rose-900/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-rose-50 hover:to-pink-100 dark:hover:from-rose-900/20 dark:hover:to-pink-800/20';
+      'rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-rose-500/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-rose-500/5 hover:via-pink-500/5 hover:to-purple-500/5 dark:hover:from-rose-500/10 dark:hover:via-pink-500/10 dark:hover:to-purple-500/10';
     const relationsPrediction = predictions.find(isRelationshipsPrediction) as
       | RelationshipsPrediction
       | undefined;
@@ -199,7 +199,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
             {relationsPrediction.content.traits_in_relationships.map((trait, index) => (
               <span
                 key={index}
-                className="rounded-lg bg-oriental-100/80 px-3 py-1 text-sm font-medium text-oriental-800 transition-all duration-300 hover:scale-105 hover:bg-oriental-200 dark:bg-oriental-900/50 dark:text-oriental-300 dark:hover:bg-oriental-800/50"
+                className="rounded-lg bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-fuchsia-500/10 px-3 py-1 text-sm font-medium text-indigo-700 transition-all duration-300 hover:scale-105 hover:from-indigo-500/20 hover:via-purple-500/20 hover:to-fuchsia-500/20 dark:from-indigo-500/20 dark:via-purple-500/20 dark:to-fuchsia-500/20 dark:text-indigo-300 dark:hover:from-indigo-500/30 dark:hover:via-purple-500/30 dark:hover:to-fuchsia-500/30"
               >
                 {trait}
               </span>
@@ -219,7 +219,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
             {relationsPrediction.content.marriage.partner_traits.map((trait, index) => (
               <span
                 key={index}
-                className="rounded-lg bg-oriental-100/80 px-3 py-1 text-sm font-medium text-oriental-800 transition-all duration-300 hover:scale-105 hover:bg-oriental-200 dark:bg-oriental-900/50 dark:text-oriental-300 dark:hover:bg-oriental-800/50"
+                className="rounded-lg bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-fuchsia-500/10 px-3 py-1 text-sm font-medium text-indigo-700 transition-all duration-300 hover:scale-105 hover:from-indigo-500/20 hover:via-purple-500/20 hover:to-fuchsia-500/20 dark:from-indigo-500/20 dark:via-purple-500/20 dark:to-fuchsia-500/20 dark:text-indigo-300 dark:hover:from-indigo-500/30 dark:hover:via-purple-500/30 dark:hover:to-fuchsia-500/30"
               >
                 {trait}
               </span>
@@ -245,7 +245,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
 
   const renderHealthTab = (predictions: Prediction[]): JSX.Element | null => {
     const cardStyle =
-      'rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-emerald-900/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-emerald-50 hover:to-teal-100 dark:hover:from-emerald-900/20 dark:hover:to-teal-800/20';
+      'rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-emerald-500/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-emerald-400/5 hover:via-teal-500/5 hover:to-cyan-500/5 dark:hover:from-emerald-400/10 dark:hover:via-teal-500/10 dark:hover:to-cyan-500/10';
     const healthPrediction = predictions.find(isHealthPrediction) as HealthPrediction | undefined;
 
     if (!healthPrediction) return null;
@@ -260,7 +260,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
             {healthPrediction.content.concerns.map((concern, index) => (
               <span
                 key={index}
-                className="rounded-lg bg-oriental-100/80 px-3 py-1 text-sm font-medium text-oriental-800 transition-all duration-300 hover:scale-105 hover:bg-oriental-200 dark:bg-oriental-900/50 dark:text-oriental-300 dark:hover:bg-oriental-800/50"
+                className="rounded-lg bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-fuchsia-500/10 px-3 py-1 text-sm font-medium text-indigo-700 transition-all duration-300 hover:scale-105 hover:from-indigo-500/20 hover:via-purple-500/20 hover:to-fuchsia-500/20 dark:from-indigo-500/20 dark:via-purple-500/20 dark:to-fuchsia-500/20 dark:text-indigo-300 dark:hover:from-indigo-500/30 dark:hover:via-purple-500/30 dark:hover:to-fuchsia-500/30"
               >
                 {concern}
               </span>
@@ -285,7 +285,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
             {healthPrediction.content.recommendations.map((recommendation, index) => (
               <span
                 key={index}
-                className="rounded-lg bg-oriental-100/80 px-3 py-1 text-sm font-medium text-oriental-800 transition-all duration-300 hover:scale-105 hover:bg-oriental-200 dark:bg-oriental-900/50 dark:text-oriental-300 dark:hover:bg-oriental-800/50"
+                className="rounded-lg bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-fuchsia-500/10 px-3 py-1 text-sm font-medium text-indigo-700 transition-all duration-300 hover:scale-105 hover:from-indigo-500/20 hover:via-purple-500/20 hover:to-fuchsia-500/20 dark:from-indigo-500/20 dark:via-purple-500/20 dark:to-fuchsia-500/20 dark:text-indigo-300 dark:hover:from-indigo-500/30 dark:hover:via-purple-500/30 dark:hover:to-fuchsia-500/30"
               >
                 {recommendation}
               </span>
@@ -298,7 +298,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
 
   const renderChallengesTab = (predictions: Prediction[]): JSX.Element | null => {
     const cardStyle =
-      'rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-amber-900/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-amber-50 hover:to-orange-100 dark:hover:from-amber-900/20 dark:hover:to-orange-800/20';
+      'rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-blue-600/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-blue-600/5 hover:via-indigo-600/5 hover:to-violet-600/5 dark:hover:from-blue-600/10 dark:hover:via-indigo-600/10 dark:hover:to-violet-600/10';
     const challengesPrediction = predictions.find(isChallengesPrediction) as
       | ChallengesPrediction
       | undefined;
@@ -315,7 +315,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
             {challengesPrediction.content.challenges.map((challenge, index) => (
               <span
                 key={index}
-                className="rounded-lg bg-oriental-100/80 px-3 py-1 text-sm font-medium text-oriental-800 transition-all duration-300 hover:scale-105 hover:bg-oriental-200 dark:bg-oriental-900/50 dark:text-oriental-300 dark:hover:bg-oriental-800/50"
+                className="rounded-lg bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-fuchsia-500/10 px-3 py-1 text-sm font-medium text-indigo-700 transition-all duration-300 hover:scale-105 hover:from-indigo-500/20 hover:via-purple-500/20 hover:to-fuchsia-500/20 dark:from-indigo-500/20 dark:via-purple-500/20 dark:to-fuchsia-500/20 dark:text-indigo-300 dark:hover:from-indigo-500/30 dark:hover:via-purple-500/30 dark:hover:to-fuchsia-500/30"
               >
                 {challenge}
               </span>
@@ -385,7 +385,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
 
   const renderMajorLifePeriodsTab = (predictions: Prediction[]): JSX.Element | null => {
     const cardStyle =
-      'rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-fuchsia-900/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-fuchsia-50 hover:to-pink-100 dark:hover:from-fuchsia-900/20 dark:hover:to-pink-800/20';
+      'rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-cyan-500/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-cyan-400/5 hover:via-blue-500/5 hover:to-indigo-500/5 dark:hover:from-cyan-400/10 dark:hover:via-blue-500/10 dark:hover:to-indigo-500/10';
     const majorLifePeriodsPrediction = predictions.find(isMajorLifePeriodsPrediction) as
       | MajorLifePeriodsPrediction
       | undefined;
