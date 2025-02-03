@@ -27,32 +27,27 @@ export function ChatWidget({ onClose }: ChatWidgetProps) {
 
   // Initialize chat
   useEffect(() => {
-    const initChat = () => {
-      const existingSession = getCurrentSession();
-      const newSessionId = existingSession || createSessionId();
-      setSessionId(newSessionId);
+    // Get or create session
+    const currentSessionId = getCurrentSession();
+    setSessionId(currentSessionId);
 
-      const savedMessages = existingSession ? loadMessages(existingSession) : [];
-      if (savedMessages.length > 0) {
-        setMessages(savedMessages.map(msg => ({
-          ...msg,
-          timestamp: new Date(msg.timestamp)
-        })));
-      } else {
-        setMessages([{
-          text: t('common.chatGreeting'),
-          isUser: false,
-          timestamp: new Date()
-        }]);
-      }
-    };
-
-    initChat();
-
-    return () => {
-      setMessages([]);
-      setSessionId('');
-    };
+    // Load existing messages or set initial message
+    const savedMessages = loadMessages(currentSessionId);
+    if (savedMessages.length > 0) {
+      setMessages(savedMessages.map(msg => ({
+        ...msg,
+        timestamp: new Date(msg.timestamp)
+      })));
+    } else {
+      const initialMessage = {
+        text: t('common.chatGreeting'),
+        isUser: false,
+        timestamp: new Date()
+      };
+      setMessages([initialMessage]);
+      // Save initial message
+      saveMessages(currentSessionId, [initialMessage]);
+    }
   }, [getCurrentSession, createSessionId, loadMessages, t]);
 
   const scrollToBottom = () => {

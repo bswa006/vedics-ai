@@ -17,15 +17,46 @@ export const useChatApi = () => {
   const [error, setError] = useState<string | null>(null);
 
   const createSessionId = useCallback(() => {
-    const now = new Date();
-    const sessionId = `${now.getHours()}:${now.getMinutes()}_${now.getTime()}`;
+    // Check if we already have a session for this page load
+    const pageLoadTime = sessionStorage.getItem('pageLoadTime');
+    const currentTime = new Date().getTime();
+
+    // If this is a page reload or first load
+    if (!pageLoadTime || (currentTime - parseInt(pageLoadTime)) > 1000) {
+      // Clear previous chat data
+      Object.keys(sessionStorage).forEach(key => {
+        if (key.startsWith('chat_') || key === 'currentChatSession') {
+          sessionStorage.removeItem(key);
+        }
+      });
+      // Set new page load time
+      sessionStorage.setItem('pageLoadTime', currentTime.toString());
+      
+      // Create new session
+      const sessionId = `session_${currentTime}`;
+      sessionStorage.setItem('currentChatSession', sessionId);
+      return sessionId;
+    }
+
+    // If we're just reopening the widget, use existing session
+    const existingSession = sessionStorage.getItem('currentChatSession');
+    if (existingSession) {
+      return existingSession;
+    }
+
+    // Fallback: create new session
+    const sessionId = `session_${currentTime}`;
     sessionStorage.setItem('currentChatSession', sessionId);
     return sessionId;
   }, []);
 
   const getCurrentSession = useCallback(() => {
-    return sessionStorage.getItem('currentChatSession');
-  }, []);
+    const currentSession = sessionStorage.getItem('currentChatSession');
+    if (currentSession) return currentSession;
+    
+    // If no session exists, create one
+    return createSessionId();
+  }, [createSessionId]);
 
   const saveMessages = useCallback((sessionId: string, messages: ChatMessage[]) => {
     if (!sessionId) return;
@@ -39,7 +70,14 @@ export const useChatApi = () => {
   const loadMessages = useCallback((sessionId: string): ChatMessage[] => {
     if (!sessionId) return [];
     const saved = sessionStorage.getItem(`chat_${sessionId}`);
-    return saved ? JSON.parse(saved) : [];
+    if (!saved) return [];
+    
+    try {
+      const messages = JSON.parse(saved);
+      return Array.isArray(messages) ? messages : [];
+    } catch {
+      return [];
+    }
   }, []);
 
   const sendMessage = useCallback(async (message: string, sessionId: string): Promise<ChatResponse> => {

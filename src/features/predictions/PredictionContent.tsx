@@ -248,7 +248,9 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
       'rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-emerald-500/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 hover:bg-gradient-to-br hover:from-emerald-400/5 hover:via-teal-500/5 hover:to-cyan-500/5 dark:hover:from-emerald-400/10 dark:hover:via-teal-500/10 dark:hover:to-cyan-500/10';
     const healthPrediction = predictions.find(isHealthPrediction) as HealthPrediction | undefined;
 
-    if (!healthPrediction) return null;
+    if (!healthPrediction || !healthPrediction.content) return null;
+    
+    const concerns = healthPrediction.content.concerns || [];
 
     return (
       <div className="animate-fadeIn space-y-8">
@@ -257,7 +259,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
             {t('health.healthConcerns')}
           </h3>
           <div className="flex flex-wrap gap-3">
-            {healthPrediction.content.concerns.map((concern, index) => (
+            {concerns.map((concern, index) => (
               <span
                 key={index}
                 className="rounded-lg bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-fuchsia-500/10 px-3 py-1 text-sm font-medium text-indigo-700 transition-all duration-300 hover:scale-105 hover:from-indigo-500/20 hover:via-purple-500/20 hover:to-fuchsia-500/20 dark:from-indigo-500/20 dark:via-purple-500/20 dark:to-fuchsia-500/20 dark:text-indigo-300 dark:hover:from-indigo-500/30 dark:hover:via-purple-500/30 dark:hover:to-fuchsia-500/30"

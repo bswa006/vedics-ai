@@ -12,9 +12,19 @@ export function Header({ darkMode, setDarkMode, onLogout }: HeaderProps) {
     <div className="relative bg-gradient-to-r from-[#0B1026] via-[#2B3990] to-[#0B1026] overflow-hidden z-10">
       {/* Animated stars background */}
       <div className="absolute inset-0 opacity-30">
-        <div className="absolute h-1 w-1 bg-white rounded-full animate-twinkle" style={{ top: '10%', left: '15%' }} />
-        <div className="absolute h-1 w-1 bg-white rounded-full animate-twinkle" style={{ top: '50%', left: '75%', animationDelay: '0.5s' }} />
-        <div className="absolute h-1 w-1 bg-white rounded-full animate-twinkle" style={{ top: '30%', left: '45%', animationDelay: '1s' }} />
+        {/* Small stars */}
+        <div className="absolute h-1 w-1 bg-white rounded-full animate-[twinkle_3s_ease-in-out_infinite,float-1_15s_ease-in-out_infinite]" style={{ top: '10%', left: '15%' }} />
+        <div className="absolute h-1 w-1 bg-white rounded-full animate-[twinkle_3s_ease-in-out_infinite,float-2_18s_ease-in-out_infinite]" style={{ top: '50%', left: '75%', animationDelay: '0.5s' }} />
+        <div className="absolute h-1 w-1 bg-white rounded-full animate-[twinkle_3s_ease-in-out_infinite,float-3_20s_ease-in-out_infinite]" style={{ top: '30%', left: '45%', animationDelay: '1s' }} />
+        <div className="absolute h-1 w-1 bg-white rounded-full animate-[twinkle_3s_ease-in-out_infinite,float-1_15s_ease-in-out_infinite]" style={{ top: '70%', left: '25%', animationDelay: '1.5s' }} />
+        <div className="absolute h-1 w-1 bg-white rounded-full animate-[twinkle_3s_ease-in-out_infinite,float-2_18s_ease-in-out_infinite]" style={{ top: '20%', left: '85%', animationDelay: '2s' }} />
+        {/* Medium stars */}
+        <div className="absolute h-1.5 w-1.5 bg-white rounded-full animate-[twinkle-slow_4s_ease-in-out_infinite,float-3_20s_ease-in-out_infinite]" style={{ top: '45%', left: '35%', animationDelay: '0.7s' }} />
+        <div className="absolute h-1.5 w-1.5 bg-white rounded-full animate-[twinkle-slow_4s_ease-in-out_infinite,float-1_15s_ease-in-out_infinite]" style={{ top: '15%', left: '65%', animationDelay: '1.2s' }} />
+        <div className="absolute h-1.5 w-1.5 bg-white rounded-full animate-[twinkle-slow_4s_ease-in-out_infinite,float-2_18s_ease-in-out_infinite]" style={{ top: '60%', left: '90%', animationDelay: '1.8s' }} />
+        {/* Large stars with glow effect */}
+        <div className="absolute h-2 w-2 bg-white rounded-full animate-[pulse_2s_ease-in-out_infinite,float-2_18s_ease-in-out_infinite] shadow-glow" style={{ top: '25%', left: '55%', animationDelay: '0.3s' }} />
+        <div className="absolute h-2 w-2 bg-white rounded-full animate-[pulse_2s_ease-in-out_infinite,float-3_20s_ease-in-out_infinite] shadow-glow" style={{ top: '75%', left: '40%', animationDelay: '1.4s' }} />
       </div>
       
       <div className="max-w-lg mx-auto px-4 py-5 relative">
