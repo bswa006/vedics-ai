@@ -104,13 +104,93 @@ export function Login() {
       <div className="absolute inset-0 animate-[pulse_15s_ease-in-out_infinite] bg-[url('/sacred-geometry.png')] bg-repeat opacity-[0.03] dark:opacity-[0.07]"></div>
       <div className="absolute inset-0 bg-gradient-to-t from-background-light/80 to-transparent backdrop-blur-[2px] transition-colors duration-200 dark:from-background-dark/80"></div>
       <div className="relative w-full max-w-md space-y-8">
-        <div className="absolute left-1/2 top-2 flex h-24 w-24 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-gradient-to-br from-accent-light to-oriental-600 shadow-xl shadow-oriental-500/20 transition-all duration-200 hover:scale-105 dark:from-accent-dark dark:to-oriental-800 dark:shadow-oriental-900/20">
-          <div className="absolute inset-[3px] rounded-full bg-background-light/90 transition-colors duration-200 dark:bg-background-dark/90"></div>
-          <img
-            src="/astrology-icon.png"
-            alt="Sacred Geometry"
-            className="relative h-12 w-12 transition-transform duration-1000 hover:rotate-180"
-          />
+        <div className="absolute left-1/2 top-2 flex h-24 w-24 -translate-x-1/2 -translate-y-1/2 items-center justify-center">
+          {/* Outer glow with rainbow pulse */}
+          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500/30 via-purple-500/30 to-pink-500/30 blur-[2px] animate-[pulse-rainbow_4s_ease-in-out_infinite]" />
+          
+          {/* Main container */}
+          <div className="relative h-full w-full rounded-full bg-[#070B14] p-[1px] group">
+            {/* Rotating border */}
+            <div className="absolute inset-0 rounded-full overflow-hidden">
+              <div className="absolute inset-0 animate-[spin_8s_linear_infinite] bg-[conic-gradient(from_0deg,#1E293B,#3B82F6,#A855F7,#EC4899,#3B82F6,#1E293B)] opacity-60" />
+            </div>
+
+            {/* Glass background */}
+            <div className="relative h-full w-full rounded-full bg-gradient-to-br from-[#0B1120]/90 via-[#0F172A]/80 to-[#0B1120]/90 flex items-center justify-center overflow-hidden">
+              {/* Deep space effects */}
+              <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.2),transparent_70%)]" />
+              <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_80%_20%,rgba(236,72,153,0.15),transparent_50%)]" />
+              <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_20%_80%,rgba(168,85,247,0.15),transparent_50%)]" />
+              
+              {/* Ambient glow */}
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 animate-pulse" />
+              
+              {/* Stars */}
+              <div className="absolute inset-0 rounded-full overflow-hidden">
+                <div className="absolute left-1/4 top-1/4 animate-[star1_10s_linear_infinite] text-white/60 text-xs">✨</div>
+                <div className="absolute right-1/3 bottom-1/3 animate-[star2_8s_linear_infinite] text-white/50 text-xs">✨</div>
+                <div className="absolute left-2/3 top-1/3 animate-[star3_12s_linear_infinite] text-white/70 text-xs">✨</div>
+              </div>
+
+              {/* Sacred Geometry Icon */}
+              <svg
+                viewBox="0 0 100 100"
+                className="relative h-12 w-12 z-10 text-white transition-all duration-700 animate-[color-shift_8s_ease-in-out_infinite]">
+                <defs>
+                  <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#60A5FA" />
+                    <stop offset="50%" stopColor="#A855F7" />
+                    <stop offset="100%" stopColor="#EC4899" />
+                  </linearGradient>
+                </defs>
+                {/* Outer rotating circle */}
+                <circle 
+                  cx="50" 
+                  cy="50" 
+                  r="40" 
+                  fill="none" 
+                  stroke="url(#iconGradient)" 
+                  strokeWidth="1" 
+                  strokeDasharray="3,3" 
+                  className="animate-[spin_12s_linear_infinite]" 
+                />
+                {/* Main triangle */}
+                <path 
+                  d="M50 5 L95 90 L5 90 Z" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  strokeWidth="1.5" 
+                  className="group-hover:animate-[pulse_2s_ease-in-out_infinite]" 
+                />
+                {/* Inner circle */}
+                <circle 
+                  cx="50" 
+                  cy="50" 
+                  r="25" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  strokeWidth="1.5" 
+                  className="group-hover:animate-[spin_4s_linear_infinite]" 
+                />
+                {/* Inner triangle */}
+                <path 
+                  d="M50 25 L75 75 L25 75 Z" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  strokeWidth="1.5" 
+                  className="group-hover:animate-[spin_6s_linear_infinite_reverse]" 
+                />
+                {/* Center dot */}
+                <circle 
+                  cx="50" 
+                  cy="50" 
+                  r="4" 
+                  fill="url(#iconGradient)" 
+                  className="animate-pulse" 
+                />
+              </svg>
+            </div>
+          </div>
         </div>
         <div>
           <h2 className="mt-16 text-center font-serif text-2xl font-light tracking-tight text-text-light-primary transition-colors duration-200 dark:text-text-dark-primary">
@@ -229,9 +309,7 @@ export function Login() {
                   </div>
                 </div>
                 {error && (
-                  <div className="mt-4 text-sm text-red-500 dark:text-red-400">
-                    {error}
-                  </div>
+                  <div className="mt-4 text-sm text-red-500 dark:text-red-400">{error}</div>
                 )}
               </>
             )}

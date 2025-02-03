@@ -19,6 +19,148 @@
   }
 }
 
+@keyframes loading {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  30%, 70% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes glow {
+  0% {
+    transform: translate(3%, 3%) rotate(0deg);
+  }
+  50% {
+    transform: translate(5%, 5%) rotate(180deg);
+  }
+  100% {
+    transform: translate(3%, 3%) rotate(360deg);
+  }
+}
+
+@keyframes glow-reverse {
+  0% {
+    transform: translate(-3%, -3%) rotate(360deg);
+  }
+  50% {
+    transform: translate(-5%, -5%) rotate(180deg);
+  }
+  100% {
+    transform: translate(-3%, -3%) rotate(0deg);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse-rainbow {
+  0%, 100% {
+    filter: drop-shadow(0 0 0.5rem rgba(59, 130, 246, 0.5));
+  }
+  25% {
+    filter: drop-shadow(0 0 0.5rem rgba(139, 92, 246, 0.5));
+  }
+  50% {
+    filter: drop-shadow(0 0 0.5rem rgba(236, 72, 153, 0.5));
+  }
+  75% {
+    filter: drop-shadow(0 0 0.5rem rgba(234, 179, 8, 0.5));
+  }
+}
+
+@keyframes color-shift {
+  0%, 100% {
+    filter: hue-rotate(0deg) brightness(1);
+  }
+  50% {
+    filter: hue-rotate(180deg) brightness(1.2);
+  }
+}
+
+/* Random star movements */
+@keyframes star1 {
+  0% { transform: translate(0, 0) scale(0.8); opacity: 0.2; }
+  25% { transform: translate(120%, 60%) scale(1); opacity: 0.3; }
+  50% { transform: translate(60%, 120%) scale(0.9); opacity: 0.25; }
+  75% { transform: translate(-60%, 60%) scale(1.1); opacity: 0.3; }
+  100% { transform: translate(0, 0) scale(0.8); opacity: 0.2; }
+}
+
+@keyframes star2 {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.25; }
+  33% { transform: translate(-90%, -60%) scale(0.9); opacity: 0.2; }
+  66% { transform: translate(90%, -30%) scale(1.1); opacity: 0.3; }
+  100% { transform: translate(0, 0) scale(1); opacity: 0.25; }
+}
+
+@keyframes star3 {
+  0% { transform: translate(0, 0) scale(0.9); opacity: 0.2; }
+  50% { transform: translate(-60%, 90%) scale(1.1); opacity: 0.25; }
+  100% { transform: translate(0, 0) scale(0.9); opacity: 0.2; }
+}
+
+@keyframes star4 {
+  0% { transform: translate(0, 0) scale(0.85); opacity: 0.2; }
+  33% { transform: translate(80%, -40%) scale(1); opacity: 0.25; }
+  66% { transform: translate(-40%, 80%) scale(0.95); opacity: 0.2; }
+  100% { transform: translate(0, 0) scale(0.85); opacity: 0.2; }
+}
+
+@keyframes star5 {
+  0% { transform: translate(0, 0) scale(0.9); opacity: 0.15; }
+  50% { transform: translate(70%, 70%) scale(1.05); opacity: 0.2; }
+  100% { transform: translate(0, 0) scale(0.9); opacity: 0.15; }
+}
+
+@keyframes star6 {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.25; }
+  25% { transform: translate(-50%, -70%) scale(0.9); opacity: 0.2; }
+  75% { transform: translate(50%, 70%) scale(1.1); opacity: 0.3; }
+  100% { transform: translate(0, 0) scale(1); opacity: 0.25; }
+}
+
+@keyframes star7 {
+  0% { transform: translate(0, 0) scale(0.8); opacity: 0.1; }
+  50% { transform: translate(100%, -50%) scale(1); opacity: 0.15; }
+  100% { transform: translate(0, 0) scale(0.8); opacity: 0.1; }
+}
+
+@keyframes star8 {
+  0% { transform: translate(0, 0) scale(0.9); opacity: 0.15; }
+  33% { transform: translate(-60%, 60%) scale(1); opacity: 0.2; }
+  66% { transform: translate(60%, -60%) scale(0.95); opacity: 0.15; }
+  100% { transform: translate(0, 0) scale(0.9); opacity: 0.15; }
+}
+
+@keyframes star9 {
+  0% { transform: translate(0, 0) scale(0.95); opacity: 0.2; }
+  50% { transform: translate(-80%, -40%) scale(1.05); opacity: 0.25; }
+  100% { transform: translate(0, 0) scale(0.95); opacity: 0.2; }
+}
+
+
 @layer utilities {
   .animate-fadeIn {
     animation: fadeIn 0.5s ease-out forwards;
