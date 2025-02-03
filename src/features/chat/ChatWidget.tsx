@@ -16,7 +16,7 @@ type ExtendedChatMessage = ChatMessage & {
 
 export function ChatWidget({ onClose }: ChatWidgetProps) {
   const { t } = useTranslation();
-  const { createSessionId, getCurrentSession, saveMessages, loadMessages, sendMessage } = useChatApi();
+  const { createSessionId, getCurrentSession, saveMessages, sendMessage } = useChatApi();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const [sessionId, setSessionId] = useState<string>('');
@@ -25,30 +25,22 @@ export function ChatWidget({ onClose }: ChatWidgetProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
 
-  // Initialize chat
+  // Initialize chat and clear messages on page load
   useEffect(() => {
     // Get or create session
     const currentSessionId = getCurrentSession();
     setSessionId(currentSessionId);
 
-    // Load existing messages or set initial message
-    const savedMessages = loadMessages(currentSessionId);
-    if (savedMessages.length > 0) {
-      setMessages(savedMessages.map(msg => ({
-        ...msg,
-        timestamp: new Date(msg.timestamp)
-      })));
-    } else {
-      const initialMessage = {
-        text: t('common.chatGreeting'),
-        isUser: false,
-        timestamp: new Date()
-      };
-      setMessages([initialMessage]);
-      // Save initial message
-      saveMessages(currentSessionId, [initialMessage]);
-    }
-  }, [getCurrentSession, createSessionId, loadMessages, t]);
+    // Clear existing messages and set initial message on every page load
+    const initialMessage = {
+      text: t('common.chatGreeting'),
+      isUser: false,
+      timestamp: new Date(),
+    };
+    setMessages([initialMessage]);
+    // Save initial message
+    saveMessages(currentSessionId, [initialMessage]);
+  }, [getCurrentSession, createSessionId, saveMessages, t]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -65,12 +57,12 @@ export function ChatWidget({ onClose }: ChatWidgetProps) {
     try {
       setIsLoading(true);
       // Add user message
-      const userMessage: ExtendedChatMessage = { 
-        text: message, 
-        isUser: true, 
-        timestamp: new Date() 
+      const userMessage: ExtendedChatMessage = {
+        text: message,
+        isUser: true,
+        timestamp: new Date(),
       };
-      
+
       // Update messages with user message
       setMessages(prev => {
         const newMessages = [...prev, userMessage];
@@ -82,8 +74,8 @@ export function ChatWidget({ onClose }: ChatWidgetProps) {
       // Show typing indicator
       setIsTyping(true);
       setMessages(prev => [
-        ...prev, 
-        { text: '', isUser: false, timestamp: new Date(), isTyping: true } as ExtendedChatMessage
+        ...prev,
+        { text: '', isUser: false, timestamp: new Date(), isTyping: true } as ExtendedChatMessage,
       ]);
 
       // Send message and wait for response
@@ -92,10 +84,10 @@ export function ChatWidget({ onClose }: ChatWidgetProps) {
       // Update messages with response
       setMessages(prev => {
         const messagesWithoutTyping = prev.filter(msg => !msg.isTyping);
-        const botMessage: ExtendedChatMessage = { 
-          text: response.reply, 
-          isUser: false, 
-          timestamp: new Date() 
+        const botMessage: ExtendedChatMessage = {
+          text: response.reply,
+          isUser: false,
+          timestamp: new Date(),
         };
         const newMessages = [...messagesWithoutTyping, botMessage];
         saveMessages(sessionId, newMessages);
@@ -105,10 +97,10 @@ export function ChatWidget({ onClose }: ChatWidgetProps) {
       // Remove typing indicator and add error message
       setMessages(prev => {
         const messagesWithoutTyping = prev.filter(msg => !msg.isTyping);
-        const errorMessage: ExtendedChatMessage = { 
-          text: t('common.chatError'), 
-          isUser: false, 
-          timestamp: new Date() 
+        const errorMessage: ExtendedChatMessage = {
+          text: t('common.chatError'),
+          isUser: false,
+          timestamp: new Date(),
         };
         const newMessages = [...messagesWithoutTyping, errorMessage];
         saveMessages(sessionId, newMessages);
