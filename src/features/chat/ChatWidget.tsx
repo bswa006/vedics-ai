@@ -1,5 +1,5 @@
 import { Loader2, Send, X, Bot, User } from 'lucide-react';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useChatApi, ChatMessage } from '../../hooks/useChatApi';
 import { format } from 'date-fns';
@@ -9,14 +9,14 @@ interface ChatWidgetProps {
   onClose: () => void;
 }
 
-interface ExtendedChatMessage extends ChatMessage {
-  timestamp: Date;
-  isTyping?: boolean;
-}
+// Using ChatMessage directly since it now includes all needed fields
+type ExtendedChatMessage = ChatMessage & {
+  timestamp: Date; // Override to ensure timestamp is Date in runtime
+};
 
 export function ChatWidget({ onClose }: ChatWidgetProps) {
   const { t } = useTranslation();
-  const { createSessionId, sendMessage } = useChatApi();
+  const { createSessionId, getCurrentSession, saveMessages, loadMessages, sendMessage } = useChatApi();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const [sessionId, setSessionId] = useState<string>('');
@@ -25,18 +25,35 @@ export function ChatWidget({ onClose }: ChatWidgetProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
 
+  // Initialize chat
   useEffect(() => {
-    // Create new session when chat widget opens
-    const newSessionId = createSessionId();
-    setSessionId(newSessionId);
-    setMessages([{ text: t('common.chatGreeting'), isUser: false, timestamp: new Date() }]);
+    const initChat = () => {
+      const existingSession = getCurrentSession();
+      const newSessionId = existingSession || createSessionId();
+      setSessionId(newSessionId);
 
-    // Cleanup session when chat widget closes
-    return () => {
-      setSessionId('');
-      setMessages([]);
+      const savedMessages = existingSession ? loadMessages(existingSession) : [];
+      if (savedMessages.length > 0) {
+        setMessages(savedMessages.map(msg => ({
+          ...msg,
+          timestamp: new Date(msg.timestamp)
+        })));
+      } else {
+        setMessages([{
+          text: t('common.chatGreeting'),
+          isUser: false,
+          timestamp: new Date()
+        }]);
+      }
     };
-  }, []);
+
+    initChat();
+
+    return () => {
+      setMessages([]);
+      setSessionId('');
+    };
+  }, [getCurrentSession, createSessionId, loadMessages, t]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -46,41 +63,67 @@ export function ChatWidget({ onClose }: ChatWidgetProps) {
     scrollToBottom();
   }, [messages]);
 
-  const handleSend = async () => {
+  const handleSend = useCallback(async () => {
     const message = inputValue.trim();
-    if (!message || isLoading) return;
+    if (!message || isLoading || !sessionId) return;
 
     try {
       setIsLoading(true);
-      setMessages(prev => [...prev, { text: message, isUser: true, timestamp: new Date() }]);
+      // Add user message
+      const userMessage: ExtendedChatMessage = { 
+        text: message, 
+        isUser: true, 
+        timestamp: new Date() 
+      };
+      
+      // Update messages with user message
+      setMessages(prev => {
+        const newMessages = [...prev, userMessage];
+        saveMessages(sessionId, newMessages);
+        return newMessages;
+      });
       setInputValue('');
 
       // Show typing indicator
       setIsTyping(true);
       setMessages(prev => [
-        ...prev,
-        { text: '', isUser: false, timestamp: new Date(), isTyping: true },
+        ...prev, 
+        { text: '', isUser: false, timestamp: new Date(), isTyping: true } as ExtendedChatMessage
       ]);
 
+      // Send message and wait for response
       const response = await sendMessage(message, sessionId);
 
-      // Remove typing indicator and add response
-      setMessages(prev => prev.filter(msg => !msg.isTyping));
-      setMessages(prev => [
-        ...prev,
-        { text: response.reply, isUser: false, timestamp: new Date() },
-      ]);
+      // Update messages with response
+      setMessages(prev => {
+        const messagesWithoutTyping = prev.filter(msg => !msg.isTyping);
+        const botMessage: ExtendedChatMessage = { 
+          text: response.reply, 
+          isUser: false, 
+          timestamp: new Date() 
+        };
+        const newMessages = [...messagesWithoutTyping, botMessage];
+        saveMessages(sessionId, newMessages);
+        return newMessages;
+      });
     } catch (error) {
-      setMessages(prev => prev.filter(msg => !msg.isTyping));
-      setMessages(prev => [
-        ...prev,
-        { text: t('common.chatError'), isUser: false, timestamp: new Date() },
-      ]);
+      // Remove typing indicator and add error message
+      setMessages(prev => {
+        const messagesWithoutTyping = prev.filter(msg => !msg.isTyping);
+        const errorMessage: ExtendedChatMessage = { 
+          text: t('common.chatError'), 
+          isUser: false, 
+          timestamp: new Date() 
+        };
+        const newMessages = [...messagesWithoutTyping, errorMessage];
+        saveMessages(sessionId, newMessages);
+        return newMessages;
+      });
     } finally {
-      setIsLoading(false);
       setIsTyping(false);
+      setIsLoading(false);
     }
-  };
+  }, [inputValue, isLoading, sessionId, t, sendMessage, saveMessages]);
 
   return (
     <div className="animate-slideIn fixed bottom-4 right-4 z-50 flex h-[500px] w-[350px] flex-col overflow-hidden rounded-2xl bg-[#2B3990] shadow-2xl">
@@ -135,14 +178,14 @@ export function ChatWidget({ onClose }: ChatWidgetProps) {
                       p: ({ children }) => <p className="m-0">{children}</p>,
                       strong: ({ children }) => <span className="font-bold">{children}</span>,
                       em: ({ children }) => <span className="italic">{children}</span>,
-                      ul: ({ children }) => <ul className="list-disc ml-4 mt-1">{children}</ul>,
-                      ol: ({ children }) => <ol className="list-decimal ml-4 mt-1">{children}</ol>,
+                      ul: ({ children }) => <ul className="ml-4 mt-1 list-disc">{children}</ul>,
+                      ol: ({ children }) => <ol className="ml-4 mt-1 list-decimal">{children}</ol>,
                       li: ({ children }) => <li className="mt-0.5">{children}</li>,
                       a: ({ children, href }) => (
-                        <a 
-                          href={href} 
-                          className="text-blue-300 hover:underline" 
-                          target="_blank" 
+                        <a
+                          href={href}
+                          className="text-blue-300 hover:underline"
+                          target="_blank"
                           rel="noopener noreferrer"
                         >
                           {children}
@@ -181,7 +224,7 @@ export function ChatWidget({ onClose }: ChatWidgetProps) {
                 handleSend();
               }
             }}
-            className="flex-1 rounded-full bg-white/20 px-4 py-3 text-white placeholder-white/60 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/20 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 rounded-full bg-white/20 px-4 py-3 text-white placeholder-white/60 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/20 disabled:cursor-not-allowed disabled:opacity-50"
             placeholder={isLoading ? t('common.processing') : t('common.typeMessage')}
             disabled={isLoading}
             aria-disabled={isLoading}
