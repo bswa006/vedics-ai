@@ -85,9 +85,7 @@ export type PredictionContent =
   | MajorLifePeriodsContent
   | AskAnythingContent;
 
-export interface TodayReading {
-  // Add properties for TodayReading interface
-}
+
 
 export type BasePrediction =
   | {

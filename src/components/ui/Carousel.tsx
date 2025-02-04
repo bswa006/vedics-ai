@@ -1,11 +1,12 @@
 import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Mousewheel } from 'swiper/modules';
+import { Navigation, Mousewheel, Scrollbar } from 'swiper/modules';
 import type { Swiper as SwiperType } from 'swiper';
 
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/navigation';
+import 'swiper/css/scrollbar';
 import styles from './Carousel.module.css';
 
 interface CarouselProps {
@@ -18,14 +19,14 @@ interface CarouselProps {
 export function Carousel({
   items,
   slidesPerView = 3,
-  spaceBetween = 12,
+  spaceBetween = 8,
   onSlideChange,
 }: CarouselProps) {
   const [isDragging, setIsDragging] = React.useState(false);
   return (
     <div className={styles['carousel-container']}>
       <Swiper
-        modules={[Navigation, Mousewheel]}
+        modules={[Navigation, Mousewheel, Scrollbar]}
         spaceBetween={spaceBetween}
         slidesPerView={slidesPerView}
         speed={600}
@@ -33,7 +34,7 @@ export function Carousel({
           nextEl: '.swiper-button-next',
           prevEl: '.swiper-button-prev',
           disabledClass: 'swiper-button-disabled',
-          lockClass: 'swiper-button-lock'
+          lockClass: 'swiper-button-lock',
         }}
         rewind={false}
         mousewheel={{
@@ -42,6 +43,12 @@ export function Carousel({
           thresholdDelta: 50,
           releaseOnEdges: true,
         }}
+        scrollbar={{
+          el: '.swiper-scrollbar',
+          draggable: true,
+          snapOnRelease: true,
+          dragSize: 100,
+        }}
         grabCursor={true}
         slidesOffsetBefore={0}
         slidesOffsetAfter={0}
@@ -49,7 +56,7 @@ export function Carousel({
         shortSwipes={false}
         longSwipesRatio={0.3}
         touchRatio={1.5}
-        onSlideChange={(swiper) => {
+        onSlideChange={swiper => {
           if (!isDragging && onSlideChange) {
             onSlideChange(swiper);
           }

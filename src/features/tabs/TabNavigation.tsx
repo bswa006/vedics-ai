@@ -25,25 +25,25 @@ export function TabNavigation({ activeTab, setActiveTab }: TabNavigationProps) {
       id: 'core_personality_and_life_path',
       label: t('tabs.personality'),
       icon: <User className="h-6 w-6" />,
-      color: 'bg-[#2435b3]',
+      color: 'bg-[#7C3AED]', // Vibrant purple for personality
     },
     {
       id: 'career_success_and_wealth',
       label: t('tabs.career'),
       icon: <Briefcase className="h-6 w-6" />,
-      color: 'bg-[#2435b3]',
+      color: 'bg-[#F59E0B]', // Vibrant amber for career
     },
     {
       id: 'relationships_love_and_marriage',
       label: t('tabs.relationships'),
       icon: <Users className="h-6 w-6" />,
-      color: 'bg-[#2435b3]',
+      color: 'bg-[#EC4899]', // Vibrant pink for relationships
     },
     {
       id: 'health_and_wellbeing',
       label: t('tabs.health'),
       icon: <Heart className="h-6 w-6" />,
-      color: 'bg-[#2435b3]',
+      color: 'bg-[#10B981]', // Vibrant emerald for health
     },
     {
       id: 'challenges_and_remedies',
@@ -95,7 +95,6 @@ export function TabNavigation({ activeTab, setActiveTab }: TabNavigationProps) {
       items={tabItems}
       slidesPerView={3}
       spaceBetween={8}
-      loop={true}
       onSlideChange={handleSlideChange}
     />
   );

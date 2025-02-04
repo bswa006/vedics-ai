@@ -17,19 +17,24 @@
 .tab-hover {
   position: relative;
   border-radius: 20px;
-  padding: 0.5rem;
+  padding: 0.75rem;
+  transition: all 0.3s ease;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  letter-spacing: 0.01em;
 }
 
 /* Active tab styles */
 .tab-hover[data-state='active'] {
   background: transparent;
+  color: white;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
-
-
 
 /* Icon styles */
 .tab-hover svg {
-  stroke-width: 1.5px;
+  filter: drop-shadow(0 0 8px currentColor);
+  stroke-width: 2px;
   width: 24px;
   height: 24px;
   opacity: 0.9;
