@@ -1,15 +1,14 @@
 import { Home, User, MessageCircle } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-interface BottomNavigationProps {
-  onAskAnything: () => void;
-}
+interface BottomNavigationProps {}
 
-export function BottomNavigation({ onAskAnything }: BottomNavigationProps) {
+export function BottomNavigation({}: BottomNavigationProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const isHome = location.pathname === '/';
   const isProfile = location.pathname === '/profile';
+  const isChat = location.pathname === '/chat';
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40">
@@ -35,8 +34,8 @@ export function BottomNavigation({ onAskAnything }: BottomNavigationProps) {
           </button>
 
           <button
-            onClick={onAskAnything}
-            className="flex flex-col items-center space-y-1 transition-colors duration-200 text-gray-400 hover:text-gray-200"
+            onClick={() => navigate('/chat')}
+            className={`flex flex-col items-center space-y-1 transition-colors duration-200 ${isChat ? 'text-white' : 'text-gray-400 hover:text-gray-200'}`}
           >
             <MessageCircle size={20} />
             <span className="text-xs font-medium">Ask Anything</span>

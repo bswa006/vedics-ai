@@ -19,7 +19,7 @@ export function Profile() {
   }
 
   return (
-    <div className="relative z-20 mx-auto max-w-lg px-4 pb-20">
+    <div className="relative z-20 pb-20">
       {/* Birth Details Card */}
       <div className="my-6 overflow-hidden rounded-[20px] bg-white p-6 shadow-lg transition-colors duration-200 dark:bg-[#1C1F2E]">
         <div className="mb-4 flex items-center gap-2">

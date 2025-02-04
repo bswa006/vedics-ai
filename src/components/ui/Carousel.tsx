@@ -20,8 +20,8 @@ interface CarouselProps {
 export function Carousel({
   items,
   slidesPerView = 3,
-  spaceBetween = 16,
-  loop = true,
+  spaceBetween = 12,
+  loop = false,
   onSlideChange,
 }: CarouselProps) {
   return (
@@ -40,10 +40,7 @@ export function Carousel({
         className={styles['swiper']}
       >
         {items.map((item, index) => (
-          <SwiperSlide 
-            key={index} 
-            className={styles['swiper-slide']}
-          >
+          <SwiperSlide key={index} className={styles['swiper-slide']}>
             {item}
           </SwiperSlide>
         ))}

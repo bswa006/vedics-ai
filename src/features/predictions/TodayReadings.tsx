@@ -17,14 +17,14 @@ export function TodayReadings({ userId }: TodayReadingsProps) {
   useEffect(() => {
     const fetchTodayReadings = async () => {
       try {
-        const data = await api.readings.getTodayReadings(userId);
-        if (!data?.reading?.today_reading) {
-          throw new Error('Invalid response format');
-        }
-        setReadings(data.reading.today_reading);
-        setError(null);
+        // const data = await api.readings.getTodayReadings(userId);
+        // if (!data?.reading?.today_reading) {
+        //   throw new Error('Invalid response format');
+        // }
+        // setReadings(data.reading.today_reading);
+        // setError(null);
       } catch (err: unknown) {
-        console.error('Failed to fetch today\'s readings:', err);
+        console.error("Failed to fetch today's readings:", err);
         setError("Failed to load today's readings. Please try again later.");
       } finally {
         setLoading(false);
@@ -62,7 +62,7 @@ export function TodayReadings({ userId }: TodayReadingsProps) {
     color_of_the_day = '',
     favorable_activities = [],
     challenging_aspects = [],
-    remedies_for_the_day = []
+    remedies_for_the_day = [],
   } = readings;
 
   return (

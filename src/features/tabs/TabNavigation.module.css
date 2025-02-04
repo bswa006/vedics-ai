@@ -1,33 +1,31 @@
+/* Space theme background */
+.navigation-container {
+  background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+/* Space theme styles */
+.navigation-container {
+  background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  padding: 0.5rem 0;
+}
+
 /* Base tab styles */
 .tab-hover {
   position: relative;
-  transition: all 0.4s ease;
   border-radius: 20px;
-  background-color: transparent;
+  padding: 0.5rem;
 }
 
 /* Active tab styles */
 .tab-hover[data-state='active'] {
-  background-color: #2435b3;
+  background: transparent;
 }
 
-/* Active tab indicator */
-.tab-indicator {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  width: 0;
-  height: 2px;
-  background: #2435b3;
-  transition: all 0.4s ease;
-  opacity: 0;
-  transform: translateX(-50%);
-}
 
-.tab-hover[data-state='active'] .tab-indicator {
-  width: 40%;
-  opacity: 1;
-}
 
 /* Icon styles */
 .tab-hover svg {

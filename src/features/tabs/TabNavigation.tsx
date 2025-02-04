@@ -1,13 +1,4 @@
-import {
-  Briefcase,
-  Clock,
-  GraduationCap,
-  Heart,
-  MessageCircle,
-  Sun,
-  User,
-  Users,
-} from 'lucide-react';
+import { Briefcase, Clock, GraduationCap, Heart, Sun, User, Users } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { PredictionType } from '../../types/predictions';
 import styles from './TabNavigation.module.css';
@@ -24,16 +15,15 @@ interface Tab {
 interface TabNavigationProps {
   activeTab: PredictionType;
   setActiveTab: (id: PredictionType) => void;
-  setIsChatOpen: (isOpen: boolean) => void;
 }
 
-export function TabNavigation({ activeTab, setActiveTab, setIsChatOpen }: TabNavigationProps) {
+export function TabNavigation({ activeTab, setActiveTab }: TabNavigationProps) {
   const { t } = useTranslation();
 
   const tabs: Tab[] = [
     {
       id: 'today_readings',
-      label: t('tabs.today'),
+      label: 'Daily Stars',
       icon: <Sun className="h-6 w-6" />,
       color: 'bg-[#2435b3]',
     },
@@ -86,21 +76,15 @@ export function TabNavigation({ activeTab, setActiveTab, setIsChatOpen }: TabNav
   const tabItems = tabs.map(tab => (
     <button
       key={tab.id}
-      onClick={() => {
-        if (tab.id === 'ask_anything') {
-          setIsChatOpen(true);
-        } else {
-          setActiveTab(tab.id);
-        }
-      }}
+      onClick={() => setActiveTab(tab.id)}
       data-state={activeTab === tab.id ? 'active' : 'inactive'}
-      className={`group relative flex flex-col items-center justify-center transition-all duration-300 ${styles['tab-hover']} ${
-        activeTab === tab.id ? 'text-white' : 'text-[#8B93B8] hover:text-white'
-      }`}
+      className={`group relative flex flex-col items-center justify-center ${styles['tab-hover']}`}
     >
-      <div className="relative z-10 flex flex-col items-center space-y-2 px-3 py-4">
-        <div className="mb-1.5 transition-all duration-300">{tab.icon}</div>
-        <span className="block text-center text-[13px] font-medium tracking-wide transition-colors duration-300">
+      <div className="relative z-10 flex flex-col items-center space-y-1 px-3 py-2.5">
+        <div className={`p-2 rounded-full ${activeTab === tab.id ? 'bg-[#2435b3] shadow-lg text-white' : 'text-[#8B93B8] hover:bg-white/5 hover:text-white'}`}>
+          {tab.icon}
+        </div>
+        <span className={`block text-center text-[11px] tracking-wide ${activeTab === tab.id ? 'text-[#2435b3] font-semibold' : 'text-[#8B93B8] font-medium'}`}>
           {tab.label}
         </span>
       </div>

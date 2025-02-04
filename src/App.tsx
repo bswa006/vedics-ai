@@ -7,6 +7,7 @@ import { PredictionContent } from './features/predictions/PredictionContent';
 import { TabNavigation } from './features/tabs/TabNavigation';
 import { Profile } from './features/profile/Profile';
 import { Login } from './features/auth/Login';
+import { Chat } from './features/chat/Chat';
 import './i18n/config';
 import { PredictionType } from './types/predictions';
 import { Modal } from './components/Modal';
@@ -16,8 +17,6 @@ function AppContent({
   userId,
   darkMode,
   setDarkMode,
-  isChatOpen,
-  setIsChatOpen,
   handleLogout,
   showLogoutModal,
   setShowLogoutModal,
@@ -26,8 +25,7 @@ function AppContent({
   userId: number | null;
   darkMode: boolean;
   setDarkMode: (dark: boolean) => void;
-  isChatOpen: boolean;
-  setIsChatOpen: (open: boolean) => void;
+
   handleLogout: () => void;
   showLogoutModal: boolean;
   setShowLogoutModal: (show: boolean) => void;
@@ -47,14 +45,20 @@ function AppContent({
             !userId ? (
               <Navigate to="/login" replace />
             ) : (
-              <Layout
-                darkMode={darkMode}
-                setDarkMode={setDarkMode}
-                isChatOpen={isChatOpen}
-                onLogout={handleLogout}
-                setIsChatOpen={setIsChatOpen}
-              >
+              <Layout darkMode={darkMode} setDarkMode={setDarkMode} onLogout={handleLogout}>
                 <Profile />
+              </Layout>
+            )
+          }
+        />
+        <Route
+          path="/chat"
+          element={
+            !userId ? (
+              <Navigate to="/login" replace />
+            ) : (
+              <Layout darkMode={darkMode} setDarkMode={setDarkMode} onLogout={handleLogout}>
+                <Chat />
               </Layout>
             )
           }
@@ -65,14 +69,8 @@ function AppContent({
             !userId ? (
               <Navigate to="/login" replace />
             ) : (
-              <Layout
-                darkMode={darkMode}
-                setDarkMode={setDarkMode}
-                isChatOpen={isChatOpen}
-                onLogout={handleLogout}
-                setIsChatOpen={setIsChatOpen}
-              >
-                <div className="mx-auto max-w-5xl space-y-4 py-4 text-text-light-primary transition-colors duration-200 dark:text-text-dark-primary">
+              <Layout darkMode={darkMode} setDarkMode={setDarkMode} onLogout={handleLogout}>
+                <div className="mx-auto max-w-5xl space-y-4 pb-4 text-text-light-primary transition-colors duration-200 dark:text-text-dark-primary">
                   {error ? (
                     <div className="text-center text-red-500 transition-colors duration-200 dark:text-red-400">
                       {t('common.error')}: {error}
@@ -131,15 +129,8 @@ function AppContent({
                           </div>
                         </div>
                       )}
-                      <TabNavigation
-                        activeTab={activeTab}
-                        setActiveTab={setActiveTab}
-                        setIsChatOpen={setIsChatOpen}
-                      />
-                      <PredictionContent
-                        activeTab={activeTab}
-                        predictions={predictions || []}
-                      />
+                      <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
+                      <PredictionContent activeTab={activeTab} predictions={predictions || []} />
                     </>
                   )}
                 </div>
@@ -165,7 +156,6 @@ function AppContent({
 }
 
 function App() {
-  const [isChatOpen, setIsChatOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const [userId, setUserId] = useState<number | null>(null);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -201,8 +191,6 @@ function App() {
           userId={userId}
           darkMode={darkMode}
           setDarkMode={setDarkMode}
-          isChatOpen={isChatOpen}
-          setIsChatOpen={setIsChatOpen}
           handleLogout={handleLogout}
           showLogoutModal={showLogoutModal}
           setShowLogoutModal={setShowLogoutModal}
