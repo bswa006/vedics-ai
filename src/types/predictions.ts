@@ -1,12 +1,15 @@
+import { TodayReading } from './readings';
+
 export type PredictionType =
-  | 'today_readings'
   | 'core_personality_and_life_path'
   | 'career_success_and_wealth'
   | 'relationships_love_and_marriage'
   | 'health_and_wellbeing'
   | 'challenges_and_remedies'
   | 'major_life_periods'
-  | 'ask_anything';
+  | 'ask_anything'
+  | 'today_readings'
+  | 'today_reading';
 
 export interface PersonalityContent {
   type: 'core_personality_and_life_path';
@@ -82,6 +85,10 @@ export type PredictionContent =
   | MajorLifePeriodsContent
   | AskAnythingContent;
 
+export interface TodayReading {
+  // Add properties for TodayReading interface
+}
+
 export type BasePrediction =
   | {
       id: number;
@@ -130,7 +137,12 @@ export type BasePrediction =
       created_at: string;
       type: 'today_readings';
       content: Record<string, never>;
+    }
+  | {
+      id: number;
+      created_at: string;
+      type: 'today_reading';
+      content: TodayReading;
     };
 
 export type PredictionResponse = BasePrediction[];
-

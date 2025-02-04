@@ -14,14 +14,11 @@ export const useUserData = (userId: number | null) => {
     try {
       setLoading(true);
       setError(null);
-      const [userResponse, readingsResponse] = await Promise.all([
-        getUser(id),
-        getUserReadings(id),
-      ]);
-
+      const userResponse = await getUser(id);
       const user = userResponse.user;
       setUserData(user);
 
+      const readingsResponse = await getUserReadings(id);
       const modifiedData = readingsResponse.map((prediction: any) => ({
         ...prediction,
         content: prediction.content[prediction.type],

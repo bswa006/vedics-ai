@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import { PredictionResponse, PredictionType } from '../../types/predictions';
-import { TodayReadings } from './TodayReadings';
 
 interface PredictionContentProps {
   activeTab: PredictionType;
@@ -9,14 +8,6 @@ interface PredictionContentProps {
 
 export function PredictionContent({ activeTab, predictions }: PredictionContentProps): JSX.Element {
   const { t } = useTranslation();
-
-  const renderTodayReadingsTab = (): JSX.Element | null => {
-    const storedUserId = localStorage.getItem('userId');
-    const userId = storedUserId ? parseInt(storedUserId) : null;
-    if (!userId) return null;
-
-    return <TodayReadings userId={userId} />;
-  };
 
   const renderPersonalityTab = (): JSX.Element | null => {
     const cardStyle =
@@ -414,8 +405,6 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
     if (!predictions || predictions.length === 0) return null;
 
     switch (tab) {
-      case 'today_readings':
-        return renderTodayReadingsTab();
       case 'core_personality_and_life_path':
         return renderPersonalityTab();
       case 'career_success_and_wealth':

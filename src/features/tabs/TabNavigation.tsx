@@ -1,4 +1,4 @@
-import { Briefcase, Clock, GraduationCap, Heart, Sun, User, Users } from 'lucide-react';
+import { Briefcase, Clock, GraduationCap, Heart, User, Users } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { PredictionType } from '../../types/predictions';
 import styles from './TabNavigation.module.css';
@@ -21,12 +21,6 @@ export function TabNavigation({ activeTab, setActiveTab }: TabNavigationProps) {
   const { t } = useTranslation();
 
   const tabs: Tab[] = [
-    {
-      id: 'today_readings',
-      label: 'Daily Stars',
-      icon: <Sun className="h-6 w-6" />,
-      color: 'bg-[#2435b3]',
-    },
     {
       id: 'core_personality_and_life_path',
       label: t('tabs.personality'),
@@ -81,10 +75,14 @@ export function TabNavigation({ activeTab, setActiveTab }: TabNavigationProps) {
       className={`group relative flex flex-col items-center justify-center ${styles['tab-hover']}`}
     >
       <div className="relative z-10 flex flex-col items-center space-y-1 px-3 py-2.5">
-        <div className={`p-2 rounded-full ${activeTab === tab.id ? 'bg-[#2435b3] shadow-lg text-white' : 'text-[#8B93B8] hover:bg-white/5 hover:text-white'}`}>
+        <div
+          className={`rounded-full p-2 ${activeTab === tab.id ? 'bg-[#2435b3] text-white shadow-lg' : 'text-[#8B93B8] hover:bg-white/5 hover:text-white'}`}
+        >
           {tab.icon}
         </div>
-        <span className={`block text-center text-[11px] tracking-wide ${activeTab === tab.id ? 'text-[#2435b3] font-semibold' : 'text-[#8B93B8] font-medium'}`}>
+        <span
+          className={`block text-center text-[11px] tracking-wide ${activeTab === tab.id ? 'font-semibold text-[#2435b3]' : 'font-medium text-[#8B93B8]'}`}
+        >
           {tab.label}
         </span>
       </div>

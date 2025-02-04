@@ -8,6 +8,7 @@ import { TabNavigation } from './features/tabs/TabNavigation';
 import { Profile } from './features/profile/Profile';
 import { Login } from './features/auth/Login';
 import { Chat } from './features/chat/Chat';
+import { DailyStars } from './features/daily-stars/DailyStars';
 import './i18n/config';
 import { PredictionType } from './types/predictions';
 import { Modal } from './components/Modal';
@@ -32,7 +33,7 @@ function AppContent({
   confirmLogout: () => void;
 }) {
   const { t } = useTranslation();
-  const [activeTab, setActiveTab] = useState<PredictionType>('today_readings');
+  const [activeTab, setActiveTab] = useState<PredictionType>('career_success_and_wealth');
   const { userData, predictions, error } = useUserDataContext();
 
   return (
@@ -59,6 +60,18 @@ function AppContent({
             ) : (
               <Layout darkMode={darkMode} setDarkMode={setDarkMode} onLogout={handleLogout}>
                 <Chat />
+              </Layout>
+            )
+          }
+        />
+        <Route
+          path="/daily-stars"
+          element={
+            !userId ? (
+              <Navigate to="/login" replace />
+            ) : (
+              <Layout darkMode={darkMode} setDarkMode={setDarkMode} onLogout={handleLogout}>
+                <DailyStars />
               </Layout>
             )
           }

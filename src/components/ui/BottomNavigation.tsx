@@ -1,4 +1,4 @@
-import { Home, User, MessageCircle } from 'lucide-react';
+import { Home, User, MessageCircle, Sun } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 interface BottomNavigationProps {}
@@ -9,6 +9,7 @@ export function BottomNavigation({}: BottomNavigationProps) {
   const isHome = location.pathname === '/';
   const isProfile = location.pathname === '/profile';
   const isChat = location.pathname === '/chat';
+  const isDailyStars = location.pathname === '/daily-stars';
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40">
@@ -31,6 +32,14 @@ export function BottomNavigation({}: BottomNavigationProps) {
           >
             <Home size={20} />
             <span className="text-xs font-medium">Home</span>
+          </button>
+
+          <button
+            onClick={() => navigate('/daily-stars')}
+            className={`flex flex-col items-center space-y-1 transition-colors duration-200 ${isDailyStars ? 'text-white' : 'text-gray-400 hover:text-gray-200'}`}
+          >
+            <Sun size={20} />
+            <span className="text-xs font-medium">Daily Stars</span>
           </button>
 
           <button
