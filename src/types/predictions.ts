@@ -1,163 +1,136 @@
-export type PredictionType = 
+export type PredictionType =
+  | 'today_readings'
   | 'core_personality_and_life_path'
   | 'career_success_and_wealth'
   | 'relationships_love_and_marriage'
   | 'health_and_wellbeing'
   | 'challenges_and_remedies'
   | 'major_life_periods'
-  | 'today_readings'
   | 'ask_anything';
 
-export type PredictionContent =
-  | CorePersonalityContent
-  | CareerSuccessContent
-  | RelationshipsContent
-  | HealthContent
-  | ChallengesContent
-  | MajorLifePeriodsContent
-  | TodayReadingsContent;
-
-export interface BasePrediction {
-  id: number;
-  created_at: string;
-  type: PredictionType;
-  content: PredictionContent;
-}
-
-export type Prediction =
-  | CorePersonalityPrediction
-  | CareerSuccessPrediction
-  | RelationshipsPrediction
-  | HealthPrediction
-  | ChallengesPrediction
-  | MajorLifePeriodsPrediction
-  | TodayReadingsPrediction;
-
-export type PredictionResponse = Prediction[];
-
-export interface CorePersonalityContent {
-  past_life_influence: string;
-  social_perception: string;
+export interface PersonalityContent {
+  type: 'core_personality_and_life_path';
   traits: string[];
-  strengths?: string[];
-  weaknesses?: string[];
+  strengths: string[];
+  weaknesses: string[];
+  social_perception: string;
+  past_life_influence: string;
 }
 
-export interface CareerSuccessContent {
-  business_vs_job: string;
-  career_transformation: {
-    expected_age_range: string;
-    prediction: string;
-  };
+export interface CareerContent {
+  type: 'career_success_and_wealth';
+  ideal_professions: string[];
   financial_growth: {
     trend: string;
     wealth_accumulation: string;
   };
+  career_transformation: {
+    expected_age_range: string;
+    prediction: string;
+  };
   foreign_opportunities: string;
-  ideal_professions: string[];
+  business_vs_job: string;
 }
 
 export interface RelationshipsContent {
+  type: 'relationships_love_and_marriage';
+  traits_in_relationships: string[];
   marriage: {
-    challenges: string;
-    partner_traits: string[];
     prediction: string;
+    partner_traits: string[];
+    challenges: string;
   };
   romantic_influences: string;
-  traits_in_relationships: string[];
 }
 
 export interface HealthContent {
+  type: 'health_and_wellbeing';
   concerns: string[];
-  long_term_health: string;
   recommendations: string[];
+  long_term_health: string;
 }
 
 export interface ChallengesContent {
+  type: 'challenges_and_remedies';
   challenges: string[];
   remedies: {
-    astrological_recommendations: string[];
     mantras: string[];
     spiritual_practices: string[];
+    astrological_recommendations: string[];
   };
 }
 
 export interface MajorLifePeriodsContent {
+  type: 'major_life_periods';
   early_life: string;
   mid_life: string;
   later_years: string;
 }
 
-
-
-// Type guard functions
-export function isCorePersonalityPrediction(prediction: Prediction): prediction is CorePersonalityPrediction {
-  return prediction.type === 'core_personality_and_life_path';
+export interface AskAnythingContent {
+  type: 'ask_anything';
+  question: string;
+  answer: string;
 }
 
-export function isCareerSuccessPrediction(prediction: Prediction): prediction is CareerSuccessPrediction {
-  return prediction.type === 'career_success_and_wealth';
-}
+export type PredictionContent =
+  | PersonalityContent
+  | CareerContent
+  | RelationshipsContent
+  | HealthContent
+  | ChallengesContent
+  | MajorLifePeriodsContent
+  | AskAnythingContent;
 
-export function isRelationshipsPrediction(prediction: Prediction): prediction is RelationshipsPrediction {
-  return prediction.type === 'relationships_love_and_marriage';
-}
+export type BasePrediction =
+  | {
+      id: number;
+      created_at: string;
+      type: 'core_personality_and_life_path';
+      content: PersonalityContent;
+    }
+  | {
+      id: number;
+      created_at: string;
+      type: 'career_success_and_wealth';
+      content: CareerContent;
+    }
+  | {
+      id: number;
+      created_at: string;
+      type: 'relationships_love_and_marriage';
+      content: RelationshipsContent;
+    }
+  | {
+      id: number;
+      created_at: string;
+      type: 'health_and_wellbeing';
+      content: HealthContent;
+    }
+  | {
+      id: number;
+      created_at: string;
+      type: 'challenges_and_remedies';
+      content: ChallengesContent;
+    }
+  | {
+      id: number;
+      created_at: string;
+      type: 'major_life_periods';
+      content: MajorLifePeriodsContent;
+    }
+  | {
+      id: number;
+      created_at: string;
+      type: 'ask_anything';
+      content: AskAnythingContent;
+    }
+  | {
+      id: number;
+      created_at: string;
+      type: 'today_readings';
+      content: Record<string, never>;
+    };
 
-export function isHealthPrediction(prediction: Prediction): prediction is HealthPrediction {
-  return prediction.type === 'health_and_wellbeing';
-}
+export type PredictionResponse = BasePrediction[];
 
-export function isChallengesPrediction(prediction: Prediction): prediction is ChallengesPrediction {
-  return prediction.type === 'challenges_and_remedies';
-}
-
-export function isMajorLifePeriodsPrediction(prediction: Prediction): prediction is MajorLifePeriodsPrediction {
-  return prediction.type === 'major_life_periods';
-}
-
-export interface CorePersonalityPrediction extends BasePrediction {
-  type: 'core_personality_and_life_path';
-  content: CorePersonalityContent;
-}
-
-export interface CareerSuccessPrediction extends BasePrediction {
-  type: 'career_success_and_wealth';
-  content: CareerSuccessContent;
-}
-
-export interface RelationshipsPrediction extends BasePrediction {
-  type: 'relationships_love_and_marriage';
-  content: RelationshipsContent;
-}
-
-export interface HealthPrediction extends BasePrediction {
-  type: 'health_and_wellbeing';
-  content: HealthContent;
-}
-
-export interface ChallengesPrediction extends BasePrediction {
-  type: 'challenges_and_remedies';
-  content: ChallengesContent;
-}
-
-export interface MajorLifePeriodsPrediction extends BasePrediction {
-  type: 'major_life_periods';
-  content: MajorLifePeriodsContent;
-}
-
-export interface TodayReadingsContent {
-  general_insights: string;
-  color_of_the_day: string;
-  favorable_activities: string[];
-  challenging_aspects: string[];
-  remedies_for_the_day: string[];
-}
-
-export interface TodayReadingsPrediction extends BasePrediction {
-  type: 'today_readings';
-  content: TodayReadingsContent;
-}
-
-export function isTodayReadingsPrediction(prediction: Prediction): prediction is TodayReadingsPrediction {
-  return prediction.type === 'today_readings';
-}

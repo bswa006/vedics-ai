@@ -72,7 +72,7 @@ export function TabNavigation({ activeTab, setActiveTab, setIsChatOpen }: TabNav
       color: 'bg-[#2435b3]',
     },
     {
-      id: 'ask_anything' as PredictionType,
+      id: 'ask_anything',
       label: t('tabs.ask_anything', 'Ask Anything'),
       icon: <MessageCircle className="h-6 w-6" />,
       color: 'bg-[#2435b3]',

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { PredictionResponse } from '../types/predictions';
+import { TodayReadingsResponse } from '../types/readings';
 
 const API_BASE_URL = 'http://152.67.9.249:5001/api';
 
@@ -22,7 +23,7 @@ export interface ChatResponse {
 
 export const api = {
   readings: {
-    getTodayReadings: async (userId: number) => {
+    getTodayReadings: async (userId: number): Promise<TodayReadingsResponse> => {
       try {
         const response = await axios.post(`${API_BASE_URL}/today_readings`, { user_id: userId }, {
           headers: {
