@@ -26,8 +26,8 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
   const { t } = useTranslation();
 
   const renderTodayReadingsTab = (): JSX.Element | null => {
-    // Get userId from the first prediction in the array
-    const userId = predictions[0]?.id;
+    const storedUserId = localStorage.getItem('userId');
+    const userId = storedUserId ? parseInt(storedUserId) : null;
     if (!userId) return null;
 
     return <TodayReadings userId={userId} />;

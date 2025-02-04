@@ -18,8 +18,9 @@ export function TodayReadings({ userId }: TodayReadingsProps) {
     const fetchTodayReadings = async () => {
       try {
         const data = await api.readings.getTodayReadings(userId);
-        if (data.reading?.today_readings) {
-          setReadings(data.reading.today_readings);
+        console.log('-------', data?.reading?.today_reading);
+        if (data.reading?.today_reading) {
+          setReadings(data.reading.today_reading);
           setError(null);
         } else {
           throw new Error('Invalid response format');
@@ -58,7 +59,7 @@ export function TodayReadings({ userId }: TodayReadingsProps) {
   }
 
   return (
-    <div className={cn('space-y-6 p-4')}>
+    <div className={cn('space-y-6')}>
       {/* General Insights */}
       <Card className={cn('p-6')}>
         <div className={cn('mb-4 flex items-center gap-2')}>
