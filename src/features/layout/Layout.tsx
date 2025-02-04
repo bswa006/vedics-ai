@@ -1,7 +1,8 @@
-import { MessageCircle } from "lucide-react";
-import { ReactNode } from "react";
-import { ChatWidget } from "../chat/ChatWidget";
-import { Header } from "./Header";
+
+import { ReactNode } from 'react';
+import { ChatWidget } from '../chat/ChatWidget';
+import { Header } from './Header';
+import { BottomNavigation } from '../../components/ui/BottomNavigation';
 
 interface LayoutProps {
   children: ReactNode;
@@ -21,20 +22,13 @@ export function Layout({
   onLogout,
 }: LayoutProps) {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+    <div className="min-h-screen bg-gray-50 transition-colors duration-200 dark:bg-gray-900">
       <Header darkMode={darkMode} setDarkMode={setDarkMode} onLogout={onLogout} />
 
-      <div className="max-w-lg mx-auto px-4 -mt-8 relative z-20">{children}</div>
+      <div className="relative z-20 mx-auto max-w-lg px-4 pb-20">{children}</div>
 
-      <div className="fixed bottom-6 right-6 z-50">
-        <button
-          onClick={() => setIsChatOpen(true)}
-          className="bg-oriental-800 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105"
-        >
-          <MessageCircle className="w-6 h-6" />
-        </button>
-      </div>
       {isChatOpen && <ChatWidget onClose={() => setIsChatOpen(false)} />}
+      <BottomNavigation onAskAnything={() => setIsChatOpen(true)} />
     </div>
   );
 }

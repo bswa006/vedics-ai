@@ -127,7 +127,7 @@ export function ChatWidget({ onClose }: ChatWidgetProps) {
   );
 
   return (
-    <div className="animate-slideIn fixed bottom-4 right-4 z-50 flex h-[500px] w-[350px] flex-col overflow-hidden rounded-2xl bg-[#2B3990] shadow-2xl">
+    <div className="animate-slideIn fixed bottom-4 left-4 right-4 z-50 flex h-[500px] w-[calc(100%-2rem)] max-w-[350px] flex-col overflow-hidden rounded-2xl bg-[#2B3990] shadow-2xl">
       {/* Chat Header */}
       <div className="flex items-center justify-between p-4">
         <div className="flex items-center gap-3">

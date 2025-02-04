@@ -11,6 +11,8 @@ import {
 import { useTranslation } from 'react-i18next';
 import { PredictionType } from '../../types/predictions';
 import styles from './TabNavigation.module.css';
+import type { Swiper } from 'swiper';
+import { Carousel } from '../../components/ui/Carousel';
 
 interface Tab {
   id: PredictionType;
@@ -71,42 +73,48 @@ export function TabNavigation({ activeTab, setActiveTab, setIsChatOpen }: TabNav
       icon: <Clock className="h-6 w-6" />,
       color: 'bg-[#2435b3]',
     },
-    {
-      id: 'ask_anything',
-      label: t('tabs.ask_anything', 'Ask Anything'),
-      icon: <MessageCircle className="h-6 w-6" />,
-      color: 'bg-[#2435b3]',
-    },
   ];
 
-  return (
-    <div className="mb-6 rounded-[24px] bg-white/10 p-3 shadow-2xl backdrop-blur-lg">
-      <div className="grid grid-cols-3 gap-2">
-        {tabs.map(tab => (
-          <button
-            key={tab.id}
-            onClick={() => {
-              if (tab.id === 'ask_anything') {
-                setIsChatOpen(true);
-              } else {
-                setActiveTab(tab.id);
-              }
-            }}
-            data-state={activeTab === tab.id ? 'active' : 'inactive'}
-            className={`group relative flex flex-col items-center justify-center transition-all duration-300 ${styles['tab-hover']} ${
-              activeTab === tab.id ? 'text-white' : 'text-[#8B93B8] hover:text-white'
-            }`}
-          >
-            <div className="relative z-10 flex flex-col items-center space-y-2 px-3 py-4">
-              <div className="mb-1.5 transition-all duration-300">{tab.icon}</div>
-              <span className="block text-center text-[13px] font-medium tracking-wide transition-colors duration-300">
-                {tab.label}
-              </span>
-            </div>
-            <div className={styles['tab-indicator']} />
-          </button>
-        ))}
+  const handleSlideChange = (swiper: Swiper) => {
+    const activeIndex = swiper.realIndex;
+    const tab = tabs[activeIndex];
+    if (tab && tab.id !== 'ask_anything') {
+      setActiveTab(tab.id);
+    }
+  };
+
+  const tabItems = tabs.map(tab => (
+    <button
+      key={tab.id}
+      onClick={() => {
+        if (tab.id === 'ask_anything') {
+          setIsChatOpen(true);
+        } else {
+          setActiveTab(tab.id);
+        }
+      }}
+      data-state={activeTab === tab.id ? 'active' : 'inactive'}
+      className={`group relative flex flex-col items-center justify-center transition-all duration-300 ${styles['tab-hover']} ${
+        activeTab === tab.id ? 'text-white' : 'text-[#8B93B8] hover:text-white'
+      }`}
+    >
+      <div className="relative z-10 flex flex-col items-center space-y-2 px-3 py-4">
+        <div className="mb-1.5 transition-all duration-300">{tab.icon}</div>
+        <span className="block text-center text-[13px] font-medium tracking-wide transition-colors duration-300">
+          {tab.label}
+        </span>
       </div>
-    </div>
+      <div className={styles['tab-indicator']} />
+    </button>
+  ));
+
+  return (
+    <Carousel
+      items={tabItems}
+      slidesPerView={3}
+      spaceBetween={8}
+      loop={true}
+      onSlideChange={handleSlideChange}
+    />
   );
 }

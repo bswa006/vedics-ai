@@ -30,6 +30,12 @@
     },
     "submit": "Continue Journey"
   },
+  "profile": {
+    "title": "Profile",
+    "birthDetails": "Birth Details",
+    "pendingStatus": "Profile Status",
+    "pendingMessage": "Your profile is currently under review. We'll notify you once the verification is complete."
+  },
   "birthDetails": {
     "birthDate": "Birth Date",
     "birthTime": "Birth Time",
