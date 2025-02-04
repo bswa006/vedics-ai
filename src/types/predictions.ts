@@ -5,7 +5,8 @@ export type PredictionType =
   | 'health_and_wellbeing'
   | 'challenges_and_remedies'
   | 'major_life_periods'
-  | 'today_readings';
+  | 'today_readings'
+  | 'ask_anything';
 
 export type PredictionContent =
   | CorePersonalityContent

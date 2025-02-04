@@ -26,6 +26,17 @@ export function ChatWidget({ onClose }: ChatWidgetProps) {
   const [isTyping, setIsTyping] = useState(false);
 
   // Initialize chat and clear messages on page load
+  const suggestedQuestions = [
+    'How can I improve my relationships?',
+    'What are my lucky colors for today?',
+    'What remedies should I follow this week?',
+  ];
+
+  const handleSuggestedQuestion = (question: string) => {
+    setInputValue(question);
+    handleSend(question);
+  };
+
   useEffect(() => {
     // Get or create session
     const currentSessionId = getCurrentSession();
@@ -50,67 +61,70 @@ export function ChatWidget({ onClose }: ChatWidgetProps) {
     scrollToBottom();
   }, [messages]);
 
-  const handleSend = useCallback(async () => {
-    const message = inputValue.trim();
-    if (!message || isLoading || !sessionId) return;
+  const handleSend = useCallback(
+    async (forcedMessage?: string) => {
+      const message = forcedMessage || inputValue.trim();
+      if (!message || isLoading || !sessionId) return;
 
-    try {
-      setIsLoading(true);
-      // Add user message
-      const userMessage: ExtendedChatMessage = {
-        text: message,
-        isUser: true,
-        timestamp: new Date(),
-      };
-
-      // Update messages with user message
-      setMessages(prev => {
-        const newMessages = [...prev, userMessage];
-        saveMessages(sessionId, newMessages);
-        return newMessages;
-      });
-      setInputValue('');
-
-      // Show typing indicator
-      setIsTyping(true);
-      setMessages(prev => [
-        ...prev,
-        { text: '', isUser: false, timestamp: new Date(), isTyping: true } as ExtendedChatMessage,
-      ]);
-
-      // Send message and wait for response
-      const response = await sendMessage(message, sessionId);
-
-      // Update messages with response
-      setMessages(prev => {
-        const messagesWithoutTyping = prev.filter(msg => !msg.isTyping);
-        const botMessage: ExtendedChatMessage = {
-          text: response.reply,
-          isUser: false,
+      try {
+        setIsLoading(true);
+        // Add user message
+        const userMessage: ExtendedChatMessage = {
+          text: message,
+          isUser: true,
           timestamp: new Date(),
         };
-        const newMessages = [...messagesWithoutTyping, botMessage];
-        saveMessages(sessionId, newMessages);
-        return newMessages;
-      });
-    } catch (error) {
-      // Remove typing indicator and add error message
-      setMessages(prev => {
-        const messagesWithoutTyping = prev.filter(msg => !msg.isTyping);
-        const errorMessage: ExtendedChatMessage = {
-          text: t('common.chatError'),
-          isUser: false,
-          timestamp: new Date(),
-        };
-        const newMessages = [...messagesWithoutTyping, errorMessage];
-        saveMessages(sessionId, newMessages);
-        return newMessages;
-      });
-    } finally {
-      setIsTyping(false);
-      setIsLoading(false);
-    }
-  }, [inputValue, isLoading, sessionId, t, sendMessage, saveMessages]);
+
+        // Update messages with user message
+        setMessages(prev => {
+          const newMessages = [...prev, userMessage];
+          saveMessages(sessionId, newMessages);
+          return newMessages;
+        });
+        setInputValue('');
+
+        // Show typing indicator
+        setIsTyping(true);
+        setMessages(prev => [
+          ...prev,
+          { text: '', isUser: false, timestamp: new Date(), isTyping: true } as ExtendedChatMessage,
+        ]);
+
+        // Send message and wait for response
+        const response = await sendMessage(message, sessionId);
+
+        // Update messages with response
+        setMessages(prev => {
+          const messagesWithoutTyping = prev.filter(msg => !msg.isTyping);
+          const botMessage: ExtendedChatMessage = {
+            text: response.reply,
+            isUser: false,
+            timestamp: new Date(),
+          };
+          const newMessages = [...messagesWithoutTyping, botMessage];
+          saveMessages(sessionId, newMessages);
+          return newMessages;
+        });
+      } catch (error) {
+        // Remove typing indicator and add error message
+        setMessages(prev => {
+          const messagesWithoutTyping = prev.filter(msg => !msg.isTyping);
+          const errorMessage: ExtendedChatMessage = {
+            text: t('common.chatError'),
+            isUser: false,
+            timestamp: new Date(),
+          };
+          const newMessages = [...messagesWithoutTyping, errorMessage];
+          saveMessages(sessionId, newMessages);
+          return newMessages;
+        });
+      } finally {
+        setIsTyping(false);
+        setIsLoading(false);
+      }
+    },
+    [inputValue, isLoading, sessionId, t, sendMessage, saveMessages]
+  );
 
   return (
     <div className="animate-slideIn fixed bottom-4 right-4 z-50 flex h-[500px] w-[350px] flex-col overflow-hidden rounded-2xl bg-[#2B3990] shadow-2xl">
@@ -134,6 +148,24 @@ export function ChatWidget({ onClose }: ChatWidgetProps) {
           <X className="h-5 w-5 text-white" aria-label={t('common.close')} />
         </button>
       </div>
+
+      {/* Suggested Questions */}
+      {messages.length === 1 && (
+        <div className="space-y-2 p-4">
+          <p className="text-sm text-white/80">Suggested questions:</p>
+          <div className="flex flex-wrap gap-2">
+            {suggestedQuestions.map((question, index) => (
+              <button
+                key={index}
+                onClick={() => handleSuggestedQuestion(question)}
+                className="rounded-full bg-white/10 px-4 py-2 text-sm text-white transition-all duration-200 hover:bg-white/20"
+              >
+                {question}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Chat Messages */}
       <div className="flex-1 space-y-4 overflow-y-auto p-4">

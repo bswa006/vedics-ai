@@ -14,7 +14,7 @@ import { Modal } from './components/Modal';
 
 function App() {
   const { t } = useTranslation();
-  const [activeTab, setActiveTab] = useState<PredictionType>('core_personality_and_life_path');
+  const [activeTab, setActiveTab] = useState<PredictionType>('today_readings');
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
 
@@ -190,7 +190,7 @@ function App() {
                       )}
                       {predictions && predictions.length > 0 && (
                         <>
-                          <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
+                          <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} setIsChatOpen={setIsChatOpen} />
                           <PredictionContent activeTab={activeTab} predictions={predictions} />
                         </>
                       )}
