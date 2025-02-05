@@ -200,7 +200,9 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
           <h3 className="mb-4 text-xl font-bold text-black dark:text-white">
             {t('relationships.marriage')}
           </h3>
-          <p className="leading-relaxed text-black dark:text-white">{content.marriage.prediction}</p>
+          <p className="leading-relaxed text-black dark:text-white">
+            {content.marriage.prediction}
+          </p>
           <h4 className="mb-2 mt-4 font-semibold">{t('relationships.partnerTraits')}</h4>
           <div className="flex flex-wrap gap-2">
             {content.marriage.partner_traits.map((trait, index) => (
@@ -213,14 +215,18 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
             ))}
           </div>
           <h4 className="mb-2 mt-4 font-semibold">{t('relationships.challenges')}</h4>
-          <p className="leading-relaxed text-black dark:text-white">{content.marriage.challenges}</p>
+          <p className="leading-relaxed text-black dark:text-white">
+            {content.marriage.challenges}
+          </p>
         </div>
 
         <div className="rounded-xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl shadow-oriental-900/10 transition-all duration-300 hover:scale-[1.02] hover:bg-gradient-to-br hover:from-oriental-50 hover:to-oriental-100 hover:shadow-2xl dark:from-gray-800 dark:to-gray-900 dark:hover:from-oriental-900/20 dark:hover:to-oriental-800/20">
           <h3 className="mb-4 text-xl font-bold text-black dark:text-white">
             {t('relationships.romanticInfluences')}
           </h3>
-          <p className="leading-relaxed text-black dark:text-white">{content.romantic_influences}</p>
+          <p className="leading-relaxed text-black dark:text-white">
+            {content.romantic_influences}
+          </p>
         </div>
       </div>
     );
@@ -423,7 +429,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
   };
 
   return (
-    <div className="relative h-[calc(100vh-12rem)] w-full overflow-hidden" data-testid="prediction-content">
+    <div className="relative overflow-hidden" data-testid="prediction-content">
       <div className="h-full w-full overflow-y-auto overflow-x-hidden px-4 pb-4">
         {renderContent(activeTab)}
       </div>
