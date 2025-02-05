@@ -13,6 +13,7 @@ export const FinalWelcome: React.FC<FinalWelcomeProps> = ({ onComplete, error })
 
   return (
     <div className="flex h-full max-h-screen flex-col bg-gradient-to-br from-[#0B1120]/90 via-[#0F172A]/80 to-[#0B1120]/90">
+
       <div className="flex-1 flex flex-col items-center justify-center px-6">
         <div className="max-w-md w-full space-y-8 text-center">
           <motion.div

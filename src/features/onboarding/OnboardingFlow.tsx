@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useUserApi } from '../../hooks/useUserApi';
 import { AxiosError } from 'axios';
-import { WelcomeScreen } from './components/WelcomeScreen';
 import { LanguageSelection } from './components/LanguageSelection';
 import { BirthDetailsForm } from './components/BirthDetailsForm';
 import { InterestsSelection } from './components/InterestsSelection';
@@ -31,7 +30,7 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) =>
   const [searchParams] = useSearchParams();
   const { createUser } = useUserApi();
   const [step, setStep] = useState(1);
-  const totalSteps = 5;
+  const totalSteps = 4;
   const [error, setError] = useState('');
 
   const phone = searchParams.get('phone');
@@ -54,13 +53,13 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) =>
   });
   const [selectedThemes, setSelectedThemes] = useState<string[]>([]);
 
-  const handleComplete = async () => {
+  const handleCreateUser = async () => {
     try {
       setError('');
 
       if (!birthDetails.date || !birthDetails.time || !birthDetails.place) {
         setError('Birth details are required');
-        return;
+        return false;
       }
 
       // Format date and time for API
@@ -81,34 +80,37 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) =>
       if (userResponse.user_id) {
         // Save user ID in localStorage
         localStorage.setItem('userId', userResponse.user_id.toString());
-
-        // Complete onboarding
-        onComplete({
-          language,
-          birthDetails,
-          selectedThemes,
-        });
-
-        // Redirect to home page
-        navigate('/', { replace: true });
-        window.location.reload();
+        return true;
       } else {
         setError('Invalid response from server');
+        return false;
       }
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;
       setError(error.response?.data?.message || 'An error occurred during user creation');
+      return false;
     }
+  };
+
+  const handleComplete = () => {
+    onComplete({
+      language,
+      birthDetails,
+      selectedThemes,
+    });
+    navigate('/', { replace: true });
+    window.location.reload();
   };
 
   return (
     <div className="flex h-full flex-col bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white">
-      <div className="flex h-full flex-col">
-        {step === 1 && <WelcomeScreen onContinue={() => setStep(2)} />}
-
-        {step === 2 && (
+      <div className="flex-none p-6">
+        <OnboardingProgress currentStep={step} totalSteps={totalSteps} />
+      </div>
+      <div className="flex-1 overflow-hidden">
+        {step === 1 && (
           <LanguageSelection
-            onNext={() => setStep(3)}
+            onNext={() => setStep(2)}
             selectedLanguage={language}
             onLanguageChange={lang => {
               setLanguage(lang);
@@ -117,23 +119,29 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) =>
           />
         )}
 
-        {step === 3 && (
+        {step === 2 && (
           <BirthDetailsForm
-            onNext={() => setStep(4)}
+            onNext={() => setStep(3)}
             birthDetails={birthDetails}
             onBirthDetailsChange={details => setBirthDetails({ ...birthDetails, ...details })}
           />
         )}
 
-        {step === 4 && (
+        {step === 3 && (
           <InterestsSelection
             selectedInterests={selectedThemes}
             onInterestsChange={setSelectedThemes}
-            onNext={() => setStep(5)}
+            onNext={async () => {
+              const success = await handleCreateUser();
+              if (success) {
+                setStep(4);
+              }
+            }}
+            error={error}
           />
         )}
 
-        {step === 5 && <FinalWelcome onComplete={handleComplete} error={error} />}
+        {step === 4 && <FinalWelcome onComplete={handleComplete} error={error} />}
       </div>
     </div>
   );

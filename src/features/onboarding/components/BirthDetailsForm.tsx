@@ -47,17 +47,6 @@ export const BirthDetailsForm: React.FC<BirthDetailsFormProps> = ({
   return (
     <div className="flex h-full flex-col">
       <div className="flex-none space-y-2 p-6">
-        <div className="flex items-center justify-between mb-4">
-          <span className="text-sm text-gray-300">Step 3 of 5</span>
-          <span className="text-sm text-blue-400">60%</span>
-        </div>
-        <div className="h-1 w-full bg-gray-700 rounded-full mb-4">
-          <div className="h-1 bg-blue-500 rounded-full" style={{ width: '60%' }} />
-        </div>
-        <div className="flex justify-between text-xs text-gray-400 mb-8">
-          <span>Start</span>
-          <span>Finish</span>
-        </div>
         <h2 className="text-2xl font-semibold text-white mb-2">
           {t('onboarding.birthDetails.title')}
         </h2>

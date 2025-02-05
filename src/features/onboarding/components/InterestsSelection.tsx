@@ -12,81 +12,93 @@ interface Interest {
   description: string;
 }
 
-const INTERESTS: Interest[] = [
-  {
-    id: 'daily-horoscope',
-    icon: '⭐',
-    title: 'Daily Horoscope',
-    description: 'Get daily personalized insights based on planetary movements',
-  },
-  {
-    id: 'career-finance',
-    icon: '💼',
-    title: 'Career & Finance',
-    description: 'Job opportunities, financial planning, business insights',
-  },
-  {
-    id: 'relationships-love',
-    icon: '❤️',
-    title: 'Relationships & Love',
-    description: 'Romantic compatibility, marriage guidance, partner traits',
-  },
-  {
-    id: 'health-wellness',
-    icon: '🌿',
-    title: 'Health & Wellness',
-    description: 'Physical well-being, mental health, lifestyle recommendations',
-  },
-  {
-    id: 'spiritual-growth',
-    icon: '🕉️',
-    title: 'Spiritual Growth',
-    description: 'Meditation guidance, karma insights, spiritual practices',
-  },
-  {
-    id: 'education-learning',
-    icon: '📚',
-    title: 'Education & Learning',
-    description: 'Academic success, skill development, learning opportunities',
-  },
-  {
-    id: 'travel-adventure',
-    icon: '✈️',
-    title: 'Travel & Adventure',
-    description: 'Auspicious travel times, destination compatibility, journey planning',
-  },
-  {
-    id: 'family-home',
-    icon: '🏠',
-    title: 'Family & Home',
-    description: 'Family relationships, domestic harmony, vastu guidance',
-  },
-  {
-    id: 'personal-growth',
-    icon: '🌱',
-    title: 'Personal Growth',
-    description: 'Self-improvement, personality development, life purpose',
-  },
-  {
-    id: 'wealth-prosperity',
-    icon: '💰',
-    title: 'Wealth & Prosperity',
-    description: 'Financial growth, investments, abundance manifestation',
-  },
-];
-
 interface InterestsSelectionProps {
   selectedInterests: string[];
   onInterestsChange: (interests: string[]) => void;
-  onNext: () => void;
+  onNext: () => Promise<void>;
+  error?: string;
 }
 
 export const InterestsSelection: React.FC<InterestsSelectionProps> = ({
   selectedInterests,
   onInterestsChange,
   onNext,
+  error,
 }) => {
   const { t } = useTranslation();
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  const handleNext = async () => {
+    setIsLoading(true);
+    try {
+      await onNext();
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const INTERESTS: Interest[] = [
+    {
+      id: 'daily-horoscope',
+      icon: '⭐',
+      title: t('onboarding.themes.dailyHoroscope.title'),
+      description: t('onboarding.themes.dailyHoroscope.description'),
+    },
+    {
+      id: 'career-finance',
+      icon: '💼',
+      title: t('onboarding.themes.careerFinance.title'),
+      description: t('onboarding.themes.careerFinance.description'),
+    },
+    {
+      id: 'relationships-love',
+      icon: '❤️',
+      title: t('onboarding.themes.relationshipsLove.title'),
+      description: t('onboarding.themes.relationshipsLove.description'),
+    },
+    {
+      id: 'health-wellness',
+      icon: '🌿',
+      title: t('onboarding.themes.healthWellbeing.title'),
+      description: t('onboarding.themes.healthWellbeing.description'),
+    },
+    {
+      id: 'spiritual-growth',
+      icon: '🕉️',
+      title: t('onboarding.themes.spiritualGrowth.title'),
+      description: t('onboarding.themes.spiritualGrowth.description'),
+    },
+    {
+      id: 'family-social',
+      icon: '🏠',
+      title: t('onboarding.themes.familySocial.title'),
+      description: t('onboarding.themes.familySocial.description'),
+    },
+    {
+      id: 'strengths-weaknesses',
+      icon: '🌱',
+      title: t('onboarding.themes.strengthsWeaknesses.title'),
+      description: t('onboarding.themes.strengthsWeaknesses.description'),
+    },
+    {
+      id: 'challenges-remedies',
+      icon: '🛡️',
+      title: t('onboarding.themes.challengesRemedies.title'),
+      description: t('onboarding.themes.challengesRemedies.description'),
+    },
+    {
+      id: 'travel-settlements',
+      icon: '✈️',
+      title: t('onboarding.themes.travelSettlements.title'),
+      description: t('onboarding.themes.travelSettlements.description'),
+    },
+    {
+      id: 'wealth-luck',
+      icon: '💰',
+      title: t('onboarding.themes.wealthLuck.title'),
+      description: t('onboarding.themes.wealthLuck.description'),
+    },
+  ];
 
   const toggleInterest = (id: string) => {
     if (selectedInterests.includes(id)) {
@@ -99,22 +111,11 @@ export const InterestsSelection: React.FC<InterestsSelectionProps> = ({
   return (
     <div className="flex h-full max-h-screen flex-col bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white">
       <div className="flex-none space-y-2 p-6">
-        <div className="flex items-center justify-between mb-4">
-          <span className="text-sm text-gray-300">Step 4 of 5</span>
-          <span className="text-sm text-blue-400">80%</span>
-        </div>
-        <div className="h-1 w-full bg-gray-700 rounded-full mb-4">
-          <div className="h-1 bg-blue-500 rounded-full" style={{ width: '80%' }} />
-        </div>
-        <div className="flex justify-between text-xs text-gray-400 mb-8">
-          <span>Start</span>
-          <span>Finish</span>
-        </div>
         <h2 className="text-2xl font-semibold text-white mb-2">
-          Choose Your Interests
+          {t('onboarding.themes.title')}
         </h2>
         <p className="text-gray-300 text-sm">
-          Choose the themes you'd like to focus on
+          {t('onboarding.themes.description')}
         </p>
       </div>
 
@@ -134,7 +135,7 @@ export const InterestsSelection: React.FC<InterestsSelectionProps> = ({
                 <Checkbox
                   checked={selectedInterests.includes(interest.id)}
                   className="h-5 w-5 border-2 border-gray-200 text-blue-500"
-                  onCheckedChange={(checked) => {
+                  onCheckedChange={() => {
                     toggleInterest(interest.id);
                   }}
                   onClick={(e) => e.stopPropagation()}
@@ -158,14 +159,19 @@ export const InterestsSelection: React.FC<InterestsSelectionProps> = ({
         </div>
       </div>
 
-      <div className="flex-none p-6">
+      <div className="flex-none p-6 space-y-4">
+        {error && (
+          <div className="rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-2 text-sm text-red-500/90">
+            {error}
+          </div>
+        )}
         <Button
-          onClick={onNext}
-          disabled={selectedInterests.length === 0}
+          onClick={handleNext}
+          disabled={selectedInterests.length === 0 || isLoading}
           className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-lg font-medium transition-colors
             disabled:bg-blue-400/50 disabled:cursor-not-allowed shadow-lg shadow-blue-500/20"
         >
-          Next
+          {t('onboarding.interests.next')}
         </Button>
       </div>
     </div>
