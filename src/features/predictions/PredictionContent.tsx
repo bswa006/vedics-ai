@@ -26,7 +26,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
     } = personalityPrediction.content;
 
     return (
-      <div className="animate-fadeIn space-y-8" data-testid="personality-tab">
+      <div className="animate-fadeIn space-y-4" data-testid="personality-tab">
         <div className={cardStyle}>
           <h3 className="mb-4 text-xl font-bold text-black dark:text-white">
             {t('personality.traits')}
@@ -179,7 +179,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
     const content = relationsPrediction.content;
 
     return (
-      <div className="animate-fadeIn space-y-8" data-testid="relationships-tab">
+      <div className="animate-fadeIn space-y-4" data-testid="relationships-tab">
         <div className={cardStyle}>
           <h3 className="mb-4 text-xl font-bold text-black dark:text-white">
             {t('relationships.relationshipTraits')}
@@ -235,7 +235,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
     const { concerns = [], recommendations = [], long_term_health = '' } = healthPrediction.content;
 
     return (
-      <div className="animate-fadeIn space-y-8" data-testid="health-tab">
+      <div className="animate-fadeIn space-y-4" data-testid="health-tab">
         <div className={cardStyle}>
           <h3 className="mb-4 text-xl font-bold text-black dark:text-white">
             {t('health.healthConcerns')}
@@ -294,7 +294,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
     } = challengesPrediction.content;
 
     return (
-      <div className="animate-fadeIn space-y-8" data-testid="challenges-tab">
+      <div className="animate-fadeIn space-y-4" data-testid="challenges-tab">
         <div className={cardStyle}>
           <h3 className="mb-4 text-xl font-bold text-black dark:text-white">
             {t('challenges.challenges')}
@@ -376,7 +376,7 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
     const { early_life = '', mid_life = '', later_years = '' } = majorLifePeriodsPrediction.content;
 
     return (
-      <div className="animate-fadeIn space-y-8" data-testid="major-life-periods-tab">
+      <div className="animate-fadeIn space-y-4" data-testid="major-life-periods-tab">
         <div className={cardStyle}>
           <h3 className="mb-4 text-xl font-bold text-black dark:text-white">
             {t('majorLifePeriods.earlyLife')}
@@ -423,8 +423,10 @@ export function PredictionContent({ activeTab, predictions }: PredictionContentP
   };
 
   return (
-    <div className="space-y-6" data-testid="prediction-content">
-      {renderContent(activeTab)}
+    <div className="relative h-[calc(100vh-12rem)] w-full overflow-hidden" data-testid="prediction-content">
+      <div className="h-full w-full overflow-y-auto overflow-x-hidden px-4 pb-4">
+        {renderContent(activeTab)}
+      </div>
     </div>
   );
 }

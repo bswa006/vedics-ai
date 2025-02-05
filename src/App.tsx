@@ -33,7 +33,7 @@ function AppContent({
   confirmLogout: () => void;
 }) {
   const { t } = useTranslation();
-  const [activeTab, setActiveTab] = useState<PredictionType>('career_success_and_wealth');
+  const [activeTab, setActiveTab] = useState<PredictionType>('core_personality_and_life_path');
   const { userData, predictions, error } = useUserDataContext();
 
   return (

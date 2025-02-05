@@ -24,7 +24,7 @@ export function Carousel({
 }: CarouselProps) {
   const [isDragging, setIsDragging] = React.useState(false);
   return (
-    <div className={styles['carousel-container']}>
+    <div className={`${styles['carousel-container']} overflow-hidden`}>
       <Swiper
         modules={[Navigation, Mousewheel, Scrollbar]}
         spaceBetween={spaceBetween}
@@ -57,8 +57,12 @@ export function Carousel({
         shortSwipes={false}
         longSwipesRatio={0.3}
         touchRatio={1.5}
-        slidesPerView={3.5}
-        spaceBetween={8}
+        breakpoints={{
+          480: { slidesPerView: 2.2 },
+          640: { slidesPerView: 3.2 },
+          768: { slidesPerView: 3.5 },
+        }}
+        centeredSlidesBounds={true}
         onSlideChange={swiper => {
           if (!isDragging && onSlideChange) {
             onSlideChange(swiper);
