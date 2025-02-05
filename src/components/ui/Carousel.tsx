@@ -18,7 +18,7 @@ interface CarouselProps {
 
 export function Carousel({
   items,
-  slidesPerView = 3,
+  slidesPerView = 3.5,
   spaceBetween = 8,
   onSlideChange,
 }: CarouselProps) {
@@ -50,12 +50,15 @@ export function Carousel({
           dragSize: 100,
         }}
         grabCursor={true}
+        centeredSlides={false}
         slidesOffsetBefore={0}
         slidesOffsetAfter={0}
         resistance={false}
         shortSwipes={false}
         longSwipesRatio={0.3}
         touchRatio={1.5}
+        slidesPerView={3.5}
+        spaceBetween={8}
         onSlideChange={swiper => {
           if (!isDragging && onSlideChange) {
             onSlideChange(swiper);

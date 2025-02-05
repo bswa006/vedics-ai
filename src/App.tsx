@@ -71,7 +71,7 @@ function AppContent({
               <Navigate to="/login" replace />
             ) : (
               <Layout darkMode={darkMode} setDarkMode={setDarkMode} onLogout={handleLogout}>
-                <DailyStars />
+                <DailyStars userId={userId as number} />
               </Layout>
             )
           }

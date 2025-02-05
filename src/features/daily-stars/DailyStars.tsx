@@ -1,42 +1,44 @@
 import { useEffect, useState } from 'react';
 import { TodayReading } from '../../types/readings';
-import { useUserDataContext } from '../../contexts/UserDataContext';
 import api from '../../services/api';
 
-export function DailyStars() {
-  const { predictions, userData } = useUserDataContext();
+interface DailyStarsProps {
+  userId: number;
+}
+
+export function DailyStars({ userId }: DailyStarsProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [todayReadings, setTodayReadings] = useState<TodayReading | null>(null);
 
   useEffect(() => {
-    if (!userData?.id) return;
-
-    const readingsFromPredictions = predictions?.find(p => p.type === 'today_reading')?.content;
-
-    console.log('predictions', readingsFromPredictions);
-
-    if (readingsFromPredictions && 
-        typeof readingsFromPredictions === 'object' &&
-        'general_insights' in readingsFromPredictions &&
-        'color_of_the_day' in readingsFromPredictions &&
-        'favorable_activities' in readingsFromPredictions &&
-        'challenging_aspects' in readingsFromPredictions &&
-        'remedies_for_the_day' in readingsFromPredictions) {
-      setTodayReadings(readingsFromPredictions as TodayReading);
+    if (!userId) {
+      console.log('No userId provided');
+      return;
     }
 
+    console.log('Fetching readings for userId:', userId);
     let isSubscribed = true;
 
     const fetchTodayReadings = async () => {
       try {
         setLoading(true);
         setError(null);
-        const response = await api.readings.getTodayReadings(userData.id);
+        console.log('Making API call to getTodayReadings...');
+        const response = await api.readings.getTodayReadings(userId);
+        console.log('API Response:', response);
+        
         if (isSubscribed) {
-          setTodayReadings(response.reading.today_reading);
+          if (response?.reading?.today_reading) {
+            console.log('Setting today readings:', response.reading.today_reading);
+            setTodayReadings(response.reading.today_reading);
+          } else {
+            console.log('No today_reading found in response');
+            setError('No readings available for today');
+          }
         }
       } catch (err) {
+        console.error('API call failed:', err);
         if (isSubscribed) {
           setError(err instanceof Error ? err.message : "Failed to fetch today's readings");
         }
@@ -47,20 +49,12 @@ export function DailyStars() {
       }
     };
 
-    if (!readingsFromPredictions || 
-        typeof readingsFromPredictions !== 'object' ||
-        !('general_insights' in readingsFromPredictions) ||
-        !('color_of_the_day' in readingsFromPredictions) ||
-        !('favorable_activities' in readingsFromPredictions) ||
-        !('challenging_aspects' in readingsFromPredictions) ||
-        !('remedies_for_the_day' in readingsFromPredictions)) {
-      fetchTodayReadings();
-    }
+    fetchTodayReadings();
 
     return () => {
       isSubscribed = false;
     };
-  }, [userData?.id, predictions]);
+  }, [userId]);
 
   if (loading) {
     return (
