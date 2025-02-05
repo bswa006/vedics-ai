@@ -62,8 +62,8 @@ export function Login() {
 
       if (userResponse.user_id) {
         localStorage.setItem('userId', userResponse.user_id.toString());
-        navigate('/');
-        window.location.reload();
+        navigate(`/onboarding?phone=${encodeURIComponent(formData.phoneNumber.replace(/\D/g, ''))}`);
+
       } else {
         setError('Invalid response from server');
       }
@@ -80,17 +80,23 @@ export function Login() {
       setError('');
       const response = (await validatePhoneNumber(phoneNumber)) as ValidationResponse;
 
+      console.log('response', response);
+
       if (response.user) {
         localStorage.setItem('userId', response.user.id.toString());
         navigate('/');
-        window.location.reload();
       } else {
         setShowAdditionalFields(true);
       }
     } catch (err) {
-      // const error = err as Error;
-      // setError(error.message || 'Failed to validate phone number');
-      setShowAdditionalFields(true);
+      const error = err as AxiosError;
+      console.log('catch block error', error);
+      if (error) {
+        navigate(`/onboarding?phone=${encodeURIComponent(phoneNumber)}`);
+      } else {
+        setError('Failed to validate phone number');
+        setShowAdditionalFields(true);
+      }
     }
   };
 
@@ -106,36 +112,43 @@ export function Login() {
       <div className="relative w-full max-w-md space-y-8">
         <div className="absolute left-1/2 top-2 flex h-24 w-24 -translate-x-1/2 -translate-y-1/2 items-center justify-center">
           {/* Outer glow with rainbow pulse */}
-          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500/30 via-purple-500/30 to-pink-500/30 blur-[2px] animate-[pulse-rainbow_4s_ease-in-out_infinite]" />
-          
+          <div className="absolute inset-0 animate-[pulse-rainbow_4s_ease-in-out_infinite] rounded-full bg-gradient-to-r from-blue-500/30 via-purple-500/30 to-pink-500/30 blur-[2px]" />
+
           {/* Main container */}
-          <div className="relative h-full w-full rounded-full bg-[#070B14] p-[1px] group">
+          <div className="group relative h-full w-full rounded-full bg-[#070B14] p-[1px]">
             {/* Rotating border */}
-            <div className="absolute inset-0 rounded-full overflow-hidden">
+            <div className="absolute inset-0 overflow-hidden rounded-full">
               <div className="absolute inset-0 animate-[spin_8s_linear_infinite] bg-[conic-gradient(from_0deg,#1E293B,#3B82F6,#A855F7,#EC4899,#3B82F6,#1E293B)] opacity-60" />
             </div>
 
             {/* Glass background */}
-            <div className="relative h-full w-full rounded-full bg-gradient-to-br from-[#0B1120]/90 via-[#0F172A]/80 to-[#0B1120]/90 flex items-center justify-center overflow-hidden">
+            <div className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-[#0B1120]/90 via-[#0F172A]/80 to-[#0B1120]/90">
               {/* Deep space effects */}
               <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.2),transparent_70%)]" />
               <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_80%_20%,rgba(236,72,153,0.15),transparent_50%)]" />
               <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_20%_80%,rgba(168,85,247,0.15),transparent_50%)]" />
-              
+
               {/* Ambient glow */}
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 animate-pulse" />
-              
+              <div className="absolute inset-0 animate-pulse rounded-full bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10" />
+
               {/* Stars */}
-              <div className="absolute inset-0 rounded-full overflow-hidden">
-                <div className="absolute left-1/4 top-1/4 animate-[star1_10s_linear_infinite] text-white/60 text-xs">✨</div>
-                <div className="absolute right-1/3 bottom-1/3 animate-[star2_8s_linear_infinite] text-white/50 text-xs">✨</div>
-                <div className="absolute left-2/3 top-1/3 animate-[star3_12s_linear_infinite] text-white/70 text-xs">✨</div>
+              <div className="absolute inset-0 overflow-hidden rounded-full">
+                <div className="absolute left-1/4 top-1/4 animate-[star1_10s_linear_infinite] text-xs text-white/60">
+                  ✨
+                </div>
+                <div className="absolute bottom-1/3 right-1/3 animate-[star2_8s_linear_infinite] text-xs text-white/50">
+                  ✨
+                </div>
+                <div className="absolute left-2/3 top-1/3 animate-[star3_12s_linear_infinite] text-xs text-white/70">
+                  ✨
+                </div>
               </div>
 
               {/* Sacred Geometry Icon */}
               <svg
                 viewBox="0 0 100 100"
-                className="relative h-12 w-12 z-10 text-white transition-all duration-700 animate-[color-shift_8s_ease-in-out_infinite]">
+                className="relative z-10 h-12 w-12 animate-[color-shift_8s_ease-in-out_infinite] text-white transition-all duration-700"
+              >
                 <defs>
                   <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor="#60A5FA" />
@@ -144,50 +157,44 @@ export function Login() {
                   </linearGradient>
                 </defs>
                 {/* Outer rotating circle */}
-                <circle 
-                  cx="50" 
-                  cy="50" 
-                  r="40" 
-                  fill="none" 
-                  stroke="url(#iconGradient)" 
-                  strokeWidth="1" 
-                  strokeDasharray="3,3" 
-                  className="animate-[spin_12s_linear_infinite]" 
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="40"
+                  fill="none"
+                  stroke="url(#iconGradient)"
+                  strokeWidth="1"
+                  strokeDasharray="3,3"
+                  className="animate-[spin_12s_linear_infinite]"
                 />
                 {/* Main triangle */}
-                <path 
-                  d="M50 5 L95 90 L5 90 Z" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  strokeWidth="1.5" 
-                  className="group-hover:animate-[pulse_2s_ease-in-out_infinite]" 
+                <path
+                  d="M50 5 L95 90 L5 90 Z"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  className="group-hover:animate-[pulse_2s_ease-in-out_infinite]"
                 />
                 {/* Inner circle */}
-                <circle 
-                  cx="50" 
-                  cy="50" 
-                  r="25" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  strokeWidth="1.5" 
-                  className="group-hover:animate-[spin_4s_linear_infinite]" 
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="25"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  className="group-hover:animate-[spin_4s_linear_infinite]"
                 />
                 {/* Inner triangle */}
-                <path 
-                  d="M50 25 L75 75 L25 75 Z" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  strokeWidth="1.5" 
-                  className="group-hover:animate-[spin_6s_linear_infinite_reverse]" 
+                <path
+                  d="M50 25 L75 75 L25 75 Z"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  className="group-hover:animate-[spin_6s_linear_infinite_reverse]"
                 />
                 {/* Center dot */}
-                <circle 
-                  cx="50" 
-                  cy="50" 
-                  r="4" 
-                  fill="url(#iconGradient)" 
-                  className="animate-pulse" 
-                />
+                <circle cx="50" cy="50" r="4" fill="url(#iconGradient)" className="animate-pulse" />
               </svg>
             </div>
           </div>

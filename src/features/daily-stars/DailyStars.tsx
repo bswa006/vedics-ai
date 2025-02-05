@@ -58,10 +58,48 @@ export function DailyStars({ userId }: DailyStarsProps) {
 
   if (loading) {
     return (
-      <div className="flex h-full items-center justify-center">
-        <div className="text-center">
-          <div className="border-primary h-8 w-8 animate-spin rounded-full border-4 border-t-transparent"></div>
-          <p className="mt-2 text-sm text-gray-500">Loading your daily stars...</p>
+      <div className="relative mx-auto mt-2 max-w-md px-4">
+        {/* Outer glow effect */}
+        <div className="absolute -inset-[1px] rounded-[21px] bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-blue-500/20 blur-[1px]" />
+
+        {/* Main container */}
+        <div className="group relative overflow-hidden rounded-[20px] bg-[#070B14] p-[1px]">
+          {/* Gradient border */}
+          <div className="absolute inset-0 rounded-[20px] p-[1px]">
+            <div className="absolute inset-0 animate-[spin_8s_linear_infinite] rounded-[20px] bg-[conic-gradient(from_0deg,#1E293B,#3B82F6,#1E293B)] opacity-40" />
+          </div>
+
+          {/* Inner container with glass effect */}
+          <div className="relative rounded-[19px] bg-gradient-to-br from-[#0B1120]/90 via-[#0F172A]/80 to-[#0B1120]/90 px-6 py-1.5 backdrop-blur-xl">
+            {/* Deep space effect */}
+            <div className="absolute inset-0 rounded-[19px] bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1),transparent_70%)]" />
+            <div className="absolute inset-0 rounded-[19px] bg-[radial-gradient(circle_at_80%_20%,rgba(147,197,253,0.1),transparent_50%)]" />
+            <div className="absolute inset-0 rounded-[19px] bg-[radial-gradient(circle_at_20%_80%,rgba(99,102,241,0.1),transparent_50%)]" />
+
+            {/* Content */}
+            <div className="relative">
+              {/* Main text */}
+              <div className="text-center">
+                <div className="relative z-10 bg-gradient-to-r from-white/90 via-white to-white/90 bg-clip-text text-sm font-medium tracking-wide text-transparent">
+                  Loading your daily stars...
+                </div>
+              </div>
+
+              {/* Animated line */}
+              <div className="relative mx-auto mt-0.5 h-[2px] w-16 overflow-hidden rounded-full bg-gradient-to-r from-blue-600/30 via-purple-600/30 to-blue-600/30">
+                {/* Primary shimmer */}
+                <div className="absolute h-full w-2/3 animate-[loading_2s_ease-in-out_infinite] bg-gradient-to-r from-transparent via-white to-transparent" />
+                {/* Blue accent */}
+                <div className="absolute h-full w-1/2 animate-[loading_2s_ease-in-out_infinite_0.3s] bg-gradient-to-r from-transparent via-blue-400 to-transparent" />
+                {/* Purple accent */}
+                <div className="absolute h-full w-1/2 animate-[loading_2s_ease-in-out_infinite_0.6s] bg-gradient-to-r from-transparent via-purple-400 to-transparent" />
+                {/* Cyan accent */}
+                <div className="absolute h-full w-1/3 animate-[loading_2s_ease-in-out_infinite_0.9s] bg-gradient-to-r from-transparent via-cyan-400 to-transparent" />
+                {/* Sparkle overlay */}
+                <div className="absolute inset-0 animate-[shimmer_3s_linear_infinite] bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );

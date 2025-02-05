@@ -1,5 +1,7 @@
 {
   "common": {
+    "continue": "Continue",
+    "next": "Next",
     "darkMode": "Dark Mode",
     "chat": "Chat with us",
     "close": "Close",
@@ -15,7 +17,11 @@
     "online": "online",
     "typeMessage": "Type your message...",
     "gathering_data": "We're Gathering Your Cosmic Data",
-    "please_wait": "Please wait while we analyze your birth details and prepare your personalized readings"
+    "please_wait": "Please wait while we analyze your birth details and prepare your personalized readings",
+    "logoutConfirmation": "Confirm Logout",
+    "logoutMessage": "Are you sure you want to logout?",
+    "confirm": "Confirm",
+    "cancel": "Cancel"
   },
   "login": {
     "title": "Welcome Seeker",
@@ -114,5 +120,103 @@
     "no_yearly_predictions": "No yearly predictions available",
     "no_monthly_predictions": "No monthly predictions available",
     "focus_areas": "Focus Areas"
+  },
+  "onboarding": {
+    "welcome": {
+      "headline": "Unlock the Power of Vedic Astrology",
+      "subtext": "Personalized insights, daily guidance, and AI-driven astrology—all at your fingertips!"
+    },
+    "language": {
+      "title": "Choose Your Language",
+      "description": "Select your preferred language for the app"
+    },
+    "birthDetails": {
+      "title": "Enter Your Birth Details",
+      "description": "Your birth details help us create accurate astrological predictions",
+      "dateLabel": "Date of Birth",
+      "timeLabel": "Time of Birth",
+      "placeLabel": "Place of Birth",
+      "placePlaceholder": "Enter city, state, or country",
+      "selectDate": "Select date"
+    },
+    "themes": {
+      "title": "Select Your Areas of Interest",
+      "description": "Choose the themes you'd like to focus on",
+      "dailyHoroscope": {
+        "title": "Daily Horoscope",
+        "description": "Get daily personalized insights based on planetary movements"
+      },
+      "careerFinance": {
+        "title": "Career & Finance",
+        "description": "Job opportunities, financial planning, business insights"
+      },
+      "relationshipsLove": {
+        "title": "Relationships & Love",
+        "description": "Romantic compatibility, marriage guidance, partner traits"
+      },
+      "healthWellbeing": {
+        "title": "Health & Well-being",
+        "description": "Lifestyle adjustments, preventive measures, health forecasts"
+      },
+      "familySocial": {
+        "title": "Family & Social Life",
+        "description": "Parenting, family harmony, friendships"
+      },
+      "spiritualGrowth": {
+        "title": "Spiritual Growth",
+        "description": "Meditation, mantras, karmic insights"
+      },
+      "strengthsWeaknesses": {
+        "title": "Personal Strengths & Weaknesses",
+        "description": "Discover your hidden talents and life purpose"
+      },
+      "challengesRemedies": {
+        "title": "Challenges & Remedies",
+        "description": "Mantras, gemstones, and astrological solutions for obstacles"
+      },
+      "travelSettlements": {
+        "title": "Foreign Travel & Settlements",
+        "description": "Relocation predictions, best travel periods"
+      },
+      "wealthLuck": {
+        "title": "Wealth & Luck",
+        "description": "Periods of financial growth, lucky days"
+      }
+    },
+    "notifications": {
+      "title": "Stay Updated",
+      "description": "Choose how you'd like to receive updates",
+      "dailyHoroscope": {
+        "title": "Daily Horoscope Notifications",
+        "description": "Get your personalized horoscope every morning"
+      },
+      "specialEvents": {
+        "title": "Special Astrological Events",
+        "description": "Be notified about important planetary alignments"
+      },
+      "weeklySummary": {
+        "title": "Weekly Predictions Summary",
+        "description": "Receive a weekly overview of your astrological forecast"
+      }
+    },
+    "dashboard": {
+      "title": "Customize Your Dashboard",
+      "description": "Arrange the sections in order of importance to you",
+      "sections": {
+        "todaysHoroscope": "Today's Horoscope",
+        "aiChat": "AI Astrologer Chat",
+        "planetaryEvents": "Upcoming Planetary Events",
+        "remedies": "Remedies & Insights",
+        "savedPredictions": "Saved Predictions"
+      }
+    },
+    "final": {
+      "title": "Your Personalized Vedic Journey Begins Now! 🎉",
+      "description": "We've customized everything according to your preferences",
+      "cta": "Start Exploring"
+    },
+    "progress": {
+      "step": "Step {{current}} of {{total}}"
+    }
   }
 }
