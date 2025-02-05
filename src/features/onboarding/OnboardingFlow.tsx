@@ -102,44 +102,38 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) =>
   };
 
   return (
-    <div className="flex h-full flex-col space-y-6 p-4">
-      <div className="flex flex-col items-center justify-center space-y-4">
-        <OnboardingProgress currentStep={step} totalSteps={totalSteps} />
-      </div>
+    <div className="flex h-full flex-col bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white">
+      <div className="flex h-full flex-col">
+        {step === 1 && <WelcomeScreen onContinue={() => setStep(2)} />}
 
-      <div className="flex-1 overflow-hidden rounded-xl">
-        <div className="flex h-full flex-col">
-          {step === 1 && <WelcomeScreen onContinue={() => setStep(2)} />}
+        {step === 2 && (
+          <LanguageSelection
+            onNext={() => setStep(3)}
+            selectedLanguage={language}
+            onLanguageChange={lang => {
+              setLanguage(lang);
+              i18n.changeLanguage(lang);
+            }}
+          />
+        )}
 
-          {step === 2 && (
-            <LanguageSelection
-              onNext={() => setStep(3)}
-              selectedLanguage={language}
-              onLanguageChange={lang => {
-                setLanguage(lang);
-                i18n.changeLanguage(lang);
-              }}
-            />
-          )}
+        {step === 3 && (
+          <BirthDetailsForm
+            onNext={() => setStep(4)}
+            birthDetails={birthDetails}
+            onBirthDetailsChange={details => setBirthDetails({ ...birthDetails, ...details })}
+          />
+        )}
 
-          {step === 3 && (
-            <BirthDetailsForm
-              onNext={() => setStep(4)}
-              birthDetails={birthDetails}
-              onBirthDetailsChange={details => setBirthDetails({ ...birthDetails, ...details })}
-            />
-          )}
+        {step === 4 && (
+          <InterestsSelection
+            selectedInterests={selectedThemes}
+            onInterestsChange={setSelectedThemes}
+            onNext={() => setStep(5)}
+          />
+        )}
 
-          {step === 4 && (
-            <InterestsSelection
-              selectedInterests={selectedThemes}
-              onInterestsChange={setSelectedThemes}
-              onNext={() => setStep(5)}
-            />
-          )}
-
-          {step === 5 && <FinalWelcome onComplete={handleComplete} error={error} />}
-        </div>
+        {step === 5 && <FinalWelcome onComplete={handleComplete} error={error} />}
       </div>
     </div>
   );
