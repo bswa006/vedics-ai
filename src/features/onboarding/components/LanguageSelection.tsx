@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../../components/ui/button';
 import { RadioGroup, RadioGroupItem } from '../../../components/ui/radio-group';
 import { Label } from '../../../components/ui/label';
+import { motion } from 'framer-motion';
+import { cn } from '../../../lib/utils';
 
 export interface LanguageOption {
   code: string;
@@ -23,7 +25,7 @@ export const LANGUAGES: LanguageOption[] = [
 ];
 
 export interface LanguageSelectionProps {
-  onNext: () => void;
+  onNext: () => Promise<void>;
   selectedLanguage: string;
   onLanguageChange: (language: string) => void;
 }
@@ -34,57 +36,104 @@ export const LanguageSelection: React.FC<LanguageSelectionProps> = ({
   onLanguageChange,
 }) => {
   const { t } = useTranslation();
+  const [localSelectedLanguage, setLocalSelectedLanguage] = useState<string>(selectedLanguage);
 
   return (
-    <div className="flex h-full flex-col">
-      <div className="flex-none space-y-2 p-6">
-        <h2 className="text-2xl font-semibold text-white mb-2">
+    <div className="flex h-full flex-col bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
+      <motion.div
+        className="flex-none space-y-3 p-6"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <h2 className="bg-gradient-to-r from-white via-white to-white/80 bg-clip-text text-3xl font-bold tracking-tight text-transparent">
           {t('onboarding.language.title')}
         </h2>
-        <p className="text-gray-300 text-sm">
+        <p className="max-w-2xl text-lg leading-relaxed text-gray-400">
           {t('onboarding.language.description')}
         </p>
-      </div>
+      </motion.div>
 
-      <div className="flex-1 overflow-y-auto px-6">
+      <motion.div
+        className="flex-1 overflow-y-auto px-6"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
         <RadioGroup
-          value={selectedLanguage}
-          onValueChange={onLanguageChange}
-          className="space-y-3"
+          value={localSelectedLanguage}
+          onValueChange={value => {
+            setLocalSelectedLanguage(value);
+            onLanguageChange(value);
+          }}
+          className="space-y-4"
         >
-          {LANGUAGES.map((lang) => (
-            <div
+          {LANGUAGES.map((lang, index) => (
+            <motion.div
               key={lang.code}
-              className={`flex items-center rounded-lg p-4 transition-colors cursor-pointer
-                ${selectedLanguage === lang.code ? 'bg-blue-500/10 border border-blue-500/30' : 'bg-gray-800/40 border border-gray-700'}
-                hover:border-blue-500/30 hover:bg-blue-500/5`}
-              onClick={() => onLanguageChange(lang.code)}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: index * 0.1 }}
+              className={cn(
+                'flex cursor-pointer items-center rounded-xl p-5 backdrop-blur-sm',
+                'group transition-all duration-500 ease-in-out',
+                'border hover:shadow-lg hover:shadow-blue-500/5',
+                'transform-gpu',
+                localSelectedLanguage === lang.code
+                  ? 'scale-[1.02] border-blue-500/50 bg-blue-500/10'
+                  : 'border-gray-700/50 hover:scale-[1.01] hover:border-blue-500/30 hover:bg-blue-500/5'
+              )}
+              onClick={() => {
+                setLocalSelectedLanguage(lang.code);
+                onLanguageChange(lang.code);
+              }}
+              role="button"
+              tabIndex={0}
             >
               <RadioGroupItem
                 value={lang.code}
                 id={lang.code}
-                className="h-5 w-5 border-2 border-gray-600 text-blue-500"
+                className={cn(
+                  'h-5 w-5 border-2 transition-all duration-300',
+                  'border-gray-500/50 text-blue-500',
+                  'group-hover:border-blue-400/50',
+                  localSelectedLanguage === lang.code && 'border-blue-500'
+                )}
               />
               <Label
                 htmlFor={lang.code}
-                className="ml-3 text-lg text-white cursor-pointer"
+                className="ml-4 cursor-pointer bg-gradient-to-r from-white to-white/90 bg-clip-text text-lg font-medium text-transparent"
               >
                 {lang.name}
               </Label>
-            </div>
+            </motion.div>
           ))}
         </RadioGroup>
-      </div>
+      </motion.div>
 
-      <div className="flex-none p-6">
+      <motion.div
+        className="flex-none p-6"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+      >
         <Button
-          onClick={onNext}
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-lg font-medium transition-colors
-            disabled:bg-blue-400/50 disabled:cursor-not-allowed shadow-lg shadow-blue-500/20"
+          onClick={() => onNext()}
+          className={cn(
+            'relative w-full overflow-hidden rounded-xl p-[1px] transition-all',
+            'bg-gradient-to-r from-blue-500 to-blue-600',
+            'hover:shadow-[0_0_2rem_-0.5rem_#3b82f6]',
+            'disabled:cursor-not-allowed disabled:opacity-50',
+            'group'
+          )}
         >
-          {t('common.next')}
+          <div className="relative rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 px-8 py-3.5 transition-all group-hover:bg-opacity-0">
+            <span className="relative z-10 text-base font-medium text-white">
+              {t('common.next')}
+            </span>
+          </div>
         </Button>
-      </div>
+      </motion.div>
     </div>
   );
 };

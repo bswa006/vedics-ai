@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useUserApi } from '../../hooks/useUserApi';
@@ -25,13 +26,14 @@ export interface OnboardingData {
 }
 
 export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { createUser } = useUserApi();
   const [step, setStep] = useState(1);
   const totalSteps = 4;
   const [error, setError] = useState('');
+  const [isChangingLanguage, setIsChangingLanguage] = useState(false);
 
   const phone = searchParams.get('phone');
 
@@ -41,7 +43,8 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) =>
   }
 
   // State for each step
-  const [language, setLanguage] = useState(i18n.language);
+  const [language, setLanguage] = useState(localStorage.getItem('i18nextLng') || i18n.language);
+  const [pendingLanguage, setPendingLanguage] = useState<string | null>(null);
   const [birthDetails, setBirthDetails] = useState<{
     date: Date | undefined;
     time: string;
@@ -99,23 +102,55 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) =>
       selectedThemes,
     });
     navigate('/', { replace: true });
-    window.location.reload();
   };
 
   return (
-    <div className="flex h-full flex-col bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white">
+    <div className="relative flex h-full flex-col bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white">
+      <AnimatePresence>
+        {isChangingLanguage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 z-50 flex items-center justify-center bg-gray-900/80 backdrop-blur-sm"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="flex items-center space-x-3 text-lg text-white"
+            >
+              <div className="h-5 w-5 animate-spin rounded-full border-2 border-blue-500 border-t-transparent" />
+              <span className="animate-pulse">{t('common.loading')}</span>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <div className="flex-none p-6">
         <OnboardingProgress currentStep={step} totalSteps={totalSteps} />
       </div>
       <div className="flex-1 overflow-hidden">
         {step === 1 && (
           <LanguageSelection
-            onNext={() => setStep(2)}
-            selectedLanguage={language}
-            onLanguageChange={lang => {
-              setLanguage(lang);
-              i18n.changeLanguage(lang);
+            onNext={async () => {
+              if (pendingLanguage && pendingLanguage !== language) {
+                setIsChangingLanguage(true);
+                try {
+                  await i18n.changeLanguage(pendingLanguage);
+                  localStorage.setItem('i18nextLng', pendingLanguage);
+                  setLanguage(pendingLanguage);
+                  // Add a small delay for smooth transition
+                  await new Promise(resolve => setTimeout(resolve, 300));
+                } catch (error) {
+                  console.error('Error changing language:', error);
+                } finally {
+                  setIsChangingLanguage(false);
+                }
+              }
+              setStep(2);
             }}
+            selectedLanguage={language}
+            onLanguageChange={lang => setPendingLanguage(lang)}
           />
         )}
 

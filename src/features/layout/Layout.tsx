@@ -7,14 +7,14 @@ interface LayoutProps {
   children: ReactNode;
   darkMode: boolean;
   setDarkMode: (value: boolean) => void;
-  onLogout: () => void;
+  onLogout?: () => void;
   userId?: number | null;
 }
 
 export function Layout({ children, darkMode, setDarkMode, onLogout, userId }: LayoutProps) {
   return (
     <div className="flex min-h-screen flex-col bg-gray-50 transition-colors duration-200 dark:bg-gray-900">
-      <Header darkMode={darkMode} setDarkMode={setDarkMode} onLogout={onLogout} />
+      <Header darkMode={darkMode} setDarkMode={setDarkMode} onLogout={onLogout} userId={userId} />
 
       <main className="relative flex-1 overflow-hidden">
         <div

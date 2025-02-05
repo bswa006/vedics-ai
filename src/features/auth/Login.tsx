@@ -62,8 +62,9 @@ export function Login() {
 
       if (userResponse.user_id) {
         localStorage.setItem('userId', userResponse.user_id.toString());
-        navigate(`/onboarding?phone=${encodeURIComponent(formData.phoneNumber.replace(/\D/g, ''))}`);
-
+        navigate(
+          `/onboarding?phone=${encodeURIComponent(formData.phoneNumber.replace(/\D/g, ''))}`
+        );
       } else {
         setError('Invalid response from server');
       }
@@ -80,11 +81,10 @@ export function Login() {
       setError('');
       const response = (await validatePhoneNumber(phoneNumber)) as ValidationResponse;
 
-      console.log('response', response);
-
       if (response.user) {
+        // Store user ID and trigger a page reload to ensure App state is updated
         localStorage.setItem('userId', response.user.id.toString());
-        navigate('/');
+        window.location.href = '/';
       } else {
         setShowAdditionalFields(true);
       }
@@ -106,10 +106,26 @@ export function Login() {
   };
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-background-light via-surface-light to-oriental-100 px-4 py-12 transition-colors duration-200 dark:from-background-dark dark:via-surface-dark dark:to-oriental-950 sm:px-6 lg:px-8">
-      <div className="absolute inset-0 animate-[pulse_15s_ease-in-out_infinite] bg-[url('/sacred-geometry.png')] bg-repeat opacity-[0.03] dark:opacity-[0.07]"></div>
-      <div className="absolute inset-0 bg-gradient-to-t from-background-light/80 to-transparent backdrop-blur-[2px] transition-colors duration-200 dark:from-background-dark/80"></div>
-      <div className="relative w-full max-w-md space-y-8">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-r from-[#0B1026] via-[#2B3990] to-[#0B1026] px-4 py-12 sm:px-6 lg:px-8">
+      {/* Animated stars background */}
+      <div className="absolute inset-0">
+        {/* Small stars */}
+        <div className="absolute h-1 w-1 rounded-full bg-white/30 shadow-glow animate-[twinkle_3s_ease-in-out_infinite,float-1_15s_ease-in-out_infinite]" style={{ top: '10%', left: '15%' }} />
+        <div className="absolute h-1 w-1 rounded-full bg-white/30 shadow-glow animate-[twinkle_3s_ease-in-out_infinite,float-2_18s_ease-in-out_infinite]" style={{ top: '50%', left: '75%', animationDelay: '0.5s' }} />
+        <div className="absolute h-1 w-1 rounded-full bg-white/30 shadow-glow animate-[twinkle_3s_ease-in-out_infinite,float-3_20s_ease-in-out_infinite]" style={{ top: '30%', left: '45%', animationDelay: '1s' }} />
+        <div className="absolute h-1 w-1 rounded-full bg-white/30 shadow-glow animate-[twinkle_3s_ease-in-out_infinite,float-1_17s_ease-in-out_infinite]" style={{ top: '70%', left: '25%', animationDelay: '1.5s' }} />
+        <div className="absolute h-1.5 w-1.5 rounded-full bg-white/30 shadow-glow animate-[twinkle_4s_ease-in-out_infinite,float-2_19s_ease-in-out_infinite]" style={{ top: '20%', left: '85%', animationDelay: '2s' }} />
+        <div className="absolute h-1.5 w-1.5 rounded-full bg-white/30 shadow-glow animate-[twinkle_4s_ease-in-out_infinite,float-3_21s_ease-in-out_infinite]" style={{ top: '80%', left: '65%', animationDelay: '2.5s' }} />
+        {/* Medium stars */}
+        <div className="absolute h-2 w-2 rounded-full bg-white/40 shadow-glow animate-[twinkle-slow_4s_ease-in-out_infinite,float-2_22s_ease-in-out_infinite]" style={{ top: '15%', left: '55%', animationDelay: '0.7s' }} />
+        <div className="absolute h-2 w-2 rounded-full bg-white/40 shadow-glow animate-[twinkle-slow_4s_ease-in-out_infinite,float-3_25s_ease-in-out_infinite]" style={{ top: '65%', left: '35%', animationDelay: '1.2s' }} />
+        <div className="absolute h-2 w-2 rounded-full bg-white/40 shadow-glow animate-[twinkle-slow_4s_ease-in-out_infinite,float-1_23s_ease-in-out_infinite]" style={{ top: '40%', left: '85%', animationDelay: '1.7s' }} />
+        {/* Large stars */}
+        <div className="absolute h-3 w-3 rounded-full bg-white/50 shadow-glow animate-[twinkle-slow_5s_ease-in-out_infinite,float-3_28s_ease-in-out_infinite]" style={{ top: '25%', left: '75%', animationDelay: '0.3s' }} />
+        <div className="absolute h-3 w-3 rounded-full bg-white/50 shadow-glow animate-[twinkle-slow_5s_ease-in-out_infinite,float-1_30s_ease-in-out_infinite]" style={{ top: '75%', left: '15%', animationDelay: '1.8s' }} />
+      </div>
+
+      <div className="relative w-full max-w-md space-y-8 text-white">
         <div className="absolute left-1/2 top-2 flex h-24 w-24 -translate-x-1/2 -translate-y-1/2 items-center justify-center">
           {/* Outer glow with rainbow pulse */}
           <div className="absolute inset-0 animate-[pulse-rainbow_4s_ease-in-out_infinite] rounded-full bg-gradient-to-r from-blue-500/30 via-purple-500/30 to-pink-500/30 blur-[2px]" />
@@ -200,13 +216,13 @@ export function Login() {
           </div>
         </div>
         <div>
-          <h2 className="mt-16 text-center font-serif text-2xl font-light tracking-tight text-text-light-primary transition-colors duration-200 dark:text-text-dark-primary">
+          <h2 className="mt-16 text-center font-serif text-2xl font-light tracking-tight text-white">
             vedics.ai
           </h2>
-          <h2 className="text-center font-serif text-4xl font-light tracking-tight text-text-light-primary transition-colors duration-200 dark:text-text-dark-primary">
+          <h2 className="text-center font-serif text-4xl font-light tracking-tight text-white">
             Welcome Seeker
           </h2>
-          <p className="mt-4 text-center text-sm font-light leading-6 text-text-light-secondary transition-colors duration-200 dark:text-text-dark-secondary">
+          <p className="mt-4 text-center text-sm font-light leading-6 text-white/80">
             Begin your journey of self-discovery
           </p>
         </div>
@@ -216,12 +232,12 @@ export function Login() {
               {error || apiError}
             </div>
           )} */}
-          <div className="space-y-6 rounded-2xl border border-border-light bg-surface-light/60 p-8 shadow-light-md backdrop-blur-md transition-all duration-200 hover:bg-surface-light/70 dark:border-border-dark dark:bg-surface-dark/40 dark:shadow-dark-md dark:hover:bg-surface-dark/50">
+          <div className="space-y-6 rounded-2xl border border-white/20 bg-black/20 p-8 shadow-light-md backdrop-blur-md transition-all duration-200 hover:bg-black/30">
             {/* Phone Number Field with Validation */}
             <div>
               <label
                 htmlFor="phoneNumber"
-                className="mb-1.5 block text-sm font-medium text-text-light-primary transition-colors duration-200 dark:text-text-dark-primary"
+                className="mb-1.5 block text-sm font-medium text-white"
               >
                 Phone Number
               </label>
@@ -231,12 +247,12 @@ export function Login() {
                   name="phoneNumber"
                   type="tel"
                   required
-                  className="relative block w-full appearance-none rounded-xl border border-border-light bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 py-3 pl-11 pr-4 text-text-light-primary placeholder-text-light-secondary/80 shadow-light-sm transition-all duration-200 hover:from-blue-500/20 hover:via-purple-500/20 hover:to-pink-500/20 focus:border-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-500/20 dark:border-border-dark dark:text-text-dark-primary dark:placeholder-text-dark-secondary/50 dark:shadow-dark-sm sm:text-sm"
+                  className="relative block w-full appearance-none rounded-xl border border-white/20 bg-white py-3 pl-11 pr-4 text-gray-900 placeholder-gray-500 shadow-light-sm transition-all duration-200 hover:bg-gray-50 focus:border-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-500/20 sm:text-sm"
                   placeholder="Enter your phone number"
                   value={formData.phoneNumber}
                   onChange={handleChange}
                 />
-                <Sun className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-light-secondary transition-colors duration-200 dark:text-text-dark-secondary" />
+                <Sun className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/70" />
               </div>
               {!showAdditionalFields && (
                 <div className="mt-6">
@@ -257,7 +273,7 @@ export function Login() {
                 <div>
                   <label
                     htmlFor="dateOfBirth"
-                    className="mb-1.5 block text-sm font-medium text-text-light-primary transition-colors duration-200 dark:text-text-dark-primary"
+                    className="mb-1.5 block text-sm font-medium text-white"
                   >
                     Date of Birth
                   </label>
@@ -267,17 +283,17 @@ export function Login() {
                       name="dateOfBirth"
                       type="date"
                       required
-                      className="relative block w-full appearance-none rounded-xl border border-border-light bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 py-3 pl-11 pr-4 text-text-light-primary placeholder-text-light-secondary/80 shadow-light-sm transition-all duration-200 hover:from-blue-500/20 hover:via-purple-500/20 hover:to-pink-500/20 focus:border-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-500/20 dark:border-border-dark dark:text-text-dark-primary dark:placeholder-text-dark-secondary/50 dark:shadow-dark-sm sm:text-sm"
+                      className="relative block w-full appearance-none rounded-xl border border-white/20 bg-white py-3 pl-11 pr-4 text-gray-900 placeholder-gray-500 shadow-light-sm transition-all duration-200 hover:bg-gray-50 focus:border-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-500/20 sm:text-sm"
                       value={formData.dateOfBirth}
                       onChange={handleChange}
                     />
-                    <Moon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-oriental-400 dark:text-oriental-600" />
+                    <Moon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/70" />
                   </div>
                 </div>
                 <div>
                   <label
                     htmlFor="timeOfBirth"
-                    className="mb-1.5 block text-sm font-medium text-text-light-primary transition-colors duration-200 dark:text-text-dark-primary"
+                    className="mb-1.5 block text-sm font-medium text-white"
                   >
                     Time of Birth
                   </label>
@@ -287,17 +303,17 @@ export function Login() {
                       name="timeOfBirth"
                       type="time"
                       required
-                      className="relative block w-full appearance-none rounded-xl border border-border-light bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 py-3 pl-11 pr-4 text-text-light-primary placeholder-text-light-secondary/80 shadow-light-sm transition-all duration-200 hover:from-blue-500/20 hover:via-purple-500/20 hover:to-pink-500/20 focus:border-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-500/20 dark:border-border-dark dark:text-text-dark-primary dark:placeholder-text-dark-secondary/50 dark:shadow-dark-sm sm:text-sm"
+                      className="relative block w-full appearance-none rounded-xl border border-white/20 bg-white py-3 pl-11 pr-4 text-gray-900 placeholder-gray-500 shadow-light-sm transition-all duration-200 hover:bg-gray-50 focus:border-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-500/20 sm:text-sm"
                       value={formData.timeOfBirth}
                       onChange={handleChange}
                     />
-                    <Clock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-oriental-400 dark:text-oriental-600" />
+                    <Clock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/70" />
                   </div>
                 </div>
                 <div>
                   <label
                     htmlFor="locationOfBirth"
-                    className="mb-1.5 block text-sm font-medium text-text-light-primary transition-colors duration-200 dark:text-text-dark-primary"
+                    className="mb-1.5 block text-sm font-medium text-white"
                   >
                     Location of Birth
                   </label>
@@ -307,12 +323,12 @@ export function Login() {
                       name="locationOfBirth"
                       type="text"
                       required
-                      className="relative block w-full appearance-none rounded-xl border border-border-light bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 py-3 pl-11 pr-4 text-text-light-primary placeholder-text-light-secondary/80 shadow-light-sm transition-all duration-200 hover:from-blue-500/20 hover:via-purple-500/20 hover:to-pink-500/20 focus:border-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-500/20 dark:border-border-dark dark:text-text-dark-primary dark:placeholder-text-dark-secondary/50 dark:shadow-dark-sm sm:text-sm"
+                      className="relative block w-full appearance-none rounded-xl border border-white/20 bg-white py-3 pl-11 pr-4 text-gray-900 placeholder-gray-500 shadow-light-sm transition-all duration-200 hover:bg-gray-50 focus:border-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-500/20 sm:text-sm"
                       placeholder="Enter your birth place"
                       value={formData.locationOfBirth}
                       onChange={handleChange}
                     />
-                    <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-oriental-400 dark:text-oriental-600" />
+                    <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/70" />
                   </div>
                 </div>
                 {error && (

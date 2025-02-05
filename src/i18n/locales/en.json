@@ -129,55 +129,6 @@
       "headline": "Unlock the Power of Vedic Astrology",
       "subtext": "Personalized insights, daily guidance, and AI-driven astrology—all at your fingertips!"
     },
-    "final": {
-      "title": "Welcome to Your Cosmic Journey",
-      "description": "Your profile has been created successfully. Get ready to explore personalized astrological insights and daily guidance.",
-      "cta": "Start Your Journey"
-    },
-    "themes": {
-      "title": "Choose Your Interests",
-      "description": "Choose the themes you'd like to focus on",
-      "dailyHoroscope": {
-        "title": "Daily Horoscope",
-        "description": "Get daily personalized insights based on planetary movements"
-      },
-      "careerFinance": {
-        "title": "Career & Finance",
-        "description": "Job opportunities, financial planning, business insights"
-      },
-      "relationshipsLove": {
-        "title": "Relationships & Love",
-        "description": "Romantic compatibility, marriage guidance, partner traits"
-      },
-      "healthWellbeing": {
-        "title": "Health & Wellbeing",
-        "description": "Physical well-being, mental health, lifestyle recommendations"
-      },
-      "spiritualGrowth": {
-        "title": "Spiritual Growth",
-        "description": "Meditation guidance, karma insights, spiritual practices"
-      },
-      "familySocial": {
-        "title": "Family & Social",
-        "description": "Family relationships, domestic harmony, vastu guidance"
-      },
-      "strengthsWeaknesses": {
-        "title": "Strengths & Weaknesses",
-        "description": "Self-improvement, personality development, life purpose"
-      },
-      "challengesRemedies": {
-        "title": "Challenges & Remedies",
-        "description": "Life challenges and their astrological solutions"
-      },
-      "travelSettlements": {
-        "title": "Travel & Settlements",
-        "description": "Auspicious travel times, destination compatibility, journey planning"
-      },
-      "wealthLuck": {
-        "title": "Wealth & Luck",
-        "description": "Financial growth, investments, abundance manifestation"
-      }
-    },
     "language": {
       "title": "Choose Your Language",
       "description": "Select your preferred language for the app"
@@ -263,7 +214,7 @@
       }
     },
     "final": {
-      "title": "Your Personalized Vedic Journey Begins Now! 🎉",
+      "title": "Your Personalized Vedic Journey Begins Now!",
       "description": "We've customized everything according to your preferences",
       "cta": "Start Exploring"
     },

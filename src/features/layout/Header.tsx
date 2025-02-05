@@ -4,10 +4,11 @@ import LanguageSwitcher from "../../components/LanguageSwitcher";
 interface HeaderProps {
   darkMode: boolean;
   setDarkMode: (value: boolean) => void;
-  onLogout: () => void;
+  onLogout: (() => void) | undefined;
+  userId: number | null | undefined;
 }
 
-export function Header({ darkMode, setDarkMode, onLogout }: HeaderProps) {
+export function Header({ darkMode, setDarkMode, onLogout, userId }: HeaderProps) {
   return (
     <div className="relative bg-gradient-to-r from-[#0B1026] via-[#2B3990] to-[#0B1026] overflow-hidden z-10">
       {/* Animated stars background */}
@@ -31,13 +32,15 @@ export function Header({ darkMode, setDarkMode, onLogout }: HeaderProps) {
         <div className="flex items-center justify-between">
           <LanguageSwitcher />
           <div className="flex gap-3">
-            <button
-              onClick={onLogout}
-              className="w-10 h-10 flex items-center justify-center rounded-xl bg-gradient-to-r from-blue-600/30 via-purple-600/30 to-pink-600/30 hover:from-blue-600/40 hover:via-purple-600/40 hover:to-pink-600/40 transition-all duration-300 backdrop-blur-sm shadow-[0_0_15px_rgba(124,58,237,0.1)]"
-              title="Logout"
-            >
-              <LogOut className="w-5 h-5 text-white" />
-            </button>
+            {userId && onLogout && (
+              <button
+                onClick={onLogout}
+                className="w-10 h-10 flex items-center justify-center rounded-xl bg-gradient-to-r from-blue-600/30 via-purple-600/30 to-pink-600/30 hover:from-blue-600/40 hover:via-purple-600/40 hover:to-pink-600/40 transition-all duration-300 backdrop-blur-sm shadow-[0_0_15px_rgba(124,58,237,0.1)]"
+                title="Logout"
+              >
+                <LogOut className="w-5 h-5 text-white" />
+              </button>
+            )}
             <button
               onClick={() => setDarkMode(!darkMode)}
               className="w-10 h-10 flex items-center justify-center rounded-xl bg-gradient-to-r from-blue-600/30 via-purple-600/30 to-pink-600/30 hover:from-blue-600/40 hover:via-purple-600/40 hover:to-pink-600/40 transition-all duration-300 backdrop-blur-sm shadow-[0_0_15px_rgba(124,58,237,0.1)]"

@@ -9,6 +9,7 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
+    debug: true,
     resources: {
       en: {
         translation: enTranslations,
@@ -18,8 +19,13 @@ i18n
       },
     },
     fallbackLng: 'en',
+    lng: localStorage.getItem('i18nextLng') || 'en',
     interpolation: {
       escapeValue: false,
+    },
+    detection: {
+      order: ['localStorage', 'navigator'],
+      caches: ['localStorage'],
     },
   });
 

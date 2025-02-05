@@ -96,6 +96,15 @@
     "laterYears": "बाद के वर्ष"
   },
   "onboarding": {
+    "birthDetails": {
+      "title": "अपना जन्म विवरण दर्ज करें",
+      "description": "आपका जन्म विवरण हमें सटीक ज्योतिषीय भविष्यवाणियां बनाने में मदद करता है",
+      "dateTimeLabel": "जन्म तिथि और समय",
+      "dateLabel": "जन्म तिथि",
+      "timeLabel": "जन्म समय",
+      "placeLabel": "जन्म स्थान",
+      "placePlaceholder": "शहर, राज्य, या देश दर्ज करें"
+    },
     "interests": {
       "next": "आगे बढ़ें"
     },
