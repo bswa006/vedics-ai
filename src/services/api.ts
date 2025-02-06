@@ -21,6 +21,11 @@ export interface ChatResponse {
   reply: string;
 }
 
+interface RatingResponse {
+  success: boolean;
+  message: string;
+}
+
 export const api = {
   readings: {
     getTodayReadings: async (userId: number): Promise<TodayReadingsResponse> => {
@@ -111,6 +116,15 @@ export const api = {
       }
     },
   },
+  ratings: {
+    submit: async (userId: number, predictionId: string, rating: number): Promise<RatingResponse> => {
+      const response = await axios.post(`${API_BASE_URL}/predictions/${predictionId}/rate`, {
+        user_id: userId,
+        rating
+      });
+      return response.data;
+    }
+  }
 };
 
 export default api;
