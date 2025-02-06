@@ -17,6 +17,7 @@ import { OnboardingFlow } from './features/onboarding/OnboardingFlow';
 
 function AppContent({
   userId,
+  setUserId,
   darkMode,
   setDarkMode,
   handleLogout,
@@ -25,6 +26,7 @@ function AppContent({
   confirmLogout,
 }: {
   userId: number | null;
+  setUserId: (id: number | null) => void;
   darkMode: boolean;
   setDarkMode: (dark: boolean) => void;
 
@@ -58,6 +60,10 @@ function AppContent({
                 <OnboardingFlow
                   onComplete={data => {
                     console.log('Onboarding completed:', data);
+                    const storedUserId = localStorage.getItem('userId');
+                    if (storedUserId) {
+                      setUserId(parseInt(storedUserId));
+                    }
                     navigate('/', { replace: true });
                   }}
                 />
@@ -333,6 +339,7 @@ function App() {
       <UserDataProvider userId={userId}>
         <AppContent
           userId={userId}
+          setUserId={setUserId}
           darkMode={darkMode}
           setDarkMode={setDarkMode}
           handleLogout={handleLogout}

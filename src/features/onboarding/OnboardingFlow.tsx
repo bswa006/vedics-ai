@@ -101,7 +101,6 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) =>
       birthDetails,
       selectedThemes,
     });
-    navigate('/', { replace: true });
   };
 
   return (
