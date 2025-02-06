@@ -10,11 +10,11 @@ export function BirthDetails({ user }: BirthDetailsProps) {
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-      <div className="rounded-xl bg-[#35397E]/10 p-4 dark:bg-[#35397E]/20">
-        <div className="mb-2 text-xs font-medium text-oriental-800 dark:text-oriental-300">
+      <div className="group relative px-6 py-4 transition-all duration-300 bg-purple-50/50 dark:bg-purple-900/10 backdrop-blur-sm rounded-lg hover:bg-purple-50/80 dark:hover:bg-purple-900/20">
+        <div className="mb-2 text-xs font-medium text-purple-700 dark:text-purple-300 uppercase tracking-wider">
           {t('birthDetails.birthDate')}
         </div>
-        <div className="font-medium text-gray-900 dark:text-gray-200">
+        <div className="font-medium text-gray-700 dark:text-gray-300">
           {(() => {
             if (!user.birth_time || !user.date_of_birth) {
               return t('birthDetails.unavailable');
@@ -30,11 +30,11 @@ export function BirthDetails({ user }: BirthDetailsProps) {
           })()}
         </div>
       </div>
-      <div className="rounded-xl bg-[#35397E]/10 p-4 dark:bg-[#35397E]/20">
-        <div className="mb-2 text-xs font-medium text-oriental-800 dark:text-oriental-300">
+      <div className="group relative px-6 py-4 transition-all duration-300 bg-purple-50/50 dark:bg-purple-900/10 backdrop-blur-sm rounded-lg hover:bg-purple-50/80 dark:hover:bg-purple-900/20">
+        <div className="mb-2 text-xs font-medium text-purple-700 dark:text-purple-300 uppercase tracking-wider">
           {t('birthDetails.birthTime')}
         </div>
-        <div className="font-medium text-gray-900 dark:text-gray-200">
+        <div className="font-medium text-gray-700 dark:text-gray-300">
           {(() => {
             if (!user.birth_time || !user.date_of_birth) {
               return t('birthDetails.unavailable');
@@ -54,12 +54,12 @@ export function BirthDetails({ user }: BirthDetailsProps) {
           })()}
         </div>
       </div>
-      <div className="rounded-xl bg-[#35397E]/10 p-4 dark:bg-[#35397E]/20">
-        <div className="mb-2 text-xs font-medium text-oriental-800 dark:text-oriental-300">
+      <div className="group relative px-6 py-4 transition-all duration-300 bg-purple-50/50 dark:bg-purple-900/10 backdrop-blur-sm rounded-lg hover:bg-purple-50/80 dark:hover:bg-purple-900/20">
+        <div className="mb-2 text-xs font-medium text-purple-700 dark:text-purple-300 uppercase tracking-wider">
           {t('birthDetails.birthPlace')}
         </div>
         <div
-          className="truncate font-medium text-gray-900 dark:text-gray-200"
+          className="truncate font-medium text-gray-700 dark:text-gray-300"
           title={user.place_of_birth}
         >
           {user.place_of_birth}

@@ -116,79 +116,54 @@ export function Chat() {
   );
 
   return (
-    <div className="relative flex h-full flex-col overflow-hidden bg-gradient-to-b from-[#0f0c29] via-[#302b63] to-[#24243e] pb-2">
-      {/* Animated stars background */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div
-          className="absolute h-1 w-1 animate-[twinkle_3s_ease-in-out_infinite] rounded-full bg-white opacity-60"
-          style={{ top: '10%', left: '15%' }}
-        />
-        <div
-          className="absolute h-1 w-1 animate-[twinkle_3s_ease-in-out_infinite] rounded-full bg-white opacity-60"
-          style={{ top: '50%', left: '75%', animationDelay: '0.5s' }}
-        />
-        <div
-          className="absolute h-1 w-1 animate-[twinkle_3s_ease-in-out_infinite] rounded-full bg-white opacity-60"
-          style={{ top: '30%', left: '45%', animationDelay: '1s' }}
-        />
-        <div
-          className="absolute h-1 w-1 animate-[twinkle_3s_ease-in-out_infinite] rounded-full bg-white opacity-60"
-          style={{ top: '70%', left: '25%', animationDelay: '1.5s' }}
-        />
-        <div
-          className="absolute h-1 w-1 animate-[twinkle_3s_ease-in-out_infinite] rounded-full bg-white opacity-60"
-          style={{ top: '20%', left: '85%', animationDelay: '2s' }}
-        />
+    <div className="relative flex h-full flex-col overflow-hidden bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900 pb-2">
+      {/* Decorative elements */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -left-4 top-0 h-64 w-64 rounded-full bg-gradient-to-br from-purple-100/30 to-transparent blur-3xl dark:from-purple-900/10" />
+        <div className="absolute -right-4 bottom-0 h-64 w-64 rounded-full bg-gradient-to-br from-purple-100/30 to-transparent blur-3xl dark:from-purple-900/10" />
       </div>
       <div className="relative z-10 flex-1 overflow-y-auto p-4">
         <div className="space-y-4">
           {messages.map((message, index) => (
             <div
               key={index}
-              className={`flex items-start space-x-2 ${
-                message.isUser ? 'justify-end' : 'justify-start'
-              }`}
+              className={`flex items-start space-x-2 ${message.isUser ? 'justify-end' : 'justify-start'}`}
             >
               {!message.isUser && (
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
-                  <Bot className="text-primary h-5 w-5" />
+                <div className="flex h-8 w-8 animate-fade-in items-center justify-center rounded-lg bg-gradient-to-br from-purple-200 to-purple-300 text-purple-700 shadow-md transition-transform duration-200 hover:scale-110 dark:from-purple-800/40 dark:to-purple-900/60 dark:text-purple-300">
+                  <Bot className="h-5 w-5" />
                 </div>
               )}
               <div
-                className={`max-w-[80%] rounded-lg px-4 py-2 ${
-                  message.isUser
-                    ? 'bg-white/20 text-white backdrop-blur-sm'
-                    : 'bg-black/20 text-white backdrop-blur-sm'
+                className={`group relative max-w-[80%] rounded-lg px-4 py-2 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md ${message.isUser
+                  ? 'bg-gradient-to-br from-purple-200 to-purple-300 text-purple-900 dark:from-purple-800/40 dark:to-purple-900/60 dark:text-purple-100'
+                  : 'bg-white/80 text-gray-800 dark:bg-gray-800/80 dark:text-gray-200'
                 }`}
               >
                 {message.isTyping ? (
-                  <Loader2 className="h-5 w-5 animate-spin" />
+                  <Loader2 className="h-5 w-5 animate-spin text-purple-600 dark:text-purple-400" />
                 ) : (
                   <>
                     <ReactMarkdown className="prose dark:prose-invert max-w-none">
                       {message.text}
                     </ReactMarkdown>
-                    <div
-                      className={`mt-1 text-xs ${
-                        message.isUser ? 'text-white/70' : 'text-text-light-secondary'
-                      }`}
-                    >
+                    <div className="mt-1 text-xs text-gray-600/90 transition-opacity group-hover:opacity-100 dark:text-gray-400/90">
                       {format(message.timestamp, 'HH:mm')}
                     </div>
                   </>
                 )}
               </div>
               {message.isUser && (
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
-                  <User className="text-primary h-5 w-5" />
+                <div className="flex h-8 w-8 animate-fade-in items-center justify-center rounded-lg bg-gradient-to-br from-purple-200 to-purple-300 text-purple-700 shadow-md transition-transform duration-200 hover:scale-110 dark:from-purple-800/40 dark:to-purple-900/60 dark:text-purple-300">
+                  <User className="h-5 w-5" />
                 </div>
               )}
             </div>
           ))}
           {isTyping && (
-            <div className="flex items-center gap-2 p-2 text-white/70">
-              <Bot className="h-6 w-6" />
-              <Loader2 className="h-4 w-4 animate-spin" />
+            <div className="flex items-center gap-2 p-2 text-gray-600 dark:text-gray-300">
+              <Bot className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+              <Loader2 className="h-4 w-4 animate-spin text-purple-600 dark:text-purple-400" />
               <span className="text-sm">Typing...</span>
             </div>
           )}
@@ -198,7 +173,7 @@ export function Chat() {
                 <button
                   key={index}
                   onClick={() => handleSuggestedQuestion(question)}
-                  className="rounded-full bg-white/10 px-4 py-2 text-sm text-white backdrop-blur-sm hover:bg-white/20"
+                  className="group relative rounded-full bg-gradient-to-r from-purple-100 to-purple-200 py-1.5 pl-3 pr-4 text-sm font-medium text-purple-700 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md dark:from-purple-800/30 dark:to-purple-900/40 dark:text-purple-200"
                 >
                   {question}
                 </button>
@@ -208,8 +183,8 @@ export function Chat() {
           <div ref={messagesEndRef} />
         </div>
       </div>
-      <div className="relative z-10 border-t border-white/10 bg-black/20 p-4 backdrop-blur-sm">
-        <div className="relative">
+      <div className="relative z-10 border-t border-gray-200 dark:border-gray-700 bg-white/70 p-4 backdrop-blur-xl dark:bg-gray-900/70">
+        <div className="relative mx-auto max-w-3xl">
           <input
             type="text"
             value={inputValue}
@@ -221,13 +196,13 @@ export function Chat() {
               }
             }}
             placeholder={t('common.typeMessage')}
-            className="focus:ring-primary w-full rounded-lg border border-white/20 bg-white/10 px-4 py-2 pr-10 text-white placeholder-white/50 backdrop-blur-sm focus:outline-none focus:ring-2"
+            className="w-full rounded-lg border-2 border-gray-200 bg-white/80 px-4 py-3 pr-10 text-gray-900 placeholder-gray-500 shadow-sm backdrop-blur-sm transition-all duration-200 focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 hover:border-purple-300 dark:border-gray-700 dark:bg-gray-800/80 dark:text-gray-100 dark:placeholder-gray-400 dark:focus:border-purple-500 dark:focus:ring-purple-500 dark:focus:ring-offset-gray-900"
             disabled={isLoading}
           />
           <button
             onClick={() => handleSend()}
             disabled={isLoading || !inputValue.trim()}
-            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1 text-white/70 hover:text-white disabled:opacity-50"
+            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-gradient-to-r from-purple-200 to-purple-300 p-2 text-purple-700 opacity-90 transition-all duration-200 hover:opacity-100 hover:shadow-md disabled:opacity-50 disabled:hover:opacity-50 dark:from-purple-800/40 dark:to-purple-900/60 dark:text-purple-200"
           >
             <Send className="h-5 w-5" />
           </button>

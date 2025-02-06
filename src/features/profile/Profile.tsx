@@ -21,48 +21,24 @@ export function Profile() {
   return (
     <div className="relative z-20 pb-20">
       {/* Birth Details Card */}
-      <div className="my-6 overflow-hidden rounded-[20px] bg-white p-6 shadow-lg transition-colors duration-200 dark:bg-[#1C1F2E]">
-        <div className="mb-4 flex items-center gap-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#35397E] text-white">
-            🌟
-          </div>
-          <h2 className="text-lg font-medium text-oriental-800 dark:text-oriental-300">
-            {t('profile.birthDetails')}
-          </h2>
-        </div>
+      <div className="group relative px-8 py-6 mb-6 transition-all duration-300 bg-white dark:bg-gray-900 backdrop-blur-sm hover:scale-[1.01] hover:bg-white/95 dark:hover:bg-gray-900/95">
+        <h3 className="mb-5 flex items-center gap-2 text-xl font-medium text-gray-900 dark:text-white">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400">✧</span>
+          {t('profile.birthDetails').toUpperCase()}
+        </h3>
         <BirthDetails user={userData} />
       </div>
 
       {/* Pending Status Card */}
       {userData.status === 'pending' && (
-        <div className="relative mx-auto w-full max-w-md">
-          {/* Outer glow effect */}
-          <div className="absolute -inset-[1px] rounded-[21px] bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-blue-500/20 blur-[1px]" />
-
-          {/* Main container */}
-          <div className="group relative overflow-hidden rounded-[20px] bg-[#070B14] p-[1px]">
-            {/* Gradient border */}
-            <div className="absolute inset-0 rounded-[20px] p-[1px]">
-              <div className="absolute inset-0 animate-[spin_8s_linear_infinite] rounded-[20px] bg-[conic-gradient(from_0deg,#1E293B,#3B82F6,#1E293B)] opacity-40" />
-            </div>
-
-            {/* Inner container with glass effect */}
-            <div className="relative rounded-[19px] bg-gradient-to-br from-[#0B1120]/90 via-[#0F172A]/80 to-[#0B1120]/90 px-8 py-6 backdrop-blur-xl">
-              {/* Deep space effect */}
-              <div className="absolute inset-0 rounded-[19px] bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1),transparent_70%)]" />
-              <div className="absolute inset-0 rounded-[19px] bg-[radial-gradient(circle_at_80%_20%,rgba(147,197,253,0.1),transparent_50%)]" />
-
-              <div className="relative">
-                <div className="mb-4 flex items-center gap-2">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#35397E] text-white">
-                    ⏳
-                  </div>
-                  <h2 className="text-lg font-medium text-white">{t('profile.pendingStatus')}</h2>
-                </div>
-                <p className="text-sm text-gray-300">{t('profile.pendingMessage')}</p>
-              </div>
-            </div>
-          </div>
+        <div className="group relative px-8 py-6 transition-all duration-300 bg-white dark:bg-gray-900 backdrop-blur-sm hover:scale-[1.01] hover:bg-white/95 dark:hover:bg-gray-900/95">
+          <h3 className="mb-5 flex items-center gap-2 text-xl font-medium text-gray-900 dark:text-white">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400">✧</span>
+            {t('profile.pendingStatus').toUpperCase()}
+          </h3>
+          <p className="border-l-2 border-purple-200 pl-4 text-base leading-relaxed text-gray-600 transition-colors duration-300 hover:border-purple-400 dark:border-purple-800/30 dark:text-gray-300 dark:hover:border-purple-600/50">
+            {t('profile.pendingMessage')}
+          </p>
         </div>
       )}
     </div>
