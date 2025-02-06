@@ -27,9 +27,9 @@ export function ChatWidget({ onClose }: ChatWidgetProps) {
 
   // Initialize chat and clear messages on page load
   const suggestedQuestions = [
-    'How can I improve my relationships?',
-    'What are my lucky colors for today?',
-    'What remedies should I follow this week?',
+    'how can i improve my relationships?',
+    'what are my lucky colors for today?',
+    'what remedies should i follow this week?',
   ];
 
   const handleSuggestedQuestion = (question: string) => {
