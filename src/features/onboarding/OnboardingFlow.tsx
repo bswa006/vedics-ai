@@ -86,12 +86,15 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) =>
     }
   };
 
-  const handleComplete = () => {
-    onComplete({
-      language,
-      birthDetails,
-      selectedThemes,
-    });
+  const handleComplete = async () => {
+    const success = await handleCreateUser();
+    if (success) {
+      onComplete({
+        language,
+        birthDetails,
+        selectedThemes,
+      });
+    }
   };
 
   return (

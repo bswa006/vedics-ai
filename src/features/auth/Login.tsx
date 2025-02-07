@@ -23,6 +23,7 @@ export function Login() {
     setLoading(true);
 
     try {
+      console.log('Starting login process...');
       // Validate required fields
       if (!formData.username) {
         setError('Phone number is required');
@@ -32,11 +33,13 @@ export function Login() {
 
       try {
         // First try to get a token (login)
+        console.log('Attempting to get token...');
         const tokenResponse = await api.auth.getToken({
           username: formData.username,
           password: formData.username, // Using username as password
         });
 
+        console.log('Token response:', tokenResponse);
         if (tokenResponse.token) {
           // Store the token in localStorage for the axios interceptor
           localStorage.setItem('token', tokenResponse.token);
@@ -48,9 +51,11 @@ export function Login() {
             console.log('User profile:', userProfile);
 
             if (userProfile.id) {
+              // Set userId in localStorage and trigger a storage event
               localStorage.setItem('userId', userProfile.id.toString());
+              window.dispatchEvent(new Event('storage'));
 
-              // Small delay to ensure localStorage is updated
+              // Small delay to ensure state is updated
               await new Promise(resolve => setTimeout(resolve, 100));
 
               // If user has completed their profile (has birth details), go to home
@@ -62,7 +67,8 @@ export function Login() {
               ) {
                 console.log('Profile complete, redirecting to home');
                 // window.location.href = '/';
-                navigate('/');
+                console.log('Navigating to home...');
+                navigate('/', { replace: true });
               } else {
                 console.log('Profile incomplete, redirecting to onboarding');
                 // window.location.href = '/onboarding';
@@ -81,17 +87,29 @@ export function Login() {
         }
       } catch (err) {
         // If login fails, create a new user
-        const response = await api.auth.createUser({
+        const response: any = await api.auth.createUser({
           username: formData.username,
           password: formData.username, // Using username as password
         });
 
-        if (response.user_id && response.token) {
-          localStorage.setItem('userId', response.user_id.toString());
-          localStorage.setItem('token', response.token);
-
-          // Navigate to onboarding after creating a new user
-          navigate('/onboarding');
+        if (response.id && response.auth_token) {
+          // For new users, we want to ensure they go through onboarding
+          localStorage.setItem('token', response.auth_token);
+          
+          // Get user profile to set userId
+          try {
+            const userProfile = await api.profiles.getProfile();
+            if (userProfile.id) {
+              localStorage.setItem('userId', userProfile.id.toString());
+              window.dispatchEvent(new Event('storage'));
+              
+              // For new users, always go to onboarding
+              navigate('/onboarding', { replace: true });
+            }
+          } catch (error) {
+            console.error('Failed to get user profile:', error);
+            setError('Failed to get user profile');
+          }
         } else {
           setError('Failed to create user');
         }

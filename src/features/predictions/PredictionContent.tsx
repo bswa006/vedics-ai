@@ -11,8 +11,22 @@ interface PredictionContentProps {
   }>;
 }
 
+import { LoadingState } from '../../components/ui/LoadingState';
+import { useUserDataContext } from '../../contexts/UserDataContext';
+
 export function PredictionContent({ predictions }: PredictionContentProps): JSX.Element | null {
+  const { userData } = useUserDataContext();
   console.log('Predictions:', predictions);
+
+  // Show loading state if profile is under review
+  if (userData?.long_term_reading_status !== 'completed') {
+    return (
+      <div className="mx-auto max-w-3xl px-4 py-3">
+        <LoadingState />
+      </div>
+    );
+  }
+
   if (!predictions || predictions.length === 0) return null;
 
   const availableTabs = predictions.map(p => p.prediction_type);

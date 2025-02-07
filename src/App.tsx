@@ -1,4 +1,5 @@
 import React, { useCallback, useState, useMemo, useEffect } from 'react';
+import { api } from './services/api';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import './App.css';
@@ -36,7 +37,7 @@ const AppContent: React.FC<AppContentProps> = React.memo(
     confirmLogout,
   }: AppContentProps) => {
     const { t } = useTranslation();
-    const { userData, predictions, error } = useUserDataContext();
+    const { userData, predictions, error, isOnboardingPending } = useUserDataContext();
     const navigate = useNavigate();
 
     // Data fetching is now handled in useUserData hook
@@ -44,15 +45,17 @@ const AppContent: React.FC<AppContentProps> = React.memo(
       console.log('userData: ------------', userData);
     }, [userData]);
 
-    const isUserAuthenticated = useMemo(() => {
-      const token = localStorage.getItem('token');
-      console.log('Checking authentication, token:', token);
-      return token !== null;
-    }, []);
-
     const isProfileIncomplete = useMemo(() => {
-      if (!userData) return false;
-      return !userData.date_of_birth || !userData.time_of_birth || !userData.place_of_birth;
+      // If we have a token but no userData or incomplete profile data, consider it incomplete
+      if (
+        !userData ||
+        !userData.date_of_birth ||
+        !userData.time_of_birth ||
+        !userData.place_of_birth
+      ) {
+        return true;
+      }
+      return false;
     }, [userData]);
 
     const isUserOnboarding = useMemo(
@@ -62,22 +65,31 @@ const AppContent: React.FC<AppContentProps> = React.memo(
 
     // Redirect to onboarding if profile is incomplete
     useEffect(() => {
-      if (
-        isUserAuthenticated &&
-        isProfileIncomplete &&
-        window.location.pathname !== '/onboarding'
-      ) {
-        console.log('Profile incomplete, redirecting to onboarding');
-        navigate('/onboarding');
-      } else if (
-        isUserAuthenticated &&
-        !isProfileIncomplete &&
-        (window.location.pathname === '/login' || window.location.pathname === '/onboarding')
-      ) {
-        console.log('Profile completed, redirecting to home');
-        navigate('/');
+      const token = localStorage.getItem('token');
+      console.log(
+        'Redirection check - Auth:',
+        !!token,
+        'Profile Incomplete:',
+        isProfileIncomplete,
+        'Current Path:',
+        window.location.pathname
+      );
+
+      if (token) {
+        if (isProfileIncomplete && window.location.pathname !== '/onboarding') {
+          console.log('Profile incomplete, redirecting to onboarding');
+          navigate('/onboarding', { replace: true });
+        } else if (
+          !isProfileIncomplete &&
+          (window.location.pathname === '/login' || window.location.pathname === '/onboarding')
+        ) {
+          console.log('Profile completed, redirecting to home');
+          navigate('/', { replace: true });
+        }
+      } else if (window.location.pathname !== '/login') {
+        navigate('/login', { replace: true });
       }
-    }, [isUserAuthenticated, isProfileIncomplete, navigate]);
+    }, [isProfileIncomplete, navigate]);
 
     return (
       <>
@@ -98,7 +110,7 @@ const AppContent: React.FC<AppContentProps> = React.memo(
           {/* Public Routes */}
           <Route
             path="/login"
-            element={isUserAuthenticated ? <Navigate to="/" replace /> : <Login />}
+            element={!!localStorage.getItem('token') ? <Navigate to="/" replace /> : <Login />}
           />
           <Route
             path="/onboarding"
@@ -110,7 +122,9 @@ const AppContent: React.FC<AppContentProps> = React.memo(
                 userId={userId}
               >
                 <OnboardingFlow
-                  onComplete={(data: unknown) => {
+                  onComplete={async (data: unknown) => {
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    window.location.href = '/';
                     console.log('Onboarding completed:', data);
                     const storedUserId = localStorage.getItem('userId');
                     if (storedUserId) {
@@ -127,7 +141,7 @@ const AppContent: React.FC<AppContentProps> = React.memo(
           <Route
             path="/"
             element={
-              !isUserAuthenticated ? (
+              !localStorage.getItem('token') ? (
                 <Navigate to="/login" replace />
               ) : (
                 <Layout
@@ -137,7 +151,7 @@ const AppContent: React.FC<AppContentProps> = React.memo(
                   userId={userId}
                 >
                   <div className="mx-auto max-w-5xl space-y-4 pb-4 text-text-light-primary transition-colors duration-200 dark:text-text-dark-primary">
-                    {isUserOnboarding && (
+                    {isOnboardingPending && (
                       <div className="relative mx-auto mt-2 max-w-md px-4">
                         {/* Outer glow effect */}
                         <div className="absolute -inset-[1px] rounded-[21px] bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-blue-500/20 blur-[1px]" />
@@ -192,7 +206,7 @@ const AppContent: React.FC<AppContentProps> = React.memo(
           <Route
             path="/profile"
             element={
-              !isUserAuthenticated ? (
+              !localStorage.getItem('token') ? (
                 <Navigate to="/login" replace />
               ) : isUserOnboarding ? (
                 <Navigate to="/onboarding" replace />
@@ -211,7 +225,7 @@ const AppContent: React.FC<AppContentProps> = React.memo(
           <Route
             path="/chat"
             element={
-              !isUserAuthenticated ? (
+              !localStorage.getItem('token') ? (
                 <Navigate to="/login" replace />
               ) : isUserOnboarding ? (
                 <Navigate to="/onboarding" replace />
@@ -230,7 +244,7 @@ const AppContent: React.FC<AppContentProps> = React.memo(
           <Route
             path="/daily-stars"
             element={
-              !isUserAuthenticated ? (
+              !localStorage.getItem('token') ? (
                 <Navigate to="/login" replace />
               ) : isUserOnboarding ? (
                 <Navigate to="/onboarding" replace />
@@ -250,7 +264,11 @@ const AppContent: React.FC<AppContentProps> = React.memo(
           <Route
             path="*"
             element={
-              !isUserAuthenticated ? <Navigate to="/login" replace /> : <Navigate to="/" replace />
+              !localStorage.getItem('token') ? (
+                <Navigate to="/login" replace />
+              ) : (
+                <Navigate to="/" replace />
+              )
             }
           />
         </Routes>
@@ -264,6 +282,40 @@ const App: React.FC = () => {
     const storedUserId = localStorage.getItem('userId');
     return storedUserId ? parseInt(storedUserId, 10) : null;
   });
+
+  // Fetch user profile and set userId when token exists but userId doesn't
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      const token = localStorage.getItem('token');
+      const storedUserId = localStorage.getItem('userId');
+
+      if (token && !storedUserId) {
+        try {
+          const userProfile = await api.profiles.getProfile();
+          if (userProfile.id) {
+            localStorage.setItem('userId', userProfile.id.toString());
+            window.dispatchEvent(new Event('storage'));
+          }
+        } catch (error) {
+          console.error('Failed to fetch user profile:', error);
+        }
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
+
+  // Listen for changes in localStorage
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const storedUserId = localStorage.getItem('userId');
+      setUserId(storedUserId ? parseInt(storedUserId, 10) : null);
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
+
   const [darkMode, setDarkMode] = useState(() => {
     const storedDarkMode = localStorage.getItem('darkMode');
     return storedDarkMode ? JSON.parse(storedDarkMode) : false;

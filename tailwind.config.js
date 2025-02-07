@@ -8,6 +8,10 @@ export default {
   theme: {
     extend: {
       keyframes: {
+        'pulse-slow': {
+          '0%, 100%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(1.1)' },
+        },
         twinkle: {
           '0%, 100%': { opacity: 0.2, transform: 'scale(0.95)' },
           '50%': { opacity: 1, transform: 'scale(1.05)' },
@@ -36,6 +40,7 @@ export default {
         },
       },
       animation: {
+        'pulse-slow': 'pulse-slow 3s ease-in-out infinite',
         twinkle: 'twinkle 3s ease-in-out infinite',
         'twinkle-slow': 'twinkle-slow 4s ease-in-out infinite',
         'float-1': 'float-1 15s ease-in-out infinite',

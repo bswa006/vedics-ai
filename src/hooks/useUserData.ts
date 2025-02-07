@@ -11,6 +11,7 @@ export const useUserData = () => {
   const [userData, setUserData] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [isOnboardingPending, setIsOnboardingPending] = useState(true);
 
   const fetchUserData = useCallback(async () => {
     const token = localStorage.getItem('token');
@@ -51,15 +52,30 @@ export const useUserData = () => {
         profileResponse.date_of_birth && 
         profileResponse.place_of_birth;
 
-      if (hasAllRequiredFields && window.location.pathname === '/login') {
-        navigate('/');
+      if (hasAllRequiredFields) {
+        if (window.location.pathname === '/login') {
+          navigate('/');
+        }
+        // Only fetch predictions if profile is complete
+        console.log('Profile complete, fetching long term predictions...');
+        const predictionsResponse = await getLongTermPredictions();
+        console.log('Predictions response:', predictionsResponse);
+        setPredictions(predictionsResponse);
+      } else {
+        console.log('Profile incomplete, skipping predictions fetch');
+        setPredictions(null);
       }
       setUserData(user);
-
-      console.log('Fetching long term predictions...');
-      const predictionsResponse = await getLongTermPredictions();
-      console.log('Predictions response:', predictionsResponse);
-      setPredictions(predictionsResponse);
+      
+      // Update onboarding status
+      const isOnboardingRequired = !(
+        user.time_of_birth && 
+        user.date_of_birth && 
+        user.place_of_birth &&
+        user.preferred_language &&
+        user.area_of_interests.length > 0
+      );
+      setIsOnboardingPending(isOnboardingRequired);
     } catch (err) {
       console.error('Error fetching user data:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
@@ -84,11 +100,27 @@ export const useUserData = () => {
       return;
     }
 
-    // Only fetch if we don't have data and aren't already loading
-    if (!userData && !loading && !error) {
+    // Start polling if we're on the home page and long-term reading is pending
+    const shouldPoll = 
+      window.location.pathname === '/' && 
+      userData?.long_term_reading_status !== 'completed';
+
+    let pollInterval: NodeJS.Timeout | null = null;
+
+    if (shouldPoll) {
+      console.log('Starting polling for profile and predictions...');
+      pollInterval = setInterval(fetchUserData, 5000); // Poll every 5 seconds
+    } else if (!userData && !loading && !error) {
+      // Initial fetch if no data
       fetchUserData();
     }
-  }, [navigate, loading, error, fetchUserData]);
+
+    return () => {
+      if (pollInterval) {
+        clearInterval(pollInterval);
+      }
+    };
+  }, [navigate, loading, error, fetchUserData, userData?.long_term_reading_status]);
 
   return { userData, predictions, loading, error, fetchUserData };
 };

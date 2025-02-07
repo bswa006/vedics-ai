@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '../../../lib/utils';
 
 export interface FinalWelcomeProps {
-  onComplete: () => void;
+  onComplete: () => Promise<void>;
   error?: string;
 }
 
@@ -61,7 +61,7 @@ export const FinalWelcome: React.FC<FinalWelcomeProps> = ({ onComplete, error })
         transition={{ duration: 0.5, delay: 0.4 }}
       >
         <Button
-          onClick={onComplete}
+          onClick={() => onComplete()}
           className={cn(
             "w-full relative overflow-hidden rounded-xl p-[1px] transition-all",
             "bg-gradient-to-r from-blue-500 to-blue-600",
