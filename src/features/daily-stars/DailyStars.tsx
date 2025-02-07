@@ -89,11 +89,11 @@ export function DailyStars({ userId }: DailyStarsProps) {
   `;
 
   const renderArrayContent = (items: (string | number)[]) => {
-    const isSingleWordArray = items.every(
-      item => typeof item === 'number' || (typeof item === 'string' && !item.includes(' '))
+    const isThreeWordArray = items.every(
+      item => typeof item === 'number' || (typeof item === 'string' && item.split(' ').length <= 3)
     );
 
-    if (isSingleWordArray) {
+    if (isThreeWordArray) {
       return items.map((item, index) => (
         <span
           key={index}

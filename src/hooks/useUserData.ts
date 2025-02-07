@@ -11,7 +11,7 @@ export const useUserData = () => {
   const [userData, setUserData] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [isOnboardingPending, setIsOnboardingPending] = useState(true);
+  const [isOnboardingPending, setIsOnboardingPending] = useState(false);
 
   const fetchUserData = useCallback(async () => {
     const token = localStorage.getItem('token');

@@ -38,7 +38,7 @@ const AppContent: React.FC<AppContentProps> = React.memo(
     confirmLogout,
   }: AppContentProps) => {
     const { t } = useTranslation();
-    const { userData, predictions, error } = useUserDataContext();
+    const { userData, predictions, error, loading } = useUserDataContext();
     const navigate = useNavigate();
 
     // Data fetching is now handled in useUserData hook
@@ -74,9 +74,14 @@ const AppContent: React.FC<AppContentProps> = React.memo(
         !!token,
         'Profile Incomplete:',
         isProfileIncomplete,
+        'Loading:',
+        loading,
         'Current Path:',
         window.location.pathname
       );
+
+      // Don't redirect while loading to prevent flicker
+      if (loading) return;
 
       if (token) {
         if (isProfileIncomplete && window.location.pathname !== '/onboarding') {
@@ -92,10 +97,22 @@ const AppContent: React.FC<AppContentProps> = React.memo(
       } else if (window.location.pathname !== '/login') {
         navigate('/login', { replace: true });
       }
-    }, [isProfileIncomplete, navigate]);
+    }, [isProfileIncomplete, navigate, loading]);
 
     return (
       <>
+        {/* Show loading state during initial data fetch */}
+        {loading && !userData && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50 backdrop-blur-sm">
+            <div className="rounded-lg bg-white/10 p-6 backdrop-blur-xl">
+              <div className="flex items-center space-x-3">
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-500 border-t-transparent" />
+                <span className="text-sm text-white/90">{t('common.loading')}</span>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Modal for logout confirmation */}
         {showLogoutModal && (
           <Modal
@@ -155,8 +172,8 @@ const AppContent: React.FC<AppContentProps> = React.memo(
                 >
                   <div className="mx-auto max-w-5xl space-y-4 pb-4 text-text-light-primary transition-colors duration-200 dark:text-text-dark-primary">
                     {isUserOnboarding && (
-                      <div className="mx-auto mt-8 max-w-3xl px-4">
-                        <motion.div 
+                      <div className="mx-auto mt-4 max-w-3xl px-4">
+                        <motion.div
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           className="relative overflow-hidden rounded-xl bg-gradient-to-r from-purple-50 via-blue-50 to-indigo-50 p-6 shadow-lg transition-all duration-300 hover:shadow-xl dark:from-purple-900/30 dark:via-blue-900/30 dark:to-indigo-900/30 dark:shadow-indigo-900/10"
@@ -171,7 +188,7 @@ const AppContent: React.FC<AppContentProps> = React.memo(
                             transition={{
                               duration: 4,
                               repeat: Infinity,
-                              ease: "easeInOut"
+                              ease: 'easeInOut',
                             }}
                           />
                           <div className="relative flex items-center gap-6">
@@ -189,17 +206,17 @@ const AppContent: React.FC<AppContentProps> = React.memo(
                                   transition={{
                                     duration: 3,
                                     repeat: Infinity,
-                                    ease: "linear"
+                                    ease: 'linear',
                                   }}
                                 />
                                 <motion.div
-                                  animate={{ 
+                                  animate={{
                                     rotate: [0, 360],
                                   }}
-                                  transition={{ 
+                                  transition={{
                                     duration: 8,
                                     repeat: Infinity,
-                                    ease: "linear"
+                                    ease: 'linear',
                                   }}
                                   className="relative flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500/10 via-purple-500/10 to-pink-500/10 p-[1px] backdrop-blur-xl"
                                 >
@@ -218,7 +235,7 @@ const AppContent: React.FC<AppContentProps> = React.memo(
                                       transition={{
                                         duration: 4,
                                         repeat: Infinity,
-                                        ease: "easeInOut"
+                                        ease: 'easeInOut',
                                       }}
                                     />
                                     {/* Animated icon */}
@@ -230,7 +247,7 @@ const AppContent: React.FC<AppContentProps> = React.memo(
                                       transition={{
                                         duration: 2,
                                         repeat: Infinity,
-                                        ease: "easeInOut"
+                                        ease: 'easeInOut',
                                       }}
                                     >
                                       <motion.span
@@ -243,7 +260,7 @@ const AppContent: React.FC<AppContentProps> = React.memo(
                                         transition={{
                                           duration: 3,
                                           repeat: Infinity,
-                                          ease: "easeInOut"
+                                          ease: 'easeInOut',
                                         }}
                                       >
                                         ✨
@@ -253,7 +270,7 @@ const AppContent: React.FC<AppContentProps> = React.memo(
                                 </motion.div>
                               </div>
                             </div>
-                            <div className="flex-1 min-w-0 space-y-2">
+                            <div className="min-w-0 flex-1 space-y-2">
                               <h2 className="bg-gradient-to-r from-purple-900 via-blue-900 to-indigo-900 bg-clip-text text-lg font-semibold text-transparent dark:from-purple-200 dark:via-blue-200 dark:to-indigo-200">
                                 {t('onboarding.pendingTitle')}
                               </h2>

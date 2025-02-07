@@ -11,21 +11,8 @@ interface PredictionContentProps {
   }>;
 }
 
-import { LoadingState } from '../../components/ui/LoadingState';
-import { useUserDataContext } from '../../contexts/UserDataContext';
-
 export function PredictionContent({ predictions }: PredictionContentProps): JSX.Element | null {
-  const { userData } = useUserDataContext();
   console.log('Predictions:', predictions);
-
-  // Show loading state if profile is under review
-  if (userData?.long_term_reading_status !== 'completed') {
-    return (
-      <div className="mx-auto max-w-3xl px-4 py-3">
-        <LoadingState />
-      </div>
-    );
-  }
 
   if (!predictions || predictions.length === 0) return null;
 
@@ -56,9 +43,9 @@ export function PredictionContent({ predictions }: PredictionContentProps): JSX.
       return String(item);
     });
 
-    const isSingleWordArray = stringItems.every(item => !item.includes(' '));
+    const isThreeWordArray = stringItems.every(item => item.split(' ').length <= 3);
 
-    if (isSingleWordArray) {
+    if (isThreeWordArray) {
       return stringItems.map((item, index) => (
         <span
           key={index}
