@@ -7,8 +7,6 @@ import { BirthDetailsForm } from './components/BirthDetailsForm';
 import { InterestsSelection } from './components/InterestsSelection';
 import { LanguageSelection } from './components/LanguageSelection';
 
-import { FinalWelcome } from './components/FinalWelcome';
-
 import OnboardingStepper from '../../components/OnboardingStepper';
 
 interface OnboardingFlowProps {
@@ -86,17 +84,6 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) =>
     }
   };
 
-  const handleComplete = async () => {
-    const success = await handleCreateUser();
-    if (success) {
-      onComplete({
-        language,
-        birthDetails,
-        selectedThemes,
-      });
-    }
-  };
-
   return (
     <div className="relative flex h-full flex-col bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white">
       <AnimatePresence>
@@ -121,7 +108,7 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) =>
       </AnimatePresence>
       <div className="flex-none">
         <OnboardingStepper
-          steps={['Choose Language', 'Birth Details', 'Select Interests', 'Final Welcome']}
+          steps={['Choose Language', 'Birth Details', 'Select Interests']}
           currentStep={step}
           setCurrentStep={setStep}
         />
@@ -166,14 +153,17 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) =>
             onNext={async () => {
               const success = await handleCreateUser();
               if (success) {
-                setStep(3);
+                onComplete({
+                  language,
+                  birthDetails,
+                  selectedThemes,
+                });
               }
             }}
             error={error}
           />
         )}
 
-        {step === 3 && <FinalWelcome onComplete={handleComplete} error={error} />}
       </div>
     </div>
   );
