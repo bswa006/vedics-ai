@@ -12,30 +12,79 @@ export interface LanguageOption {
 }
 
 export const LANGUAGES: LanguageOption[] = [
-  { code: 'en', name: 'English' },
-  { code: 'hi', name: 'हिंदी (Hindi)' },
-  { code: 'ta', name: 'தமிழ் (Tamil)' },
-  { code: 'te', name: 'తెలుగు (Telugu)' },
-  { code: 'bn', name: 'বাংলা (Bengali)' },
-  { code: 'mr', name: 'मराठी (Marathi)' },
-  { code: 'kn', name: 'ಕನ್ನಡ (Kannada)' },
-  { code: 'ml', name: 'മലയാളം (Malayalam)' },
-  { code: 'gu', name: 'ગુજરાતી (Gujarati)' },
-  { code: 'pa', name: 'ਪੰਜਾਬੀ (Punjabi)' },
-  { code: 'sa', name: 'संस्कृतम् (Sanskrit)' },
-  { code: 'ur', name: 'اردو (Urdu)' },
-  { code: 'ne', name: 'नेपाली (Nepali)' },
-  { code: 'si', name: 'සිංහල (Sinhala)' },
-  { code: 'my', name: 'မြန်မာ (Burmese)' },
-  { code: 'th', name: 'ไทย (Thai)' },
-  { code: 'km', name: 'ខ្មែរ (Khmer)' },
-  { code: 'vi', name: 'Tiếng Việt (Vietnamese)' },
-  { code: 'id', name: 'Bahasa Indonesia' },
-  { code: 'ms', name: 'Bahasa Melayu' },
-  { code: 'zh', name: '中文 (Chinese)' },
-  { code: 'ja', name: '日本語 (Japanese)' },
-  { code: 'ko', name: '한국어 (Korean)' },
+  // South Asian Languages
+  { code: 'english', name: 'English' },
+  { code: 'hindi', name: 'हिंदी (Hindi)' },
+  { code: 'tamil', name: 'தமிழ் (Tamil)' },
+  { code: 'telugu', name: 'తెలుగు (Telugu)' },
+  { code: 'bengali', name: 'বাংলা (Bengali)' },
+  { code: 'marathi', name: 'मराठी (Marathi)' },
+  { code: 'kannada', name: 'ಕನ್ನಡ (Kannada)' },
+  { code: 'malayalam', name: 'മലയാളം (Malayalam)' },
+  { code: 'gujarati', name: 'ગુજરાતી (Gujarati)' },
+  { code: 'punjabi', name: 'ਪੰਜਾਬੀ (Punjabi)' },
+  { code: 'sanskrit', name: 'संस्कृतम् (Sanskrit)' },
+  { code: 'urdu', name: 'اردو (Urdu)' },
+  { code: 'nepali', name: 'नेपाली (Nepali)' },
+  { code: 'sinhala', name: 'සිංහල (Sinhala)' },
+  { code: 'odia', name: 'ଓଡ଼ିଆ (Odia)' },
+  { code: 'assamese', name: 'অসমীয়া (Assamese)' },
+  { code: 'kashmiri', name: 'कॉशुर (Kashmiri)' },
+  { code: 'konkani', name: 'कोंकणी (Konkani)' },
+  { code: 'manipuri', name: 'মৈতৈলোন্ (Manipuri)' },
+  { code: 'maithili', name: 'मैथिली (Maithili)' },
+  
+  // Southeast Asian Languages
+  { code: 'burmese', name: 'မြန်မာ (Burmese)' },
+  { code: 'thai', name: 'ไทย (Thai)' },
+  { code: 'khmer', name: 'ខ្មែរ (Khmer)' },
+  { code: 'vietnamese', name: 'Tiếng Việt (Vietnamese)' },
+  { code: 'indonesian', name: 'Bahasa Indonesia (Indonesian)' },
+  { code: 'malay', name: 'Bahasa Melayu (Malay)' },
+  { code: 'tagalog', name: 'Tagalog (Filipino)' },
+  { code: 'lao', name: 'ລາວ (Lao)' },
+  { code: 'javanese', name: 'Basa Jawa (Javanese)' },
+  { code: 'sundanese', name: 'Basa Sunda (Sundanese)' },
+  
+  // East Asian Languages
+  { code: 'chinese', name: '中文 (Chinese)' },
+  { code: 'japanese', name: '日本語 (Japanese)' },
+  { code: 'korean', name: '한국어 (Korean)' },
+  { code: 'mongolian', name: 'Монгол (Mongolian)' },
+  { code: 'tibetan', name: 'བོད་སྐད་ (Tibetan)' },
+  
+  // Central Asian Languages
+  { code: 'kazakh', name: 'Қазақ тілі (Kazakh)' },
+  { code: 'uzbek', name: 'Oʻzbek (Uzbek)' },
+  { code: 'kyrgyz', name: 'Кыргызча (Kyrgyz)' },
+  { code: 'turkmen', name: 'Türkmen (Turkmen)' },
+  { code: 'tajik', name: 'Тоҷикӣ (Tajik)' },
+  
+  // Middle Eastern Languages
+  { code: 'arabic', name: 'العربية (Arabic)' },
+  { code: 'persian', name: 'فارسی (Persian)' },
+  { code: 'turkish', name: 'Türkçe (Turkish)' },
+  { code: 'hebrew', name: 'עברית (Hebrew)' },
+  { code: 'kurdish', name: 'کوردی (Kurdish)' },
+  
+  // European Languages
+  { code: 'french', name: 'Français (French)' },
+  { code: 'german', name: 'Deutsch (German)' },
+  { code: 'spanish', name: 'Español (Spanish)' },
+  { code: 'portuguese', name: 'Português (Portuguese)' },
+  { code: 'italian', name: 'Italiano (Italian)' },
+  { code: 'russian', name: 'Русский (Russian)' },
+  { code: 'polish', name: 'Polski (Polish)' },
+  { code: 'ukrainian', name: 'Українська (Ukrainian)' },
+  { code: 'greek', name: 'Ελληνικά (Greek)' },
+  { code: 'dutch', name: 'Nederlands (Dutch)' },
+  { code: 'czech', name: 'Čeština (Czech)' },
+  { code: 'swedish', name: 'Svenska (Swedish)' },
+  { code: 'romanian', name: 'Română (Romanian)' },
+  { code: 'hungarian', name: 'Magyar (Hungarian)' },
+  { code: 'bulgarian', name: 'Български (Bulgarian)' },
 ];
+
 
 export interface LanguageSelectionProps {
   onNext: () => Promise<void>;
