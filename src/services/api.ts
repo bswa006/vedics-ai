@@ -19,6 +19,21 @@ axiosInstance.interceptors.request.use((config) => {
   return config;
 });
 
+// Add response interceptor to handle 403 errors
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 403) {
+      // Clear all localStorage
+      localStorage.clear();
+      
+      // Redirect to login page
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
+
 export interface UserBirthDetails {
   date_of_birth: string;
   birth_time: string;

@@ -76,8 +76,15 @@ export const useUserData = () => {
         user.area_of_interests.length > 0
       );
       setIsOnboardingPending(isOnboardingRequired);
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error fetching user data:', err);
+      if (err.response?.status === 403) {
+        // Clear all localStorage
+        localStorage.clear();
+        // Navigate to login page
+        navigate('/login');
+        return;
+      }
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
@@ -91,11 +98,11 @@ export const useUserData = () => {
     console.log('useEffect running with:', { userId, token, loading, userData });
     
     if (!token || !userId) {
-      if (!token) {
-        // Only navigate if we're not already on the login page
-        if (window.location.pathname !== '/login') {
-          navigate('/login');
-        }
+      // Clear any remaining localStorage items
+      localStorage.clear();
+      // Only navigate if we're not already on the login page
+      if (window.location.pathname !== '/login') {
+        navigate('/login');
       }
       return;
     }
@@ -122,7 +129,7 @@ export const useUserData = () => {
     };
   }, [navigate, loading, error, fetchUserData, userData?.long_term_reading_status]);
 
-  return { userData, predictions, loading, error, fetchUserData };
+  return { userData, predictions, loading, error, fetchUserData, isOnboardingPending };
 };
 
 export default useUserData;

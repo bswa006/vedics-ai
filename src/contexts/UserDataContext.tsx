@@ -9,6 +9,7 @@ interface UserDataContextType {
   loading: boolean;
   error: string | null;
   fetchUserData: () => Promise<void>;
+  isOnboardingPending: boolean;
 }
 
 const UserDataContext = createContext<UserDataContextType | null>(null);
@@ -17,7 +18,17 @@ export function UserDataProvider({ children }: { children: ReactNode }) {
   const userDataResult = useUserData();
 
   // Memoize the context value to prevent unnecessary re-renders
-  const contextValue = useMemo(() => userDataResult, [userDataResult]);
+  const contextValue = useMemo(
+    () => ({
+      userData: userDataResult.userData,
+      predictions: userDataResult.predictions,
+      loading: userDataResult.loading,
+      error: userDataResult.error,
+      fetchUserData: userDataResult.fetchUserData,
+      isOnboardingPending: userDataResult.isOnboardingPending,
+    }),
+    [userDataResult]
+  );
 
   return <UserDataContext.Provider value={contextValue}>{children}</UserDataContext.Provider>;
 }
