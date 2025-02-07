@@ -4,6 +4,8 @@
     "logoutConfirmMessage": "Are you sure you want to logout?"
   },
   "common": {
+    "save": "Save Changes",
+    "cancel": "Cancel",
     "continue": "continue",
     "next": "next",
     "darkMode": "dark mode",
@@ -41,7 +43,19 @@
     "submit": "continue journey"
   },
   "profile": {
-    "title": "profile",
+    "title": "My Profile",
+    "edit": "Edit Profile",
+    "personalInfo": "Personal Information",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "dateOfBirth": "Date of Birth",
+    "timeOfBirth": "Time of Birth",
+    "placeOfBirth": "Place of Birth",
+    "preferences": "Preferences",
+    "preferredLanguage": "Preferred Language",
+    "interests": "Areas of Interest",
+    "updateError": "Failed to update profile. Please try again.",
     "birthDetails": "birth details",
     "pendingStatus": "profile status",
     "pendingMessage": "your profile is currently under review. we'll notify you once the verification is complete."

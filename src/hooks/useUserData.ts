@@ -23,9 +23,9 @@ export const useUserData = () => {
     try {
       setLoading(true);
       setError(null);
-      console.log('Fetching profile...');
+
       const profileResponse = await getProfile();
-      console.log('Profile response:', profileResponse);
+
       
       if (!profileResponse) {
         throw new Error('No profile data found');
@@ -57,12 +57,12 @@ export const useUserData = () => {
           navigate('/');
         }
         // Only fetch predictions if profile is complete
-        console.log('Profile complete, fetching long term predictions...');
+
         const predictionsResponse = await getLongTermPredictions();
-        console.log('Predictions response:', predictionsResponse);
+
         setPredictions(predictionsResponse);
       } else {
-        console.log('Profile incomplete, skipping predictions fetch');
+
         setPredictions(null);
       }
       setUserData(user);
@@ -70,7 +70,7 @@ export const useUserData = () => {
       // Update onboarding status based on long_term_reading_status
       setIsOnboardingPending(user.long_term_reading_status === 'pending' || user.long_term_reading_status === 'started');
     } catch (err: any) {
-      console.error('Error fetching user data:', err);
+
       if (err.response?.status === 403) {
         // Clear all localStorage
         localStorage.clear();
@@ -88,7 +88,7 @@ export const useUserData = () => {
     const token = localStorage.getItem('token');
     const userId = localStorage.getItem('userId');
     
-    console.log('useEffect running with:', { userId, token, loading, userData });
+
     
     if (!token || !userId) {
       // Clear any remaining localStorage items

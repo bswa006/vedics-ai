@@ -4,6 +4,8 @@
     "logoutConfirmMessage": "क्या आप लॉगआउट करना चाहते हैं?"
   },
   "common": {
+    "save": "परिवर्तन सहेजें",
+    "cancel": "रद्द करें",
     "darkMode": "डार्क मोड",
     "chat": "हमसे चैट करें",
     "close": "बंद करें",
@@ -166,6 +168,22 @@
       }
     }
   },
+  "profile": {
+    "title": "मेरी प्रोफाइल",
+    "edit": "प्रोफाइल संपादित करें",
+    "personalInfo": "व्यक्तिगत जानकारी",
+    "firstName": "पहला नाम",
+    "lastName": "उपनाम",
+    "email": "ईमेल",
+    "dateOfBirth": "जन्म तिथि",
+    "timeOfBirth": "जन्म समय",
+    "placeOfBirth": "जन्म स्थान",
+    "preferences": "प्राथमिकताएं",
+    "preferredLanguage": "पसंदीदा भाषा",
+    "interests": "रुचि के क्षेत्र",
+    "updateError": "प्रोफाइल अपडेट करने में विफल। कृपया पुनः प्रयास करें।"
+  },
+
   "predictions": {
     "daily": "दैनिक भविष्यवाणी",
     "monthly": "मासिक भविष्यवाणी",
