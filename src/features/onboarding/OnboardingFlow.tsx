@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import { AxiosError } from 'axios';
 import { AnimatePresence, motion } from 'framer-motion';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useUserApi } from '../../hooks/useUserApi';
-import { AxiosError } from 'axios';
-import { LanguageSelection } from './components/LanguageSelection';
 import { BirthDetailsForm } from './components/BirthDetailsForm';
 import { InterestsSelection } from './components/InterestsSelection';
+import { LanguageSelection } from './components/LanguageSelection';
 
 import { FinalWelcome } from './components/FinalWelcome';
-import { OnboardingProgress } from './components/OnboardingProgress';
+
+import OnboardingStepper from '../../components/OnboardingStepper';
 
 interface OnboardingFlowProps {
   onComplete: (data: OnboardingData) => void;
@@ -27,8 +28,7 @@ export interface OnboardingData {
 export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
   const { t, i18n } = useTranslation();
   const { updateProfile } = useUserApi();
-  const [step, setStep] = useState(1);
-  const totalSteps = 4;
+  const [step, setStep] = useState(0);
   const [error, setError] = useState('');
   const [isChangingLanguage, setIsChangingLanguage] = useState(false);
 
@@ -119,11 +119,15 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) =>
           </motion.div>
         )}
       </AnimatePresence>
-      <div className="flex-none p-6">
-        <OnboardingProgress currentStep={step} totalSteps={totalSteps} />
+      <div className="flex-none">
+        <OnboardingStepper
+          steps={['Choose Language', 'Birth Details', 'Select Interests', 'Final Welcome']}
+          currentStep={step}
+          setCurrentStep={setStep}
+        />
       </div>
       <div className="flex-1 overflow-hidden">
-        {step === 1 && (
+        {step === 0 && (
           <LanguageSelection
             onNext={async () => {
               if (pendingLanguage && pendingLanguage !== language) {
@@ -140,36 +144,36 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) =>
                   setIsChangingLanguage(false);
                 }
               }
-              setStep(2);
+              setStep(1);
             }}
             selectedLanguage={language}
             onLanguageChange={lang => setPendingLanguage(lang)}
           />
         )}
 
-        {step === 2 && (
+        {step === 1 && (
           <BirthDetailsForm
-            onNext={() => setStep(3)}
+            onNext={() => setStep(2)}
             birthDetails={birthDetails}
             onBirthDetailsChange={details => setBirthDetails({ ...birthDetails, ...details })}
           />
         )}
 
-        {step === 3 && (
+        {step === 2 && (
           <InterestsSelection
             selectedInterests={selectedThemes}
             onInterestsChange={setSelectedThemes}
             onNext={async () => {
               const success = await handleCreateUser();
               if (success) {
-                setStep(4);
+                setStep(3);
               }
             }}
             error={error}
           />
         )}
 
-        {step === 4 && <FinalWelcome onComplete={handleComplete} error={error} />}
+        {step === 3 && <FinalWelcome onComplete={handleComplete} error={error} />}
       </div>
     </div>
   );

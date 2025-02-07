@@ -67,15 +67,8 @@ export const useUserData = () => {
       }
       setUserData(user);
       
-      // Update onboarding status
-      const isOnboardingRequired = !(
-        user.time_of_birth && 
-        user.date_of_birth && 
-        user.place_of_birth &&
-        user.preferred_language &&
-        user.area_of_interests.length > 0
-      );
-      setIsOnboardingPending(isOnboardingRequired);
+      // Update onboarding status based on long_term_reading_status
+      setIsOnboardingPending(user.long_term_reading_status === 'pending' || user.long_term_reading_status === 'started');
     } catch (err: any) {
       console.error('Error fetching user data:', err);
       if (err.response?.status === 403) {

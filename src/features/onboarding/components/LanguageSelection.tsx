@@ -13,15 +13,28 @@ export interface LanguageOption {
 
 export const LANGUAGES: LanguageOption[] = [
   { code: 'en', name: 'English' },
-  { code: 'hi', name: 'हिंदी' },
-  { code: 'ta', name: 'தமிழ்' },
-  { code: 'te', name: 'తెలుగు' },
-  { code: 'bn', name: 'বাংলা' },
-  { code: 'mr', name: 'मराठी' },
-  { code: 'kn', name: 'ಕನ್ನಡ' },
-  { code: 'ml', name: 'മലയാളം' },
-  { code: 'gu', name: 'ગુજરાતી' },
-  { code: 'pa', name: 'ਪੰਜਾਬੀ' },
+  { code: 'hi', name: 'हिंदी (Hindi)' },
+  { code: 'ta', name: 'தமிழ் (Tamil)' },
+  { code: 'te', name: 'తెలుగు (Telugu)' },
+  { code: 'bn', name: 'বাংলা (Bengali)' },
+  { code: 'mr', name: 'मराठी (Marathi)' },
+  { code: 'kn', name: 'ಕನ್ನಡ (Kannada)' },
+  { code: 'ml', name: 'മലയാളം (Malayalam)' },
+  { code: 'gu', name: 'ગુજરાતી (Gujarati)' },
+  { code: 'pa', name: 'ਪੰਜਾਬੀ (Punjabi)' },
+  { code: 'sa', name: 'संस्कृतम् (Sanskrit)' },
+  { code: 'ur', name: 'اردو (Urdu)' },
+  { code: 'ne', name: 'नेपाली (Nepali)' },
+  { code: 'si', name: 'සිංහල (Sinhala)' },
+  { code: 'my', name: 'မြန်မာ (Burmese)' },
+  { code: 'th', name: 'ไทย (Thai)' },
+  { code: 'km', name: 'ខ្មែរ (Khmer)' },
+  { code: 'vi', name: 'Tiếng Việt (Vietnamese)' },
+  { code: 'id', name: 'Bahasa Indonesia' },
+  { code: 'ms', name: 'Bahasa Melayu' },
+  { code: 'zh', name: '中文 (Chinese)' },
+  { code: 'ja', name: '日本語 (Japanese)' },
+  { code: 'ko', name: '한국어 (Korean)' },
 ];
 
 export interface LanguageSelectionProps {
@@ -30,6 +43,9 @@ export interface LanguageSelectionProps {
   onLanguageChange: (language: string) => void;
 }
 
+import { Search } from 'lucide-react';
+import { Input } from '../../../components/ui/input';
+
 export const LanguageSelection: React.FC<LanguageSelectionProps> = ({
   onNext,
   selectedLanguage,
@@ -37,6 +53,12 @@ export const LanguageSelection: React.FC<LanguageSelectionProps> = ({
 }) => {
   const { t } = useTranslation();
   const [localSelectedLanguage, setLocalSelectedLanguage] = useState<string>(selectedLanguage);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredLanguages = LANGUAGES.filter(lang =>
+    lang.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    lang.code.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="flex h-full flex-col bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
@@ -60,28 +82,39 @@ export const LanguageSelection: React.FC<LanguageSelectionProps> = ({
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
+        <div className="relative mb-6">
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+            <Input
+              type="text"
+              placeholder={t('onboarding.language.search')}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="h-12 w-full rounded-xl border border-gray-800 bg-gray-900/90 pl-12 pr-4 text-base text-white ring-1 ring-gray-700/50 placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500/20"
+            />
+          </div>
+        </div>
         <RadioGroup
           value={localSelectedLanguage}
           onValueChange={value => {
             setLocalSelectedLanguage(value);
             onLanguageChange(value);
           }}
-          className="space-y-4"
+          className="space-y-2"
         >
-          {LANGUAGES.map((lang, index) => (
+          {filteredLanguages.map((lang, index) => (
             <motion.div
               key={lang.code}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: index * 0.1 }}
               className={cn(
-                'flex cursor-pointer items-center rounded-xl p-5 backdrop-blur-sm',
-                'group transition-all duration-500 ease-in-out',
-                'border hover:shadow-lg hover:shadow-blue-500/5',
+                'flex cursor-pointer items-center rounded-xl py-3.5 px-4',
+                'group transition-all duration-300 ease-in-out',
                 'transform-gpu',
                 localSelectedLanguage === lang.code
-                  ? 'scale-[1.02] border-blue-500/50 bg-blue-500/10'
-                  : 'border-gray-700/50 hover:scale-[1.01] hover:border-blue-500/30 hover:bg-blue-500/5'
+                  ? 'bg-blue-500/10 ring-1 ring-blue-500/50'
+                  : 'bg-gray-900/90 ring-1 ring-gray-800 hover:bg-gray-800/90 hover:ring-gray-700'
               )}
               onClick={() => {
                 setLocalSelectedLanguage(lang.code);
@@ -95,9 +128,10 @@ export const LanguageSelection: React.FC<LanguageSelectionProps> = ({
                 id={lang.code}
                 className={cn(
                   'h-5 w-5 border-2 transition-all duration-300',
-                  'border-gray-500/50 text-blue-500',
-                  'group-hover:border-blue-400/50',
-                  localSelectedLanguage === lang.code && 'border-blue-500'
+                  'text-blue-500',
+                  localSelectedLanguage === lang.code
+                    ? 'border-blue-500 bg-blue-500'
+                    : 'border-gray-600 group-hover:border-gray-500'
                 )}
               />
               <Label
