@@ -1,4 +1,8 @@
 {
+  "auth": {
+    "logoutConfirmTitle": "Confirm Logout",
+    "logoutConfirmMessage": "Are you sure you want to logout?"
+  },
   "common": {
     "continue": "continue",
     "next": "next",
@@ -18,8 +22,8 @@
     "typeMessage": "type your message...",
     "gathering_data": "we're gathering your cosmic data",
     "please_wait": "please wait while we analyze your birth details and prepare your personalized readings",
-    "logoutConfirmation": "confirm logout",
-    "logoutMessage": "are you sure you want to logout?",
+    "yes": "yes",
+    "no": "no",
     "confirm": "confirm",
     "cancel": "cancel"
   },

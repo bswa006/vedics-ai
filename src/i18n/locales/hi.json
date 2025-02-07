@@ -1,4 +1,8 @@
 {
+  "auth": {
+    "logoutConfirmTitle": "लॉगआउट की पुष्टि करें",
+    "logoutConfirmMessage": "क्या आप लॉगआउट करना चाहते हैं?"
+  },
   "common": {
     "darkMode": "डार्क मोड",
     "chat": "हमसे चैट करें",

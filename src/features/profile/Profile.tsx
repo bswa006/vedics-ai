@@ -32,7 +32,7 @@ export function Profile() {
       </div>
 
       {/* Pending Status Card */}
-      {userData.status === 'pending' && (
+      {userData.long_term_reading_status === 'pending' && (
         <div className="group relative bg-white px-8 py-6 backdrop-blur-sm transition-all duration-300 hover:scale-[1.01] hover:bg-white/95 dark:bg-gray-900 dark:hover:bg-gray-900/95">
           <h3 className="mb-5 flex items-center gap-2 text-xl font-medium text-gray-900 dark:text-white">
             <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400">

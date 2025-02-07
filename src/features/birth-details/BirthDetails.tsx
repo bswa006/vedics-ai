@@ -10,18 +10,18 @@ export function BirthDetails({ user }: BirthDetailsProps) {
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-      <div className="group relative px-6 py-4 transition-all duration-300 bg-purple-50/50 dark:bg-purple-900/10 backdrop-blur-sm rounded-lg hover:bg-purple-50/80 dark:hover:bg-purple-900/20">
+      <div className="group relative px-6 py-4 transition-all duration-300 bg-white dark:bg-gray-900 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 hover:bg-white/95 dark:hover:bg-gray-900/95">
         <div className="mb-2 text-xs font-medium text-purple-700 dark:text-purple-300 uppercase tracking-wider">
           {t('birthDetails.birthDate')}
         </div>
         <div className="font-medium text-gray-700 dark:text-gray-300">
           {(() => {
-            if (!user.birth_time || !user.date_of_birth) {
+            if (!user.time_of_birth || !user.date_of_birth) {
               return t('birthDetails.unavailable');
             }
             try {
               // Create UTC date from birth date and time
-              const utcDateTime = new Date(`${user.date_of_birth}T${user.birth_time}Z`);
+              const utcDateTime = new Date(`${user.date_of_birth}T${user.time_of_birth}Z`);
               // It will automatically convert to local timezone
               return utcDateTime.toLocaleDateString();
             } catch (error) {
@@ -30,18 +30,18 @@ export function BirthDetails({ user }: BirthDetailsProps) {
           })()}
         </div>
       </div>
-      <div className="group relative px-6 py-4 transition-all duration-300 bg-purple-50/50 dark:bg-purple-900/10 backdrop-blur-sm rounded-lg hover:bg-purple-50/80 dark:hover:bg-purple-900/20">
+      <div className="group relative px-6 py-4 transition-all duration-300 bg-white dark:bg-gray-900 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 hover:bg-white/95 dark:hover:bg-gray-900/95">
         <div className="mb-2 text-xs font-medium text-purple-700 dark:text-purple-300 uppercase tracking-wider">
           {t('birthDetails.birthTime')}
         </div>
         <div className="font-medium text-gray-700 dark:text-gray-300">
           {(() => {
-            if (!user.birth_time || !user.date_of_birth) {
+            if (!user.time_of_birth || !user.date_of_birth) {
               return t('birthDetails.unavailable');
             }
             try {
               // Create UTC date from birth date and time
-              const utcDateTime = new Date(`${user.date_of_birth}T${user.birth_time}Z`);
+              const utcDateTime = new Date(`${user.date_of_birth}T${user.time_of_birth}Z`);
               // Convert to local time with desired format
               return utcDateTime.toLocaleTimeString('en-US', {
                 hour: 'numeric',
@@ -54,7 +54,7 @@ export function BirthDetails({ user }: BirthDetailsProps) {
           })()}
         </div>
       </div>
-      <div className="group relative px-6 py-4 transition-all duration-300 bg-purple-50/50 dark:bg-purple-900/10 backdrop-blur-sm rounded-lg hover:bg-purple-50/80 dark:hover:bg-purple-900/20">
+      <div className="group relative px-6 py-4 transition-all duration-300 bg-white dark:bg-gray-900 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 hover:bg-white/95 dark:hover:bg-gray-900/95">
         <div className="mb-2 text-xs font-medium text-purple-700 dark:text-purple-300 uppercase tracking-wider">
           {t('birthDetails.birthPlace')}
         </div>
