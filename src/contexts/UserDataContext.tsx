@@ -1,4 +1,4 @@
-import { createContext, useContext, ReactNode } from 'react';
+import { createContext, useContext, ReactNode, useMemo } from 'react';
 import { User } from '../types/user';
 import { PredictionResponse } from '../types/predictions';
 import { useUserData } from '../hooks/useUserData';
@@ -8,18 +8,18 @@ interface UserDataContextType {
   predictions: PredictionResponse | null;
   loading: boolean;
   error: string | null;
+  fetchUserData: () => Promise<void>;
 }
 
 const UserDataContext = createContext<UserDataContextType | null>(null);
 
-export function UserDataProvider({ children, userId }: { children: ReactNode; userId: number | null }) {
-  const userDataResult = useUserData(userId);
+export function UserDataProvider({ children }: { children: ReactNode }) {
+  const userDataResult = useUserData();
 
-  return (
-    <UserDataContext.Provider value={userDataResult}>
-      {children}
-    </UserDataContext.Provider>
-  );
+  // Memoize the context value to prevent unnecessary re-renders
+  const contextValue = useMemo(() => userDataResult, [userDataResult]);
+
+  return <UserDataContext.Provider value={contextValue}>{children}</UserDataContext.Provider>;
 }
 
 export function useUserDataContext() {

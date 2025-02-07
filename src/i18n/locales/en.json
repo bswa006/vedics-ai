@@ -125,6 +125,8 @@
     "interests": {
       "next": "Next"
     },
+    "pendingTitle": "Profile Under Review",
+    "pendingDescription": "Your profile is currently being reviewed. We'll notify you once the verification is complete.",
     "welcome": {
       "headline": "Unlock the Power of Vedic Astrology",
       "subtext": "Personalized insights, daily guidance, and AI-driven astrology—all at your fingertips!"

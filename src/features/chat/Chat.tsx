@@ -88,7 +88,7 @@ export function Chat() {
         setMessages(prev => {
           const messagesWithoutTyping = prev.filter(msg => !msg.isTyping);
           const botMessage: ExtendedChatMessage = {
-            text: response.reply,
+            text: response.message.reply,
             isUser: false,
             timestamp: new Date(),
           };
@@ -116,7 +116,7 @@ export function Chat() {
   );
 
   return (
-    <div className="relative flex h-full flex-col overflow-hidden bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900 pb-2">
+    <div className="relative flex h-full flex-col overflow-hidden bg-gradient-to-br from-gray-50 via-white to-gray-50 pb-2 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
       {/* Decorative elements */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute -left-4 top-0 h-64 w-64 rounded-full bg-gradient-to-br from-purple-100/30 to-transparent blur-3xl dark:from-purple-900/10" />
@@ -130,14 +130,15 @@ export function Chat() {
               className={`flex items-start space-x-2 ${message.isUser ? 'justify-end' : 'justify-start'}`}
             >
               {!message.isUser && (
-                <div className="flex h-8 w-8 animate-fade-in items-center justify-center rounded-lg bg-gradient-to-br from-purple-200 to-purple-300 text-purple-700 shadow-md transition-transform duration-200 hover:scale-110 dark:from-purple-800/40 dark:to-purple-900/60 dark:text-purple-300">
+                <div className="animate-fade-in flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-purple-200 to-purple-300 text-purple-700 shadow-md transition-transform duration-200 hover:scale-110 dark:from-purple-800/40 dark:to-purple-900/60 dark:text-purple-300">
                   <Bot className="h-5 w-5" />
                 </div>
               )}
               <div
-                className={`group relative max-w-[80%] rounded-lg px-4 py-2 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md ${message.isUser
-                  ? 'bg-gradient-to-br from-purple-200 to-purple-300 text-purple-900 dark:from-purple-800/40 dark:to-purple-900/60 dark:text-purple-100'
-                  : 'bg-white/80 text-gray-800 dark:bg-gray-800/80 dark:text-gray-200'
+                className={`group relative max-w-[80%] rounded-lg px-4 py-2 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md ${
+                  message.isUser
+                    ? 'bg-gradient-to-br from-purple-200 to-purple-300 text-purple-900 dark:from-purple-800/40 dark:to-purple-900/60 dark:text-purple-100'
+                    : 'bg-white/80 text-gray-800 dark:bg-gray-800/80 dark:text-gray-200'
                 }`}
               >
                 {message.isTyping ? (
@@ -154,7 +155,7 @@ export function Chat() {
                 )}
               </div>
               {message.isUser && (
-                <div className="flex h-8 w-8 animate-fade-in items-center justify-center rounded-lg bg-gradient-to-br from-purple-200 to-purple-300 text-purple-700 shadow-md transition-transform duration-200 hover:scale-110 dark:from-purple-800/40 dark:to-purple-900/60 dark:text-purple-300">
+                <div className="animate-fade-in flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-purple-200 to-purple-300 text-purple-700 shadow-md transition-transform duration-200 hover:scale-110 dark:from-purple-800/40 dark:to-purple-900/60 dark:text-purple-300">
                   <User className="h-5 w-5" />
                 </div>
               )}
@@ -183,7 +184,7 @@ export function Chat() {
           <div ref={messagesEndRef} />
         </div>
       </div>
-      <div className="relative z-10 border-t border-gray-200 dark:border-gray-700 bg-white/70 p-4 backdrop-blur-xl dark:bg-gray-900/70">
+      <div className="relative z-10 border-t border-gray-200 bg-white/70 p-4 backdrop-blur-xl dark:border-gray-700 dark:bg-gray-900/70">
         <div className="relative mx-auto max-w-3xl">
           <input
             type="text"
@@ -196,7 +197,7 @@ export function Chat() {
               }
             }}
             placeholder={t('common.typeMessage')}
-            className="w-full rounded-lg border-2 border-gray-200 bg-white/80 px-4 py-3 pr-10 text-gray-900 placeholder-gray-500 shadow-sm backdrop-blur-sm transition-all duration-200 focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 hover:border-purple-300 dark:border-gray-700 dark:bg-gray-800/80 dark:text-gray-100 dark:placeholder-gray-400 dark:focus:border-purple-500 dark:focus:ring-purple-500 dark:focus:ring-offset-gray-900"
+            className="w-full rounded-lg border-2 border-gray-200 bg-white/80 px-4 py-3 pr-10 text-gray-900 placeholder-gray-500 shadow-sm backdrop-blur-sm transition-all duration-200 hover:border-purple-300 focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800/80 dark:text-gray-100 dark:placeholder-gray-400 dark:focus:border-purple-500 dark:focus:ring-purple-500 dark:focus:ring-offset-gray-900"
             disabled={isLoading}
           />
           <button

@@ -85,61 +85,76 @@ export type PredictionContent =
   | MajorLifePeriodsContent
   | AskAnythingContent;
 
-
+export interface PredictionApiResponse {
+  prediction_type: PredictionType;
+  content: Record<string, any>;
+  id: number;
+  created_at: string;
+  updated_at: string;
+}
 
 export type BasePrediction =
   | {
       id: number;
       created_at: string;
-      type: 'core_personality_and_life_path';
+      updated_at: string;
+      prediction_type: 'core_personality_and_life_path';
       content: PersonalityContent;
     }
   | {
       id: number;
       created_at: string;
-      type: 'career_success_and_wealth';
+      updated_at: string;
+      prediction_type: 'career_success_and_wealth';
       content: CareerContent;
     }
   | {
       id: number;
       created_at: string;
-      type: 'relationships_love_and_marriage';
+      updated_at: string;
+      prediction_type: 'relationships_love_and_marriage';
       content: RelationshipsContent;
     }
   | {
       id: number;
       created_at: string;
-      type: 'health_and_wellbeing';
+      updated_at: string;
+      prediction_type: 'health_and_wellbeing';
       content: HealthContent;
     }
   | {
       id: number;
       created_at: string;
-      type: 'challenges_and_remedies';
+      updated_at: string;
+      prediction_type: 'challenges_and_remedies';
       content: ChallengesContent;
     }
   | {
       id: number;
       created_at: string;
-      type: 'major_life_periods';
+      updated_at: string;
+      prediction_type: 'major_life_periods';
       content: MajorLifePeriodsContent;
     }
   | {
       id: number;
       created_at: string;
-      type: 'ask_anything';
+      updated_at: string;
+      prediction_type: 'ask_anything';
       content: AskAnythingContent;
     }
   | {
       id: number;
       created_at: string;
-      type: 'today_readings';
+      updated_at: string;
+      prediction_type: 'today_readings';
       content: Record<string, never>;
     }
   | {
       id: number;
       created_at: string;
-      type: 'today_reading';
+      updated_at: string;
+      prediction_type: 'today_reading';
       content: TodayReading;
     };
 

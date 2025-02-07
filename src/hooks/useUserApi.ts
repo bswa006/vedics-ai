@@ -1,15 +1,25 @@
 import { useState } from 'react';
-import { api, UserBirthDetails } from '../services/api';
+import { api } from '../services/api';
+
+interface UpdateProfileData {
+  date_of_birth?: string;
+  time_of_birth?: string;
+  place_of_birth?: string;
+  preferred_language?: string;
+  area_of_interests?: string[];
+}
 
 export const useUserApi = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const validatePhoneNumber = async (phoneNumber: string) => {
+
+
+  const getLongTermPredictions = async () => {
     try {
       setLoading(true);
       setError(null);
-      const result = await api.users.validatePhoneNumber(phoneNumber);
+      const result = await api.predictions.getLongTermPredictions();
       return result;
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
@@ -19,11 +29,11 @@ export const useUserApi = () => {
     }
   };
 
-  const createUser = async (birthDetails: UserBirthDetails) => {
+  const getProfile = async () => {
     try {
       setLoading(true);
       setError(null);
-      const result = await api.users.create(birthDetails);
+      const result = await api.profiles.getProfile();
       return result;
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
@@ -33,25 +43,11 @@ export const useUserApi = () => {
     }
   };
 
-  const getUserReadings = async (userId: number) => {
+  const updateProfile = async (userId: number, data: UpdateProfileData) => {
     try {
       setLoading(true);
       setError(null);
-      const result = await api.users.getReadings(userId);
-      return result;
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const getUser = async (userId: number) => {
-    try {
-      setLoading(true);
-      setError(null);
-      const result = await api.users.getUser(userId);
+      const result = await api.profiles.updateProfile(userId, data);
       return result;
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
@@ -62,10 +58,9 @@ export const useUserApi = () => {
   };
 
   return {
-    validatePhoneNumber,
-    createUser,
-    getUser,
-    getUserReadings,
+    getProfile,
+    getLongTermPredictions,
+    updateProfile,
     loading,
     error,
   };

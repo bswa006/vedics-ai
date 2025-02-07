@@ -1,108 +1,106 @@
+import { Sun } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Sun, Moon, Clock, MapPin } from 'lucide-react';
-import { useUserApi } from '../../hooks/useUserApi';
-import { AxiosError } from 'axios';
+import { api } from '../../services/api';
 
 interface FormData {
-  phoneNumber: string;
-  dateOfBirth: string;
-  timeOfBirth: string;
-  locationOfBirth: string;
-}
-
-interface ValidationResponse {
-  user?: {
-    id: number;
-  };
+  username: string;
+  password: string;
 }
 
 export function Login() {
   const navigate = useNavigate();
-  const { createUser, validatePhoneNumber, loading } = useUserApi();
   const [error, setError] = useState('');
-  const [showAdditionalFields, setShowAdditionalFields] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<FormData>({
-    phoneNumber: '',
-    dateOfBirth: '',
-    timeOfBirth: '',
-    locationOfBirth: '',
+    username: '',
+    password: '',
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
 
     try {
       // Validate required fields
-      if (
-        !formData.dateOfBirth ||
-        !formData.timeOfBirth ||
-        !formData.locationOfBirth ||
-        !formData.phoneNumber
-      ) {
-        setError('All fields are required');
+      if (!formData.username) {
+        setError('Phone number is required');
+        setLoading(false); // Ensure loading is reset
         return;
       }
 
-      // Combine date and time into a single UTC datetime
-      const localDateTime = new Date(`${formData.dateOfBirth}T${formData.timeOfBirth}`);
-      const utcDateTime = localDateTime.toISOString();
+      try {
+        // First try to get a token (login)
+        const tokenResponse = await api.auth.getToken({
+          username: formData.username,
+          password: formData.username, // Using username as password
+        });
 
-      // Format the date and time strings according to the API requirements
-      const [datePart = '', timePart = ''] = utcDateTime.split('T');
-      const timeWithoutSeconds: string = timePart.substring(0, 5); // Get only HH:mm
+        if (tokenResponse.token) {
+          // Store the token in localStorage for the axios interceptor
+          localStorage.setItem('token', tokenResponse.token);
 
-      const userResponse = await createUser({
-        date_of_birth: datePart,
-        birth_time: timeWithoutSeconds,
-        place_of_birth: formData.locationOfBirth?.trim() || '',
-        phone: formData.phoneNumber.replace(/\D/g, ''),
-      });
+          // Get user profile
+          try {
+            console.log('Fetching user profile...');
+            const userProfile = await api.profiles.getProfile();
+            console.log('User profile:', userProfile);
 
-      if (userResponse.user_id) {
-        localStorage.setItem('userId', userResponse.user_id.toString());
-        navigate(
-          `/onboarding?phone=${encodeURIComponent(formData.phoneNumber.replace(/\D/g, ''))}`
-        );
-      } else {
-        setError('Invalid response from server');
+            if (userProfile.id) {
+              localStorage.setItem('userId', userProfile.id.toString());
+
+              // Small delay to ensure localStorage is updated
+              await new Promise(resolve => setTimeout(resolve, 100));
+
+              // If user has completed their profile (has birth details), go to home
+              // Otherwise, go to onboarding
+              if (
+                userProfile.date_of_birth &&
+                userProfile.time_of_birth &&
+                userProfile.place_of_birth
+              ) {
+                console.log('Profile complete, redirecting to home');
+                // window.location.href = '/';
+                navigate('/');
+              } else {
+                console.log('Profile incomplete, redirecting to onboarding');
+                // window.location.href = '/onboarding';
+                navigate('/onboarding');
+              }
+            } else {
+              console.error('No user ID in profile response');
+              setError('Failed to get user profile');
+              localStorage.removeItem('token');
+            }
+          } catch (profileError) {
+            console.error('Error fetching user profile:', profileError);
+            setError('Failed to get user profile');
+            localStorage.removeItem('token');
+          }
+        }
+      } catch (err) {
+        // If login fails, create a new user
+        const response = await api.auth.createUser({
+          username: formData.username,
+          password: formData.username, // Using username as password
+        });
+
+        if (response.user_id && response.token) {
+          localStorage.setItem('userId', response.user_id.toString());
+          localStorage.setItem('token', response.token);
+
+          // Navigate to onboarding after creating a new user
+          navigate('/onboarding');
+        } else {
+          setError('Failed to create user');
+        }
       }
-    } catch (err) {
-      const error = err as AxiosError<{ message: string }>;
-      setError(error.response?.data?.message || 'An error occurred during login');
+    } catch (generalError) {
+      setError('An unexpected error occurred');
     } finally {
-      // setLoading(false); // Removed this line
+      setLoading(false); // Ensure loading is reset
     }
-  };
-
-  const validateAndShowFields = async (phoneNumber: string) => {
-    try {
-      setError('');
-      const response = (await validatePhoneNumber(phoneNumber)) as ValidationResponse;
-
-      if (response.user) {
-        // Store user ID and trigger a page reload to ensure App state is updated
-        localStorage.setItem('userId', response.user.id.toString());
-        window.location.href = '/';
-      } else {
-        setShowAdditionalFields(true);
-      }
-    } catch (err) {
-      const error = err as AxiosError;
-      console.log('catch block error', error);
-      if (error) {
-        navigate(`/onboarding?phone=${encodeURIComponent(phoneNumber)}`);
-      } else {
-        setError('Failed to validate phone number');
-        setShowAdditionalFields(true);
-      }
-    }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   return (
@@ -110,19 +108,52 @@ export function Login() {
       {/* Animated stars background */}
       <div className="absolute inset-0">
         {/* Small stars */}
-        <div className="absolute h-1 w-1 rounded-full bg-white/30 shadow-glow animate-[twinkle_3s_ease-in-out_infinite,float-1_15s_ease-in-out_infinite]" style={{ top: '10%', left: '15%' }} />
-        <div className="absolute h-1 w-1 rounded-full bg-white/30 shadow-glow animate-[twinkle_3s_ease-in-out_infinite,float-2_18s_ease-in-out_infinite]" style={{ top: '50%', left: '75%', animationDelay: '0.5s' }} />
-        <div className="absolute h-1 w-1 rounded-full bg-white/30 shadow-glow animate-[twinkle_3s_ease-in-out_infinite,float-3_20s_ease-in-out_infinite]" style={{ top: '30%', left: '45%', animationDelay: '1s' }} />
-        <div className="absolute h-1 w-1 rounded-full bg-white/30 shadow-glow animate-[twinkle_3s_ease-in-out_infinite,float-1_17s_ease-in-out_infinite]" style={{ top: '70%', left: '25%', animationDelay: '1.5s' }} />
-        <div className="absolute h-1.5 w-1.5 rounded-full bg-white/30 shadow-glow animate-[twinkle_4s_ease-in-out_infinite,float-2_19s_ease-in-out_infinite]" style={{ top: '20%', left: '85%', animationDelay: '2s' }} />
-        <div className="absolute h-1.5 w-1.5 rounded-full bg-white/30 shadow-glow animate-[twinkle_4s_ease-in-out_infinite,float-3_21s_ease-in-out_infinite]" style={{ top: '80%', left: '65%', animationDelay: '2.5s' }} />
+        <div
+          className="shadow-glow absolute h-1 w-1 animate-[twinkle_3s_ease-in-out_infinite,float-1_15s_ease-in-out_infinite] rounded-full bg-white/30"
+          style={{ top: '10%', left: '15%' }}
+        />
+        <div
+          className="shadow-glow absolute h-1 w-1 animate-[twinkle_3s_ease-in-out_infinite,float-2_18s_ease-in-out_infinite] rounded-full bg-white/30"
+          style={{ top: '50%', left: '75%', animationDelay: '0.5s' }}
+        />
+        <div
+          className="shadow-glow absolute h-1 w-1 animate-[twinkle_3s_ease-in-out_infinite,float-3_20s_ease-in-out_infinite] rounded-full bg-white/30"
+          style={{ top: '30%', left: '45%', animationDelay: '1s' }}
+        />
+        <div
+          className="shadow-glow absolute h-1 w-1 animate-[twinkle_3s_ease-in-out_infinite,float-1_17s_ease-in-out_infinite] rounded-full bg-white/30"
+          style={{ top: '70%', left: '25%', animationDelay: '1.5s' }}
+        />
+        <div
+          className="shadow-glow absolute h-1.5 w-1.5 animate-[twinkle_4s_ease-in-out_infinite,float-2_19s_ease-in-out_infinite] rounded-full bg-white/30"
+          style={{ top: '20%', left: '85%', animationDelay: '2s' }}
+        />
+        <div
+          className="shadow-glow absolute h-1.5 w-1.5 animate-[twinkle_4s_ease-in-out_infinite,float-3_21s_ease-in-out_infinite] rounded-full bg-white/30"
+          style={{ top: '80%', left: '65%', animationDelay: '2.5s' }}
+        />
         {/* Medium stars */}
-        <div className="absolute h-2 w-2 rounded-full bg-white/40 shadow-glow animate-[twinkle-slow_4s_ease-in-out_infinite,float-2_22s_ease-in-out_infinite]" style={{ top: '15%', left: '55%', animationDelay: '0.7s' }} />
-        <div className="absolute h-2 w-2 rounded-full bg-white/40 shadow-glow animate-[twinkle-slow_4s_ease-in-out_infinite,float-3_25s_ease-in-out_infinite]" style={{ top: '65%', left: '35%', animationDelay: '1.2s' }} />
-        <div className="absolute h-2 w-2 rounded-full bg-white/40 shadow-glow animate-[twinkle-slow_4s_ease-in-out_infinite,float-1_23s_ease-in-out_infinite]" style={{ top: '40%', left: '85%', animationDelay: '1.7s' }} />
+        <div
+          className="shadow-glow absolute h-2 w-2 animate-[twinkle-slow_4s_ease-in-out_infinite,float-2_22s_ease-in-out_infinite] rounded-full bg-white/40"
+          style={{ top: '15%', left: '55%', animationDelay: '0.7s' }}
+        />
+        <div
+          className="shadow-glow absolute h-2 w-2 animate-[twinkle-slow_4s_ease-in-out_infinite,float-3_25s_ease-in-out_infinite] rounded-full bg-white/40"
+          style={{ top: '65%', left: '35%', animationDelay: '1.2s' }}
+        />
+        <div
+          className="shadow-glow absolute h-2 w-2 animate-[twinkle-slow_4s_ease-in-out_infinite,float-1_23s_ease-in-out_infinite] rounded-full bg-white/40"
+          style={{ top: '40%', left: '85%', animationDelay: '1.7s' }}
+        />
         {/* Large stars */}
-        <div className="absolute h-3 w-3 rounded-full bg-white/50 shadow-glow animate-[twinkle-slow_5s_ease-in-out_infinite,float-3_28s_ease-in-out_infinite]" style={{ top: '25%', left: '75%', animationDelay: '0.3s' }} />
-        <div className="absolute h-3 w-3 rounded-full bg-white/50 shadow-glow animate-[twinkle-slow_5s_ease-in-out_infinite,float-1_30s_ease-in-out_infinite]" style={{ top: '75%', left: '15%', animationDelay: '1.8s' }} />
+        <div
+          className="shadow-glow absolute h-3 w-3 animate-[twinkle-slow_5s_ease-in-out_infinite,float-3_28s_ease-in-out_infinite] rounded-full bg-white/50"
+          style={{ top: '25%', left: '75%', animationDelay: '0.3s' }}
+        />
+        <div
+          className="shadow-glow absolute h-3 w-3 animate-[twinkle-slow_5s_ease-in-out_infinite,float-1_30s_ease-in-out_infinite] rounded-full bg-white/50"
+          style={{ top: '75%', left: '15%', animationDelay: '1.8s' }}
+        />
       </div>
 
       <div className="relative w-full max-w-md space-y-8 text-white">
@@ -227,134 +258,52 @@ export function Login() {
           </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          {/* {(error || apiError) && (
+          {error && (
             <div className="rounded-lg bg-red-50 p-3 text-center text-sm text-red-500 dark:bg-red-900/20 dark:text-red-400">
-              {error || apiError}
+              {error}
             </div>
-          )} */}
+          )}
           <div className="space-y-6 rounded-2xl border border-white/20 bg-black/20 p-8 shadow-light-md backdrop-blur-md transition-all duration-200 hover:bg-black/30">
-            {/* Phone Number Field with Validation */}
             <div>
-              <label
-                htmlFor="phoneNumber"
-                className="mb-1.5 block text-sm font-medium text-white"
-              >
+              <label htmlFor="username" className="mb-1.5 block text-sm font-medium text-white">
                 Phone Number
               </label>
               <div className="relative">
                 <input
-                  id="phoneNumber"
-                  name="phoneNumber"
-                  type="tel"
+                  id="username"
+                  name="username"
+                  type="text"
                   required
                   className="relative block w-full appearance-none rounded-xl border border-white/20 bg-white py-3 pl-11 pr-4 text-gray-900 placeholder-gray-500 shadow-light-sm transition-all duration-200 hover:bg-gray-50 focus:border-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-500/20 sm:text-sm"
                   placeholder="Enter your phone number"
-                  value={formData.phoneNumber}
-                  onChange={handleChange}
+                  value={formData.username}
+                  onChange={e =>
+                    setFormData({ ...formData, username: e.target.value, password: e.target.value })
+                  }
                 />
                 <Sun className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/70" />
               </div>
-              {!showAdditionalFields && (
-                <div className="mt-6">
-                  <button
-                    type="button"
-                    onClick={() => validateAndShowFields(formData.phoneNumber)}
-                    className="group relative flex w-full justify-center overflow-hidden rounded-xl bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 px-4 py-2 text-sm font-medium text-white shadow-lg backdrop-blur-sm transition-all duration-300 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:ring-offset-2 active:scale-[0.98]"
-                    disabled={loading || !formData.phoneNumber}
-                  >
-                    {loading ? 'Validating...' : 'Continue'}
-                  </button>
-                </div>
-              )}
             </div>
-            {/* Additional Fields - Only visible after phone number is entered */}
-            {showAdditionalFields && (
-              <>
-                <div>
-                  <label
-                    htmlFor="dateOfBirth"
-                    className="mb-1.5 block text-sm font-medium text-white"
-                  >
-                    Date of Birth
-                  </label>
-                  <div className="relative">
-                    <input
-                      id="dateOfBirth"
-                      name="dateOfBirth"
-                      type="date"
-                      required
-                      className="relative block w-full appearance-none rounded-xl border border-white/20 bg-white py-3 pl-11 pr-4 text-gray-900 placeholder-gray-500 shadow-light-sm transition-all duration-200 hover:bg-gray-50 focus:border-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-500/20 sm:text-sm"
-                      value={formData.dateOfBirth}
-                      onChange={handleChange}
-                    />
-                    <Moon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/70" />
-                  </div>
-                </div>
-                <div>
-                  <label
-                    htmlFor="timeOfBirth"
-                    className="mb-1.5 block text-sm font-medium text-white"
-                  >
-                    Time of Birth
-                  </label>
-                  <div className="relative">
-                    <input
-                      id="timeOfBirth"
-                      name="timeOfBirth"
-                      type="time"
-                      required
-                      className="relative block w-full appearance-none rounded-xl border border-white/20 bg-white py-3 pl-11 pr-4 text-gray-900 placeholder-gray-500 shadow-light-sm transition-all duration-200 hover:bg-gray-50 focus:border-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-500/20 sm:text-sm"
-                      value={formData.timeOfBirth}
-                      onChange={handleChange}
-                    />
-                    <Clock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/70" />
-                  </div>
-                </div>
-                <div>
-                  <label
-                    htmlFor="locationOfBirth"
-                    className="mb-1.5 block text-sm font-medium text-white"
-                  >
-                    Location of Birth
-                  </label>
-                  <div className="relative">
-                    <input
-                      id="locationOfBirth"
-                      name="locationOfBirth"
-                      type="text"
-                      required
-                      className="relative block w-full appearance-none rounded-xl border border-white/20 bg-white py-3 pl-11 pr-4 text-gray-900 placeholder-gray-500 shadow-light-sm transition-all duration-200 hover:bg-gray-50 focus:border-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-500/20 sm:text-sm"
-                      placeholder="Enter your birth place"
-                      value={formData.locationOfBirth}
-                      onChange={handleChange}
-                    />
-                    <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/70" />
-                  </div>
-                </div>
-                {error && (
-                  <div className="mt-4 text-sm text-red-500 dark:text-red-400">{error}</div>
-                )}
-              </>
-            )}
           </div>
 
-          {showAdditionalFields && (
-            <div>
-              <button
-                type="submit"
-                className="group relative flex w-full justify-center overflow-hidden rounded-xl bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 px-6 py-3.5 text-sm font-medium text-white shadow-lg backdrop-blur-sm transition-all duration-300 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:ring-offset-2 active:scale-[0.98]"
-                disabled={loading}
-              >
-                <div className="absolute inset-0 -z-10 bg-gradient-to-r from-oriental-400/0 via-white/10 to-oriental-400/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 dark:from-white/0 dark:via-white/5 dark:to-white/0"></div>
-                <span className="mr-2 transition-transform duration-500 group-hover:rotate-[360deg]">
-                  ✨
-                </span>
-                Begin Journey
-              </button>
-            </div>
-          )}
+          <div>
+            <button
+              type="submit"
+              className="group relative flex w-full justify-center overflow-hidden rounded-xl bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 px-6 py-3.5 text-sm font-medium text-white shadow-lg backdrop-blur-sm transition-all duration-300 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:ring-offset-2 active:scale-[0.98]"
+              disabled={loading}
+            >
+              {loading ? 'Signing in...' : 'Sign in'}
+              <div className="absolute inset-0 -z-10 bg-gradient-to-r from-oriental-400/0 via-white/10 to-oriental-400/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 dark:from-white/0 dark:via-white/5 dark:to-white/0"></div>
+              <span className="mr-2 transition-transform duration-500 group-hover:rotate-[360deg]">
+                ✨
+              </span>
+              Begin Journey
+            </button>
+          </div>
         </form>
       </div>
     </div>
   );
 }
+
+export default Login;

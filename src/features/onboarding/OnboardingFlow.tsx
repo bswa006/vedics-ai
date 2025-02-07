@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useUserApi } from '../../hooks/useUserApi';
 import { AxiosError } from 'axios';
 import { LanguageSelection } from './components/LanguageSelection';
@@ -27,20 +26,11 @@ export interface OnboardingData {
 
 export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
   const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const { createUser } = useUserApi();
+  const { updateProfile } = useUserApi();
   const [step, setStep] = useState(1);
   const totalSteps = 4;
   const [error, setError] = useState('');
   const [isChangingLanguage, setIsChangingLanguage] = useState(false);
-
-  const phone = searchParams.get('phone');
-
-  if (!phone) {
-    navigate('/login');
-    return null;
-  }
 
   // State for each step
   const [language, setLanguage] = useState(localStorage.getItem('i18nextLng') || i18n.language);
@@ -73,21 +63,22 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) =>
       const [datePart = '', timePart = ''] = utcDateTime.split('T');
       const timeWithoutSeconds = timePart.substring(0, 5); // Get only HH:mm
 
-      const userResponse = await createUser({
-        date_of_birth: datePart,
-        birth_time: timeWithoutSeconds,
-        place_of_birth: birthDetails.place.trim(),
-        phone: phone,
-      });
-
-      if (userResponse.user_id) {
-        // Save user ID in localStorage
-        localStorage.setItem('userId', userResponse.user_id.toString());
-        return true;
-      } else {
-        setError('Invalid response from server');
+      // Update the user's profile with onboarding data
+      const userId = parseInt(localStorage.getItem('userId') || '', 10);
+      if (!userId) {
+        setError('User ID not found');
         return false;
       }
+
+      await updateProfile(userId, {
+        date_of_birth: datePart,
+        time_of_birth: timeWithoutSeconds,
+        place_of_birth: birthDetails.place.trim(),
+        preferred_language: language,
+        area_of_interests: selectedThemes,
+      });
+
+      return true;
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;
       setError(error.response?.data?.message || 'An error occurred during user creation');

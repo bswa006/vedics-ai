@@ -97,7 +97,7 @@ export function ChatWidget({ onClose }: ChatWidgetProps) {
         setMessages(prev => {
           const messagesWithoutTyping = prev.filter(msg => !msg.isTyping);
           const botMessage: ExtendedChatMessage = {
-            text: response.reply,
+            text: response.message.reply,
             isUser: false,
             timestamp: new Date(),
           };

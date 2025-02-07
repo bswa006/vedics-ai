@@ -1,74 +1,96 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { User } from '../types/user';
 import { PredictionResponse } from '../types/predictions';
 import { useUserApi } from './useUserApi';
+import { useNavigate } from 'react-router-dom';
 
-export const useUserData = (userId: number | null) => {
-  const { getUserReadings, getUser } = useUserApi();
+export const useUserData = () => {
+  const { getLongTermPredictions, getProfile } = useUserApi();
+  const navigate = useNavigate();
   const [predictions, setPredictions] = useState<PredictionResponse | null>(null);
   const [userData, setUserData] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const fetchUserData = async (id: number) => {
+  const fetchUserData = useCallback(async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+
     try {
       setLoading(true);
       setError(null);
-      const userResponse = await getUser(id);
-      const user = userResponse.user;
+      console.log('Fetching profile...');
+      const profileResponse = await getProfile();
+      console.log('Profile response:', profileResponse);
+      
+      if (!profileResponse) {
+        throw new Error('No profile data found');
+      }
+      
+      const user: User = {
+        id: profileResponse.id,
+        user: profileResponse.user,
+        date_of_birth: profileResponse.date_of_birth,
+        time_of_birth: profileResponse.time_of_birth,
+        place_of_birth: profileResponse.place_of_birth,
+        phone_number: profileResponse.phone_number,
+        preferred_language: profileResponse.preferred_language,
+        area_of_interests: profileResponse.area_of_interests,
+        long_term_reading_status: profileResponse.long_term_reading_status,
+        is_deleted: profileResponse.is_deleted,
+        created_at: profileResponse.created_at,
+        updated_at: profileResponse.updated_at
+      };
+
+      // Check if all required fields are present
+      const hasAllRequiredFields = 
+        profileResponse.time_of_birth && 
+        profileResponse.date_of_birth && 
+        profileResponse.place_of_birth;
+
+      if (hasAllRequiredFields && window.location.pathname === '/login') {
+        navigate('/');
+      }
       setUserData(user);
 
-      const readingsResponse = await getUserReadings(id);
-      const modifiedData = readingsResponse.map((prediction: any) => ({
-        ...prediction,
-        content: prediction.content[prediction.type],
-      }));
-      setPredictions(modifiedData);
-
-      return user;
+      console.log('Fetching long term predictions...');
+      const predictionsResponse = await getLongTermPredictions();
+      console.log('Predictions response:', predictionsResponse);
+      setPredictions(predictionsResponse);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch user data';
-      setError(errorMessage);
-      localStorage.removeItem('userId');
-      setUserData(null);
-      throw err;
+      console.error('Error fetching user data:', err);
+      setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
     }
-  };
+  }, [getProfile, getLongTermPredictions, navigate]);
 
   useEffect(() => {
-    if (!userId) return;
-
-    let isSubscribed = true;
-    let pollTimeout: NodeJS.Timeout | null = null;
-
-    const pollUserStatus = async () => {
-      if (!isSubscribed) return;
-
-      try {
-        const user = await fetchUserData(userId);
-        
-        if (user?.status === 'pending' && isSubscribed) {
-          pollTimeout = setTimeout(pollUserStatus, 5000);
-        }
-      } catch (err) {
-        console.error('Polling failed:', err);
-        if (pollTimeout) {
-          clearTimeout(pollTimeout);
+    const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('userId');
+    
+    console.log('useEffect running with:', { userId, token, loading, userData });
+    
+    if (!token || !userId) {
+      if (!token) {
+        // Only navigate if we're not already on the login page
+        if (window.location.pathname !== '/login') {
+          navigate('/login');
         }
       }
-    };
+      return;
+    }
 
-    pollUserStatus();
+    // Only fetch if we don't have data and aren't already loading
+    if (!userData && !loading && !error) {
+      fetchUserData();
+    }
+  }, [navigate, loading, error, fetchUserData]);
 
-    return () => {
-      isSubscribed = false;
-      if (pollTimeout) {
-        clearTimeout(pollTimeout);
-      }
-    };
-  }, [userId]); // Only re-run if userId changes
-
-  return { userData, predictions, loading, error };
+  return { userData, predictions, loading, error, fetchUserData };
 };
+
+export default useUserData;

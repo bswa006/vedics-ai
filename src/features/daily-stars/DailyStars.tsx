@@ -25,13 +25,13 @@ export function DailyStars({ userId }: DailyStarsProps) {
         setLoading(true);
         setError(null);
         console.log('Making API call to getTodayReadings...');
-        const response = await api.readings.getTodayReadings(userId);
+        const response: any = await api.readings.getTodayReadings();
         console.log('API Response:', response);
-        
+
         if (isSubscribed) {
-          if (response?.reading?.today_reading) {
-            console.log('Setting today readings:', response.reading.today_reading);
-            setTodayReadings(response.reading.today_reading);
+          if (response?.message?.content) {
+            console.log('Setting today readings:', response.message.content);
+            setTodayReadings(response.message.content);
           } else {
             console.log('No today_reading found in response');
             setError('No readings available for today');
@@ -59,9 +59,7 @@ export function DailyStars({ userId }: DailyStarsProps) {
   if (loading) {
     return (
       <div className="flex h-full items-center justify-center p-8">
-        <div className="text-center text-gray-500">
-          Loading your daily stars...
-        </div>
+        <div className="text-center text-gray-500">Loading your daily stars...</div>
       </div>
     );
   }
@@ -85,11 +83,15 @@ export function DailyStars({ userId }: DailyStarsProps) {
   const cardStyle = `
     group relative px-8 py-6 transition-all duration-300
     bg-white dark:bg-gray-900 backdrop-blur-sm
-    hover:scale-[1.01] hover:bg-white/95 dark:hover:bg-gray-900/95 mb-6
+    hover:scale-[1.01] hover:bg-white/95 dark:hover:bg-gray-900/95
+    border-b border-gray-200 dark:border-gray-800
+    last:border-b-0
   `;
 
-  const renderArrayContent = (items: string[]) => {
-    const isSingleWordArray = items.every(item => !item.includes(' '));
+  const renderArrayContent = (items: (string | number)[]) => {
+    const isSingleWordArray = items.every(
+      item => typeof item === 'number' || (typeof item === 'string' && !item.includes(' '))
+    );
 
     if (isSingleWordArray) {
       return items.map((item, index) => (
@@ -129,25 +131,26 @@ export function DailyStars({ userId }: DailyStarsProps) {
         </p>
       );
     }
-    return <></>;  
+    return <></>;
   };
 
   return (
-    <div className="mb-6">
-      {todayReadings && Object.entries(todayReadings).map(([key, value]) => (
-        <div key={key} className={cardStyle}>
-          <h3 className="mb-5 flex items-center gap-2 text-xl font-medium text-gray-900 dark:text-white">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400">
-              ✧
-            </span>
-            {key
-              .split('_')
-              .map(word => word.charAt(0).toLowerCase() + word.slice(1))
-              .join(' ')}
-          </h3>
-          {renderValue(value, key)}
-        </div>
-      ))}
+    <div>
+      {todayReadings &&
+        Object.entries(todayReadings).map(([key, value]) => (
+          <div key={key} className={cardStyle}>
+            <h3 className="mb-5 flex items-center gap-2 text-xl font-medium text-gray-900 dark:text-white">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400">
+                ✧
+              </span>
+              {key
+                .split('_')
+                .map(word => word.charAt(0).toLowerCase() + word.slice(1))
+                .join(' ')}
+            </h3>
+            {renderValue(value, key)}
+          </div>
+        ))}
     </div>
   );
 }

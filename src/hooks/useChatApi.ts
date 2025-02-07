@@ -9,7 +9,10 @@ export interface ChatMessage {
 }
 
 export interface ChatResponse {
-  reply: string;
+  message: {
+    reply: string;
+    session_id: string;
+  };
 }
 
 export const useChatApi = () => {
@@ -92,7 +95,6 @@ export const useChatApi = () => {
       }
 
       const response = await api.chat.sendMessage({
-        user_id: userId,
         session_id: sessionId,
         message
       });

@@ -3,17 +3,19 @@ import { useState, useEffect } from 'react';
 
 interface PredictionContentProps {
   predictions: Array<{
-    type: string;
+    prediction_type: string;
     content: Record<string, any>;
     id: number;
     created_at: string;
+    updated_at: string;
   }>;
 }
 
 export function PredictionContent({ predictions }: PredictionContentProps): JSX.Element | null {
+  console.log('Predictions:', predictions);
   if (!predictions || predictions.length === 0) return null;
 
-  const availableTabs = predictions.map(p => p.type);
+  const availableTabs = predictions.map(p => p.prediction_type);
   const [activeTab, setActiveTab] = useState<string>(availableTabs[0] || '');
 
   useEffect(() => {
@@ -27,13 +29,23 @@ export function PredictionContent({ predictions }: PredictionContentProps): JSX.
     group relative px-8 py-6 transition-all duration-300
     bg-white dark:bg-gray-900 backdrop-blur-sm
     hover:scale-[1.01] hover:bg-white/95 dark:hover:bg-gray-900/95
+    border-b border-gray-200 dark:border-gray-800
+    last:border-b-0
   `;
 
-  const renderArrayContent = (items: string[], className?: string) => {
-    const isSingleWordArray = items.every(item => !item.includes(' '));
+  const renderArrayContent = (items: any[], className?: string) => {
+    // Convert items to strings and ensure they are valid
+    const stringItems = items.map(item => {
+      if (typeof item === 'string') return item;
+      if (typeof item === 'number') return item.toString();
+      if (typeof item === 'object' && item !== null) return JSON.stringify(item);
+      return String(item);
+    });
+
+    const isSingleWordArray = stringItems.every(item => !item.includes(' '));
 
     if (isSingleWordArray) {
-      return items.map((item, index) => (
+      return stringItems.map((item, index) => (
         <span
           key={index}
           className={
@@ -47,7 +59,7 @@ export function PredictionContent({ predictions }: PredictionContentProps): JSX.
     } else {
       return (
         <ul className="ml-1 list-none space-y-3">
-          {items.map((item, index) => (
+          {stringItems.map((item, index) => (
             <li
               key={index}
               className="group/item -ml-2 flex items-start gap-3 rounded-lg p-2 transition-all duration-300 hover:bg-purple-50 dark:hover:bg-purple-900/20"
@@ -89,7 +101,7 @@ export function PredictionContent({ predictions }: PredictionContentProps): JSX.
     return <></>;
   };
 
-  const activePrediction = predictions.find(p => p.type === activeTab);
+  const activePrediction = predictions.find(p => p.prediction_type === activeTab);
   if (!activePrediction) return null;
 
   const content = activePrediction.content;
