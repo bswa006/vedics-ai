@@ -109,14 +109,16 @@ export function PredictionContent({ predictions }: PredictionContentProps): JSX.
   if (!content) return null;
 
   return (
-    <div>
-      <TabNavigation
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        availableTabs={availableTabs}
-      />
+    <div className="relative min-h-screen">
+      <div className="fixed left-0 right-0 top-20 z-10 bg-[#1a1b26]/80 backdrop-blur-md">
+        <TabNavigation
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          availableTabs={availableTabs}
+        />
+      </div>
 
-      <div className="animate-fadeIn mb-6" data-testid={`${activeTab}-tab`}>
+      <div className="animate-fadeIn pt-28" data-testid={`${activeTab}-tab`}>
         {Object.entries(content).map(([key, value]) => (
           <div key={key} className={cardStyle}>
             <h3 className="mb-5 flex items-center gap-2 text-xl font-medium text-gray-900 dark:text-white">

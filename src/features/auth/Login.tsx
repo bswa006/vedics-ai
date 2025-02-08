@@ -216,9 +216,9 @@ export function Login() {
           >
             {error && (
               <div 
-                className={`border border-statusRed/20 bg-statusRed/10 p-3 text-center text-sm text-statusRed ${theme.typography.body.fontFamily}`}
+                className="rounded-lg border border-[#7F7ACA]/20 bg-[#7F7ACA]/10 p-3 text-center text-sm text-white"
                 style={{ 
-                  borderRadius: theme.borderRadius.lg,
+                  fontFamily: theme.typography.body.fontFamily,
                   fontWeight: theme.typography.body.weights.medium 
                 }}
               >

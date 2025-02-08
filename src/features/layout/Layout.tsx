@@ -27,6 +27,7 @@ export function Layout({ children, darkMode, setDarkMode, onLogout, userId }: La
       const timer = setTimeout(() => setIsRouteChanging(false), 300);
       return () => clearTimeout(timer);
     }
+    return undefined;
   }, [location.pathname]);
 
   const pageVariants = {
@@ -69,7 +70,7 @@ export function Layout({ children, darkMode, setDarkMode, onLogout, userId }: La
           className={cn(
             'relative mx-auto w-full max-w-lg overflow-y-auto',
             'transition-all duration-300 ease-in-out',
-            'mt-20 pb-32', // Account for fixed header and bottom nav
+            'mt-20 pb-16', // Account for fixed header and bottom nav
             '[&::-webkit-scrollbar-track]:bg-white/5 [&::-webkit-scrollbar]:w-2',
             '[&::-webkit-scrollbar-thumb]:bg-white/10 hover:[&::-webkit-scrollbar-thumb]:bg-white/20',
             isRouteChanging ? 'opacity-50' : 'opacity-100',

@@ -139,7 +139,7 @@ export const LanguageSelection: React.FC<LanguageSelectionProps> = ({
               placeholder={t('onboarding.language.search')}
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="h-12 w-full rounded-2xl border border-white/10 bg-white/5 pl-12 pr-4 text-base text-white backdrop-blur-xl placeholder:text-gray-400 hover:border-[#7F7ACA]/30 focus:border-[#F6A623]/50 focus:outline-none focus:ring-1 focus:ring-[#F6A623]/20"
+              className="h-12 w-full rounded-lg border border-white/5 bg-[#2A2B3B] pl-12 pr-4 text-base text-white placeholder:text-gray-500 focus:border-[#7F7ACA]/50 focus:outline-none focus:ring-2 focus:ring-[#7F7ACA]/20"
             />
           </div>
         </div>
@@ -203,18 +203,16 @@ export const LanguageSelection: React.FC<LanguageSelectionProps> = ({
         <Button
           onClick={() => onNext()}
           className={cn(
-            'relative w-full overflow-hidden rounded-xl p-[1px] transition-all',
-            'bg-gradient-to-r from-[#F6A623] to-[#F6A623]/90',
-            'hover:shadow-[0_0_2rem_-0.5rem_#F6A623]',
+            'relative w-full overflow-hidden rounded-lg bg-[#7F7ACA] p-4 text-white transition-all',
+            'hover:bg-[#7F7ACA]/90 hover:shadow-lg',
             'disabled:cursor-not-allowed disabled:opacity-50',
+            'focus:outline-none focus:ring-2 focus:ring-[#7F7ACA]/50',
             'group'
           )}
         >
-          <div className="relative rounded-xl bg-gradient-to-r from-[#F6A623] to-[#F6A623]/90 px-8 py-3.5 transition-all group-hover:bg-opacity-0">
-            <span className="relative z-10 text-base font-medium text-white">
-              {t('common.next')}
-            </span>
-          </div>
+          <span className="text-base font-medium text-white">
+            {t('onboarding.nextButton')}
+          </span>
         </Button>
       </motion.div>
     </div>

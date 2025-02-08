@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { User } from '../../types/user';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { LANGUAGES } from '../onboarding/components/LanguageSelection';
 import { api } from '../../services/api';
 
@@ -15,19 +15,38 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const shouldReduceMotion = useReducedMotion();
   const [formData, setFormData] = useState({
     first_name: user.user.first_name,
     last_name: user.user.last_name,
     email: user.user.email,
     date_of_birth: user.date_of_birth || '',
     time_of_birth: user.time_of_birth || '',
-    place_of_birth: user.place_of_birth,
+    place_of_birth: user.place_of_birth || '',
     preferred_language: user.preferred_language,
-    area_of_interests: user.area_of_interests,
+    area_of_interests: user.area_of_interests || [],
   });
+
+  const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onCancel();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onCancel]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!formRef.current?.checkValidity()) {
+      formRef.current?.reportValidity();
+      return;
+    }
+
     setLoading(true);
     setError('');
 
@@ -39,9 +58,10 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
         preferred_language: formData.preferred_language,
         area_of_interests: formData.area_of_interests,
       });
-      onUpdate();
-    } catch (err) {
-      setError(t('profile.updateError'));
+      await onUpdate();
+    } catch (err: any) {
+      setError(err?.message || t('profile.updateError'));
+      console.error('Profile update error:', err);
     } finally {
       setLoading(false);
     }
@@ -54,7 +74,10 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
       exit={{ opacity: 0, scale: 0.98 }}
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       onSubmit={handleSubmit}
+      ref={formRef}
       className="mx-auto max-w-2xl space-y-8"
+      noValidate
+      aria-label={t('profile.editForm')}
     >
       {error && (
         <motion.div
@@ -171,6 +194,11 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
                 value={formData.date_of_birth}
                 onChange={e => setFormData({ ...formData, date_of_birth: e.target.value })}
                 className="mt-2 block w-full rounded-md border-0 px-3 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-purple-500 dark:bg-transparent dark:text-white dark:ring-gray-700 sm:text-sm"
+                required
+                aria-required="true"
+                aria-label={t('profile.dateOfBirth')}
+                min="1900-01-01"
+                max={new Date().toISOString().split('T')[0]}
               />
             </div>
             <div>
@@ -182,6 +210,10 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
                 value={formData.time_of_birth}
                 onChange={e => setFormData({ ...formData, time_of_birth: e.target.value })}
                 className="mt-2 block w-full rounded-md border-0 px-3 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-purple-500 dark:bg-transparent dark:text-white dark:ring-gray-700 sm:text-sm"
+                required
+                aria-required="true"
+                aria-label={t('profile.timeOfBirth')}
+                step="60"
               />
             </div>
           </div>
@@ -196,7 +228,14 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
                 value={formData.place_of_birth}
                 onChange={e => setFormData({ ...formData, place_of_birth: e.target.value })}
                 className="block w-full rounded-xl border-0 bg-white px-4 py-3 pl-11 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-500 dark:bg-gray-800 dark:text-white dark:ring-gray-700 dark:placeholder:text-gray-500 dark:focus:ring-purple-500 sm:text-sm"
-                placeholder="City, Country"
+                placeholder={t('profile.placeOfBirthPlaceholder')}
+                required
+                aria-required="true"
+                aria-label={t('profile.placeOfBirth')}
+                minLength={2}
+                maxLength={100}
+                pattern="[A-Za-z\s,]+"
+                title={t('profile.placeOfBirthValidation')}
               />
               <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                 <svg className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
@@ -238,6 +277,9 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
                 value={formData.preferred_language}
                 onChange={e => setFormData({ ...formData, preferred_language: e.target.value })}
                 className="block w-full rounded-xl border-0 bg-white px-4 py-3 pl-11 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-500 dark:bg-gray-800 dark:text-white dark:ring-gray-700 dark:placeholder:text-gray-500 dark:focus:ring-purple-500 sm:text-sm"
+                required
+                aria-required="true"
+                aria-label={t('profile.preferredLanguage')}
               >
                 {LANGUAGES.map(lang => (
                   <option key={lang.code} value={lang.code}>
