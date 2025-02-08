@@ -47,6 +47,9 @@ const AppContent: React.FC<AppContentProps> = React.memo(
     }, [userData]);
 
     const isProfileIncomplete = useMemo(() => {
+      // Don't consider incomplete while loading
+      if (loading) return false;
+
       // If we have a token but no userData or incomplete profile data, consider it incomplete
       if (
         !userData ||
@@ -57,7 +60,7 @@ const AppContent: React.FC<AppContentProps> = React.memo(
         return true;
       }
       return false;
-    }, [userData]);
+    }, [userData, loading]);
 
     const isUserOnboarding = useMemo(
       () =>
@@ -66,38 +69,35 @@ const AppContent: React.FC<AppContentProps> = React.memo(
       [userData]
     );
 
-    // Redirect to onboarding if profile is incomplete
+    // Handle routing based on auth state and profile completion
     useEffect(() => {
       const token = localStorage.getItem('token');
-      console.log(
-        'Redirection check - Auth:',
-        !!token,
-        'Profile Incomplete:',
-        isProfileIncomplete,
-        'Loading:',
-        loading,
-        'Current Path:',
-        window.location.pathname
-      );
+      const currentPath = window.location.pathname;
 
-      // Don't redirect while loading to prevent flicker
+      // Don't make any routing decisions while data is loading
       if (loading) return;
 
-      if (token) {
-        if (isProfileIncomplete && window.location.pathname !== '/onboarding') {
-          console.log('Profile incomplete, redirecting to onboarding');
+      // Not authenticated - redirect to login
+      if (!token && currentPath !== '/login') {
+        navigate('/login', { replace: true });
+        return;
+      }
+
+      // Authenticated but no data yet - wait
+      if (token && !userData) return;
+
+      // Authenticated with data - handle routing
+      if (token && userData) {
+        if (isProfileIncomplete && currentPath !== '/onboarding') {
           navigate('/onboarding', { replace: true });
         } else if (
           !isProfileIncomplete &&
-          (window.location.pathname === '/login' || window.location.pathname === '/onboarding')
+          (currentPath === '/login' || currentPath === '/onboarding')
         ) {
-          console.log('Profile completed, redirecting to home');
           navigate('/', { replace: true });
         }
-      } else if (window.location.pathname !== '/login') {
-        navigate('/login', { replace: true });
       }
-    }, [isProfileIncomplete, navigate, loading]);
+    }, [isProfileIncomplete, navigate, loading, userData]);
 
     return (
       <>
@@ -287,10 +287,12 @@ const AppContent: React.FC<AppContentProps> = React.memo(
                         {t('common.error')}: {error}
                       </div>
                     ) : !userData ? (
-                      <div className="flex items-center justify-center p-8">
-                        <div className="text-center">
-                          <div className="mb-4 text-4xl">⏳</div>
-                          <h2 className="mb-2 text-lg font-medium">{t('common.loading')}</h2>
+                      <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50 backdrop-blur-sm">
+                        <div className="rounded-lg bg-white/10 p-6 backdrop-blur-xl">
+                          <div className="flex items-center space-x-3">
+                            <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-500 border-t-transparent" />
+                            <span className="text-sm text-white/90">{t('common.loading')}</span>
+                          </div>
                         </div>
                       </div>
                     ) : (
