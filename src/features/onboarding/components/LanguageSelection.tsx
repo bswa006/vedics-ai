@@ -110,23 +110,23 @@ export const LanguageSelection: React.FC<LanguageSelectionProps> = ({
   );
 
   return (
-    <div className="flex h-full flex-col bg-[#1a1b26] bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))] text-white">
+    <div className="fixed inset-0 flex flex-col bg-gradient-to-b from-[#2E2A5D] via-[#1f1d3d] to-[#1a1b26] text-white pt-20">
       <motion.div
-        className="flex-none space-y-3 p-8"
+        className="flex-none space-y-3 bg-gradient-to-b from-[#2E2A5D] to-[#2E2A5D]/95 p-8"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h2 className="bg-gradient-to-r from-white via-white to-white/90 bg-clip-text text-3xl font-bold tracking-tight text-transparent">
+        <h2 className="text-3xl font-bold tracking-tight text-white/90">
           {t('onboarding.language.title')}
         </h2>
-        <p className="max-w-2xl text-base leading-relaxed text-gray-400/80">
+        <p className="max-w-2xl text-base leading-relaxed text-gray-300/80">
           {t('onboarding.language.description')}
         </p>
       </motion.div>
 
       <motion.div
-        className="flex-1 overflow-y-auto px-6"
+        className="flex-1 overflow-y-auto px-6 py-4 pb-32 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-white/5 [&::-webkit-scrollbar-thumb]:bg-white/10 hover:[&::-webkit-scrollbar-thumb]:bg-white/20"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
@@ -139,7 +139,7 @@ export const LanguageSelection: React.FC<LanguageSelectionProps> = ({
               placeholder={t('onboarding.language.search')}
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="h-12 w-full rounded-2xl border border-white/10 bg-white/5 pl-12 pr-4 text-base text-white backdrop-blur-xl placeholder:text-gray-500 hover:border-white/20 focus:border-purple-500/50 focus:outline-none focus:ring-1 focus:ring-purple-500/20"
+              className="h-12 w-full rounded-2xl border border-white/10 bg-white/5 pl-12 pr-4 text-base text-white backdrop-blur-xl placeholder:text-gray-400 hover:border-[#7F7ACA]/30 focus:border-[#F6A623]/50 focus:outline-none focus:ring-1 focus:ring-[#F6A623]/20"
             />
           </div>
         </div>
@@ -162,7 +162,7 @@ export const LanguageSelection: React.FC<LanguageSelectionProps> = ({
                 'group transition-all duration-300 ease-in-out',
                 'transform-gpu backdrop-blur-xl',
                 localSelectedLanguage === lang.code
-                  ? 'bg-purple-500/10 ring-1 ring-purple-500/30'
+                  ? 'bg-[#7F7ACA]/10 ring-1 ring-[#7F7ACA]/30'
                   : 'bg-white/5 hover:bg-white/10'
               )}
               onClick={() => {
@@ -177,10 +177,10 @@ export const LanguageSelection: React.FC<LanguageSelectionProps> = ({
                 id={lang.code}
                 className={cn(
                   'h-5 w-5 border-2 transition-all duration-300',
-                  'text-purple-400',
+                  'text-[#F6A623]',
                   localSelectedLanguage === lang.code
-                    ? 'border-purple-400 bg-purple-400'
-                    : 'border-gray-600 group-hover:border-purple-400/50'
+                    ? 'border-[#F6A623] bg-[#F6A623]'
+                    : 'border-gray-600 group-hover:border-[#F6A623]/50'
                 )}
               />
               <Label
@@ -195,7 +195,7 @@ export const LanguageSelection: React.FC<LanguageSelectionProps> = ({
       </motion.div>
 
       <motion.div
-        className="flex-none p-6"
+        className="flex-none bg-gradient-to-t from-[#1a1b26] via-[#1a1b26] to-transparent p-6 pb-8"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.4 }}
@@ -204,13 +204,13 @@ export const LanguageSelection: React.FC<LanguageSelectionProps> = ({
           onClick={() => onNext()}
           className={cn(
             'relative w-full overflow-hidden rounded-xl p-[1px] transition-all',
-            'bg-gradient-to-r from-purple-500 to-purple-600',
-            'hover:shadow-[0_0_2rem_-0.5rem_#a855f7]',
+            'bg-gradient-to-r from-[#F6A623] to-[#F6A623]/90',
+            'hover:shadow-[0_0_2rem_-0.5rem_#F6A623]',
             'disabled:cursor-not-allowed disabled:opacity-50',
             'group'
           )}
         >
-          <div className="relative rounded-xl bg-gradient-to-r from-purple-500 to-purple-600 px-8 py-3.5 transition-all group-hover:bg-opacity-0">
+          <div className="relative rounded-xl bg-gradient-to-r from-[#F6A623] to-[#F6A623]/90 px-8 py-3.5 transition-all group-hover:bg-opacity-0">
             <span className="relative z-10 text-base font-medium text-white">
               {t('common.next')}
             </span>

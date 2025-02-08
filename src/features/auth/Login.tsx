@@ -1,7 +1,10 @@
-import { Sun } from 'lucide-react';
+import { Phone } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { api } from '../../services/api';
+import { theme } from '../../styles/theme';
 
 interface FormData {
   username: string;
@@ -10,6 +13,7 @@ interface FormData {
 
 export function Login() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<FormData>({
@@ -23,59 +27,39 @@ export function Login() {
     setLoading(true);
 
     try {
-      console.log('Starting login process...');
-      // Validate required fields
       if (!formData.username) {
-        setError('Phone number is required');
-        setLoading(false); // Ensure loading is reset
+        setError(t('login.errors.phoneRequired'));
         return;
       }
 
       try {
         // First try to get a token (login)
-        console.log('Attempting to get token...');
         const tokenResponse = await api.auth.getToken({
           username: formData.username,
           password: formData.username, // Using username as password
         });
 
-        console.log('Token response:', tokenResponse);
         if (tokenResponse.token) {
-          // Store the token in localStorage for the axios interceptor
           localStorage.setItem('token', tokenResponse.token);
 
-          // Get user profile
           try {
-            console.log('Fetching user profile...');
             const userProfile = await api.profiles.getProfile();
-            console.log('User profile:', userProfile);
-
             if (userProfile.id) {
-              // Set userId in localStorage and trigger a storage event
               localStorage.setItem('userId', userProfile.id.toString());
               window.dispatchEvent(new Event('storage'));
 
-              // Small delay to ensure state is updated
               await new Promise(resolve => setTimeout(resolve, 100));
 
-              // If user has completed their profile (has birth details), go to home
-              // Otherwise, go to onboarding
               if (
                 userProfile.date_of_birth &&
                 userProfile.time_of_birth &&
                 userProfile.place_of_birth
               ) {
-                console.log('Profile complete, redirecting to home');
-                // window.location.href = '/';
-                console.log('Navigating to home...');
                 navigate('/', { replace: true });
               } else {
-                console.log('Profile incomplete, redirecting to onboarding');
-                // window.location.href = '/onboarding';
                 navigate('/onboarding');
               }
             } else {
-              console.error('No user ID in profile response');
               setError('Failed to get user profile');
               localStorage.removeItem('token');
             }
@@ -93,17 +77,13 @@ export function Login() {
         });
 
         if (response.id && response.auth_token) {
-          // For new users, we want to ensure they go through onboarding
           localStorage.setItem('token', response.auth_token);
           
-          // Get user profile to set userId
           try {
             const userProfile = await api.profiles.getProfile();
             if (userProfile.id) {
               localStorage.setItem('userId', userProfile.id.toString());
               window.dispatchEvent(new Event('storage'));
-              
-              // For new users, always go to onboarding
               navigate('/onboarding', { replace: true });
             }
           } catch (error) {
@@ -117,208 +97,227 @@ export function Login() {
     } catch (generalError) {
       setError('An unexpected error occurred');
     } finally {
-      setLoading(false); // Ensure loading is reset
+      setLoading(false);
     }
   };
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-r from-[#0B1026] via-[#2B3990] to-[#0B1026] px-4 py-12 sm:px-6 lg:px-8">
-      {/* Animated stars background */}
-      <div className="absolute inset-0">
-        {/* Small stars */}
-        <div
-          className="shadow-glow absolute h-1 w-1 animate-[twinkle_3s_ease-in-out_infinite,float-1_15s_ease-in-out_infinite] rounded-full bg-white/30"
-          style={{ top: '10%', left: '15%' }}
+    <div className="relative min-h-screen overflow-hidden bg-midnightIndigo">
+      {/* Background gradient */}
+      <div 
+        className="pointer-events-none absolute inset-0" 
+        style={{ background: theme.gradients.background }}
+      />
+      {/* Decorative elements */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <motion.div 
+          className="absolute -left-4 top-0 h-64 w-64 rounded-full bg-celestialLilac/30 blur-3xl"
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.2, 0.3, 0.2]
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: 'easeInOut'
+          }}
         />
-        <div
-          className="shadow-glow absolute h-1 w-1 animate-[twinkle_3s_ease-in-out_infinite,float-2_18s_ease-in-out_infinite] rounded-full bg-white/30"
-          style={{ top: '50%', left: '75%', animationDelay: '0.5s' }}
-        />
-        <div
-          className="shadow-glow absolute h-1 w-1 animate-[twinkle_3s_ease-in-out_infinite,float-3_20s_ease-in-out_infinite] rounded-full bg-white/30"
-          style={{ top: '30%', left: '45%', animationDelay: '1s' }}
-        />
-        <div
-          className="shadow-glow absolute h-1 w-1 animate-[twinkle_3s_ease-in-out_infinite,float-1_17s_ease-in-out_infinite] rounded-full bg-white/30"
-          style={{ top: '70%', left: '25%', animationDelay: '1.5s' }}
-        />
-        <div
-          className="shadow-glow absolute h-1.5 w-1.5 animate-[twinkle_4s_ease-in-out_infinite,float-2_19s_ease-in-out_infinite] rounded-full bg-white/30"
-          style={{ top: '20%', left: '85%', animationDelay: '2s' }}
-        />
-        <div
-          className="shadow-glow absolute h-1.5 w-1.5 animate-[twinkle_4s_ease-in-out_infinite,float-3_21s_ease-in-out_infinite] rounded-full bg-white/30"
-          style={{ top: '80%', left: '65%', animationDelay: '2.5s' }}
-        />
-        {/* Medium stars */}
-        <div
-          className="shadow-glow absolute h-2 w-2 animate-[twinkle-slow_4s_ease-in-out_infinite,float-2_22s_ease-in-out_infinite] rounded-full bg-white/40"
-          style={{ top: '15%', left: '55%', animationDelay: '0.7s' }}
-        />
-        <div
-          className="shadow-glow absolute h-2 w-2 animate-[twinkle-slow_4s_ease-in-out_infinite,float-3_25s_ease-in-out_infinite] rounded-full bg-white/40"
-          style={{ top: '65%', left: '35%', animationDelay: '1.2s' }}
-        />
-        <div
-          className="shadow-glow absolute h-2 w-2 animate-[twinkle-slow_4s_ease-in-out_infinite,float-1_23s_ease-in-out_infinite] rounded-full bg-white/40"
-          style={{ top: '40%', left: '85%', animationDelay: '1.7s' }}
-        />
-        {/* Large stars */}
-        <div
-          className="shadow-glow absolute h-3 w-3 animate-[twinkle-slow_5s_ease-in-out_infinite,float-3_28s_ease-in-out_infinite] rounded-full bg-white/50"
-          style={{ top: '25%', left: '75%', animationDelay: '0.3s' }}
-        />
-        <div
-          className="shadow-glow absolute h-3 w-3 animate-[twinkle-slow_5s_ease-in-out_infinite,float-1_30s_ease-in-out_infinite] rounded-full bg-white/50"
-          style={{ top: '75%', left: '15%', animationDelay: '1.8s' }}
+        <motion.div 
+          className="absolute -right-4 bottom-0 h-64 w-64 rounded-full bg-vedicSaffron/30 blur-3xl"
+          animate={{
+            scale: [1, 1.1, 1],
+            opacity: [0.2, 0.25, 0.2]
+          }}
+          transition={{
+            duration: 6,
+            repeat: Infinity,
+            ease: 'easeInOut',
+            delay: 1
+          }}
         />
       </div>
 
-      <div className="relative w-full max-w-md space-y-8 text-white">
-        <div className="absolute left-1/2 top-2 flex h-24 w-24 -translate-x-1/2 -translate-y-1/2 items-center justify-center">
-          {/* Outer glow with rainbow pulse */}
-          <div className="absolute inset-0 animate-[pulse-rainbow_4s_ease-in-out_infinite] rounded-full bg-gradient-to-r from-blue-500/30 via-purple-500/30 to-pink-500/30 blur-[2px]" />
-
-          {/* Main container */}
-          <div className="group relative h-full w-full rounded-full bg-[#070B14] p-[1px]">
-            {/* Rotating border */}
-            <div className="absolute inset-0 overflow-hidden rounded-full">
-              <div className="absolute inset-0 animate-[spin_8s_linear_infinite] bg-[conic-gradient(from_0deg,#1E293B,#3B82F6,#A855F7,#EC4899,#3B82F6,#1E293B)] opacity-60" />
-            </div>
-
-            {/* Glass background */}
-            <div className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-[#0B1120]/90 via-[#0F172A]/80 to-[#0B1120]/90">
-              {/* Deep space effects */}
-              <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.2),transparent_70%)]" />
-              <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_80%_20%,rgba(236,72,153,0.15),transparent_50%)]" />
-              <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_20%_80%,rgba(168,85,247,0.15),transparent_50%)]" />
-
-              {/* Ambient glow */}
-              <div className="absolute inset-0 animate-pulse rounded-full bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10" />
-
-              {/* Stars */}
-              <div className="absolute inset-0 overflow-hidden rounded-full">
-                <div className="absolute left-1/4 top-1/4 animate-[star1_10s_linear_infinite] text-xs text-white/60">
-                  ✨
-                </div>
-                <div className="absolute bottom-1/3 right-1/3 animate-[star2_8s_linear_infinite] text-xs text-white/50">
-                  ✨
-                </div>
-                <div className="absolute left-2/3 top-1/3 animate-[star3_12s_linear_infinite] text-xs text-white/70">
-                  ✨
-                </div>
-              </div>
-
-              {/* Sacred Geometry Icon */}
-              <svg
-                viewBox="0 0 100 100"
-                className="relative z-10 h-12 w-12 animate-[color-shift_8s_ease-in-out_infinite] text-white transition-all duration-700"
-              >
-                <defs>
-                  <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#60A5FA" />
-                    <stop offset="50%" stopColor="#A855F7" />
-                    <stop offset="100%" stopColor="#EC4899" />
-                  </linearGradient>
-                </defs>
-                {/* Outer rotating circle */}
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="40"
-                  fill="none"
-                  stroke="url(#iconGradient)"
-                  strokeWidth="1"
-                  strokeDasharray="3,3"
-                  className="animate-[spin_12s_linear_infinite]"
-                />
-                {/* Main triangle */}
-                <path
-                  d="M50 5 L95 90 L5 90 Z"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  className="group-hover:animate-[pulse_2s_ease-in-out_infinite]"
-                />
-                {/* Inner circle */}
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="25"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  className="group-hover:animate-[spin_4s_linear_infinite]"
-                />
-                {/* Inner triangle */}
-                <path
-                  d="M50 25 L75 75 L25 75 Z"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  className="group-hover:animate-[spin_6s_linear_infinite_reverse]"
-                />
-                {/* Center dot */}
-                <circle cx="50" cy="50" r="4" fill="url(#iconGradient)" className="animate-pulse" />
-              </svg>
-            </div>
-          </div>
-        </div>
-        <div>
-          <h2 className="mt-16 text-center font-serif text-2xl font-light tracking-tight text-white">
-            vedics.ai
-          </h2>
-          <h2 className="text-center font-serif text-4xl font-light tracking-tight text-white">
-            Welcome Seeker
-          </h2>
-          <p className="mt-4 text-center text-sm font-light leading-6 text-white/80">
-            Begin your journey of self-discovery
-          </p>
-        </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          {error && (
-            <div className="rounded-lg bg-red-50 p-3 text-center text-sm text-red-500 dark:bg-red-900/20 dark:text-red-400">
-              {error}
-            </div>
-          )}
-          <div className="space-y-6 rounded-2xl border border-white/20 bg-black/20 p-8 shadow-light-md backdrop-blur-md transition-all duration-200 hover:bg-black/30">
-            <div>
-              <label htmlFor="username" className="mb-1.5 block text-sm font-medium text-white">
-                Phone Number
-              </label>
-              <div className="relative">
-                <input
-                  id="username"
-                  name="username"
-                  type="text"
-                  required
-                  className="relative block w-full appearance-none rounded-xl border border-white/20 bg-white py-3 pl-11 pr-4 text-gray-900 placeholder-gray-500 shadow-light-sm transition-all duration-200 hover:bg-gray-50 focus:border-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-500/20 sm:text-sm"
-                  placeholder="Enter your phone number"
-                  value={formData.username}
-                  onChange={e =>
-                    setFormData({ ...formData, username: e.target.value, password: e.target.value })
-                  }
-                />
-                <Sun className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/70" />
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <button
-              type="submit"
-              className="group relative flex w-full justify-center overflow-hidden rounded-xl bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 px-6 py-3.5 text-sm font-medium text-white shadow-lg backdrop-blur-sm transition-all duration-300 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:ring-offset-2 active:scale-[0.98]"
-              disabled={loading}
+      {/* Main content */}
+      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
+        <div className="w-full max-w-md space-y-8">
+          {/* Logo and title */}
+          <div className="text-center">
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: parseFloat(theme.animations.transition.normal) / 1000 }}
+              className="mx-auto h-24 w-24"
             >
-              {loading ? 'Signing in...' : 'Sign in'}
-              <div className="absolute inset-0 -z-10 bg-gradient-to-r from-oriental-400/0 via-white/10 to-oriental-400/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 dark:from-white/0 dark:via-white/5 dark:to-white/0"></div>
-              <span className="mr-2 transition-transform duration-500 group-hover:rotate-[360deg]">
-                ✨
-              </span>
-              Begin Journey
-            </button>
+              <div 
+                className="relative h-full w-full overflow-hidden rounded-full border-2 border-[#7F7ACA]/50 p-[2px]"
+              >
+                <motion.div 
+                  className="h-full w-full rounded-full bg-[#2A2B3B] p-4"
+                  animate={loading ? {
+                    scale: [1, 0.98, 1],
+                    opacity: [1, 0.8, 1]
+                  } : { scale: 1, opacity: 1 }}
+                  transition={{
+                    duration: 1.5,
+                    repeat: loading ? Infinity : 0,
+                    ease: 'easeInOut'
+                  }}
+                >
+                  <motion.div 
+                    className="h-full w-full rounded-full bg-[#7F7ACA]/20"
+                    animate={loading ? { rotate: 360 } : { rotate: 0 }}
+                    transition={{
+                      duration: 2,
+                      repeat: loading ? Infinity : 0,
+                      ease: 'linear'
+                    }}
+                  />
+                </motion.div>
+              </div>
+            </motion.div>
+            <motion.h2
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ 
+                type: 'tween',
+                delay: parseFloat(theme.animations.transition.normal) / 1000, 
+                duration: parseFloat(theme.animations.transition.normal) / 1000 
+              }}
+              className="mt-6 text-3xl font-medium tracking-tight text-white"
+            >
+              Welcome to Vedics.ai
+            </motion.h2>
+            <motion.p
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ 
+                type: 'tween',
+                delay: parseFloat(theme.animations.transition.normal) / 1000, 
+                duration: parseFloat(theme.animations.transition.normal) / 1000 
+              }}
+              className="mt-2 text-sm text-gray-200"
+              style={{ fontWeight: theme.typography.body.weights.regular }}
+            >
+              {t('login.subtitle')}
+            </motion.p>
           </div>
-        </form>
+
+          {/* Login form */}
+          <motion.form
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ 
+              type: 'tween',
+              delay: parseFloat(theme.animations.transition.normal) / 1000, 
+              duration: parseFloat(theme.animations.transition.normal) / 1000 
+            }}
+            className="mt-8 space-y-6"
+            onSubmit={handleSubmit}
+          >
+            {error && (
+              <div 
+                className={`border border-statusRed/20 bg-statusRed/10 p-3 text-center text-sm text-statusRed ${theme.typography.body.fontFamily}`}
+                style={{ 
+                  borderRadius: theme.borderRadius.lg,
+                  fontWeight: theme.typography.body.weights.medium 
+                }}
+              >
+                {error}
+              </div>
+            )}
+
+            <div 
+              className="space-y-6 rounded-xl border border-celestialLilac/20 bg-white/5 backdrop-blur-xl"
+              style={{ 
+                padding: theme.spacing['2xl'],
+                boxShadow: `0 8px 32px ${theme.colors.celestialLilac}10`,
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)'
+              }}
+            >
+              <div>
+                <label 
+                  htmlFor="username"
+                  aria-label={t('login.phoneNumber')}
+                  className="mb-1.5 block text-sm font-medium text-white"
+                >
+                  Phone Number
+                </label>
+                <div className="relative">
+                  <input
+                    id="username"
+                    name="username"
+                    type="text"
+                    required
+                    className="block w-full rounded-lg border border-white/5 bg-[#2A2B3B] px-4 py-2 pl-11 text-white placeholder-gray-500 focus:border-[#7F7ACA]/50 focus:outline-none focus:ring-2 focus:ring-[#7F7ACA]/20"
+                    placeholder="Enter your phone number"
+                    value={formData.username}
+                    onChange={e =>
+                      setFormData({ ...formData, username: e.target.value, password: e.target.value })
+                    }
+                  />
+                  <Phone className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[#7F7ACA]" />
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <button
+                type="submit"
+                disabled={loading}
+                className="group relative flex w-full justify-center rounded-lg bg-[#7F7ACA] px-6 py-3 text-sm font-medium text-white transition-all duration-200 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[#7F7ACA]/50 disabled:cursor-not-allowed disabled:opacity-50 active:scale-[0.98]"
+              >
+                <motion.span
+                  animate={loading ? {
+                    opacity: [1, 0.7, 1],
+                    scale: [1, 0.98, 1]
+                  } : { opacity: 1, scale: 1 }}
+                  transition={{
+                    duration: 1,
+                    repeat: loading ? Infinity : 0,
+                    ease: 'easeInOut'
+                  }}
+                >
+                  {loading ? 'Signing in...' : 'Begin Journey'}
+                </motion.span>
+                <motion.div 
+                  className="absolute inset-0 -z-10 opacity-0 group-hover:opacity-100"
+                  style={{ 
+                    background: theme.gradients.accent,
+                    transition: `opacity ${parseFloat(theme.animations.transition.normal) / 1000}s ease-in-out`
+                  }}
+                  whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+                  whileTap={{ scale: 0.98, transition: { duration: 0.1 } }}
+                />
+                <motion.span 
+                  className="ml-2"
+                  animate={loading ? {
+                    rotate: 360,
+                    scale: [1, 1.2, 1]
+                  } : {}}
+                  transition={{
+                    rotate: {
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: 'linear'
+                    },
+                    scale: {
+                      duration: 1.5,
+                      repeat: Infinity,
+                      ease: 'easeInOut'
+                    }
+                  }}
+                  style={{
+                    display: 'inline-block',
+                    transformOrigin: 'center'
+                  }}
+                >
+                  ✨
+                </motion.span>
+              </button>
+            </div>
+          </motion.form>
+        </div>
       </div>
     </div>
   );

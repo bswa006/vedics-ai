@@ -1,4 +1,7 @@
+import { useTranslation } from 'react-i18next';
 import { LogOut, Moon, Sun } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { format } from 'date-fns';
 import LanguageSwitcher from '../../components/LanguageSwitcher';
 
 interface HeaderProps {
@@ -9,82 +12,52 @@ interface HeaderProps {
 }
 
 export function Header({ darkMode, setDarkMode, onLogout, userId }: HeaderProps) {
-  return (
-    <div className="relative z-10 overflow-hidden bg-gradient-to-r from-[#0B1026] via-[#2B3990] to-[#0B1026]">
-      {/* Animated stars background */}
-      <div className="absolute inset-0 opacity-30">
-        {/* Small stars */}
-        <div
-          className="absolute h-1 w-1 animate-[twinkle_3s_ease-in-out_infinite,float-1_15s_ease-in-out_infinite] rounded-full bg-white"
-          style={{ top: '10%', left: '15%' }}
-        />
-        <div
-          className="absolute h-1 w-1 animate-[twinkle_3s_ease-in-out_infinite,float-2_18s_ease-in-out_infinite] rounded-full bg-white"
-          style={{ top: '50%', left: '75%', animationDelay: '0.5s' }}
-        />
-        <div
-          className="absolute h-1 w-1 animate-[twinkle_3s_ease-in-out_infinite,float-3_20s_ease-in-out_infinite] rounded-full bg-white"
-          style={{ top: '30%', left: '45%', animationDelay: '1s' }}
-        />
-        <div
-          className="absolute h-1 w-1 animate-[twinkle_3s_ease-in-out_infinite,float-1_15s_ease-in-out_infinite] rounded-full bg-white"
-          style={{ top: '70%', left: '25%', animationDelay: '1.5s' }}
-        />
-        <div
-          className="absolute h-1 w-1 animate-[twinkle_3s_ease-in-out_infinite,float-2_18s_ease-in-out_infinite] rounded-full bg-white"
-          style={{ top: '20%', left: '85%', animationDelay: '2s' }}
-        />
-        {/* Medium stars */}
-        <div
-          className="absolute h-1.5 w-1.5 animate-[twinkle-slow_4s_ease-in-out_infinite,float-3_20s_ease-in-out_infinite] rounded-full bg-white"
-          style={{ top: '45%', left: '35%', animationDelay: '0.7s' }}
-        />
-        <div
-          className="absolute h-1.5 w-1.5 animate-[twinkle-slow_4s_ease-in-out_infinite,float-1_15s_ease-in-out_infinite] rounded-full bg-white"
-          style={{ top: '15%', left: '65%', animationDelay: '1.2s' }}
-        />
-        <div
-          className="absolute h-1.5 w-1.5 animate-[twinkle-slow_4s_ease-in-out_infinite,float-2_18s_ease-in-out_infinite] rounded-full bg-white"
-          style={{ top: '60%', left: '90%', animationDelay: '1.8s' }}
-        />
-        {/* Large stars with glow effect */}
-        <div
-          className="shadow-glow absolute h-2 w-2 animate-[pulse_2s_ease-in-out_infinite,float-2_18s_ease-in-out_infinite] rounded-full bg-white"
-          style={{ top: '25%', left: '55%', animationDelay: '0.3s' }}
-        />
-        <div
-          className="shadow-glow absolute h-2 w-2 animate-[pulse_2s_ease-in-out_infinite,float-3_20s_ease-in-out_infinite] rounded-full bg-white"
-          style={{ top: '75%', left: '40%', animationDelay: '1.4s' }}
-        />
-      </div>
+  const { t } = useTranslation();
+  const currentTime = new Date();
+  const hours = currentTime.getHours();
 
-      <div className="relative mx-auto max-w-lg px-4 py-5">
-        <div className="flex items-center justify-between">
-          <LanguageSwitcher />
-          <div className="flex gap-3">
-            {userId && onLogout && (
-              <button
-                onClick={onLogout}
-                className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-r from-blue-600/30 via-purple-600/30 to-pink-600/30 shadow-[0_0_15px_rgba(124,58,237,0.1)] backdrop-blur-sm transition-all duration-300 hover:from-blue-600/40 hover:via-purple-600/40 hover:to-pink-600/40"
-                title="Logout"
-              >
-                <LogOut className="h-5 w-5 text-white" />
-              </button>
-            )}
-            <button
-              onClick={() => setDarkMode(!darkMode)}
-              className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-r from-blue-600/30 via-purple-600/30 to-pink-600/30 shadow-[0_0_15px_rgba(124,58,237,0.1)] backdrop-blur-sm transition-all duration-300 hover:from-blue-600/40 hover:via-purple-600/40 hover:to-pink-600/40"
-              title={darkMode ? 'Light Mode' : 'Dark Mode'}
-            >
-              {darkMode ? (
-                <Sun className="h-5 w-5 text-white" />
-              ) : (
-                <Moon className="h-5 w-5 text-white" />
-              )}
-            </button>
+  const getGreeting = () => {
+    if (hours < 12) return t('greetings.morning');
+    if (hours < 17) return t('greetings.afternoon');
+    return t('greetings.evening');
+  };
+
+  return (
+    <motion.header
+      initial={{ y: -20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.3 }}
+      className="fixed inset-x-0 top-0 z-50 h-20 bg-[#1a1b26]/95 backdrop-blur-md"
+    >
+      <div className="relative mx-auto flex h-full max-w-lg items-center justify-between px-6">
+        {/* Content */}
+        <div className="flex flex-col justify-center">
+          <div className="flex items-center gap-4">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#7F7ACA]">
+              <span className="text-lg">🌟</span>
+            </div>
+            <div>
+              <h1 className="text-lg font-medium text-white">{getGreeting()}</h1>
+              <p className="text-sm text-gray-400">{format(currentTime, 'MMMM d')}</p>
+            </div>
           </div>
         </div>
+
+        <div className="flex items-center space-x-3">
+          <LanguageSwitcher />
+          {userId && onLogout && (
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={onLogout}
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-[#2A2B3B] text-gray-400 transition-all duration-300 hover:bg-[#363748] hover:text-white"
+              title={t('common.logout')}
+            >
+              <LogOut className="text-creamWhite h-5 w-5" />
+            </motion.button>
+          )}
+        </div>
       </div>
-    </div>
+    </motion.header>
   );
 }

@@ -1,3 +1,4 @@
+
 .carousel-container {
   position: relative;
   width: 100%;
@@ -22,7 +23,7 @@
   width: auto !important;
   flex-shrink: 0;
 }
-
+/* 
 .carousel-container::after {
   content: '';
   position: absolute;
@@ -54,7 +55,7 @@
 .carousel-container:hover::after,
 .carousel-container:hover::before {
   opacity: 1;
-}
+} */
 
 .swiper {
   margin: 0 auto;

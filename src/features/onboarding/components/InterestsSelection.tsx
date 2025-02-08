@@ -5,6 +5,7 @@ import { Label } from '../../../components/ui/label';
 import { cn } from '../../../lib/utils';
 import { Checkbox } from '../../../components/ui/checkbox';
 import { motion, AnimatePresence } from 'framer-motion';
+import { theme } from '../../../styles/theme';
 
 interface Interest {
   id: string;
@@ -110,26 +111,26 @@ export const InterestsSelection: React.FC<InterestsSelectionProps> = ({
   };
 
   return (
-    <div className="flex h-full flex-col bg-[#1a1b26] bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))] text-white">
+    <div className="fixed inset-0 flex flex-col bg-gradient-to-b from-midnight-indigo via-[#1f1d3d] to-[#1a1b26] pt-20">
       <motion.div
-        className="flex-none space-y-3 p-8"
+        className="flex-none space-y-4 bg-gradient-to-b from-midnight-indigo to-midnight-indigo/95 p-8 font-body"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
       >
-        <h2 className="bg-gradient-to-r from-white via-white to-white/90 bg-clip-text text-3xl font-bold tracking-tight text-transparent">
+        <h2 className="font-heading text-3xl font-semibold tracking-tight text-cream-white">
           {t('onboarding.themes.title')}
         </h2>
-        <p className="max-w-2xl text-base leading-relaxed text-gray-400/80">
+        <p className="max-w-2xl text-base font-normal leading-relaxed text-cool-gray">
           {t('onboarding.themes.description')}
         </p>
       </motion.div>
 
       <motion.div
-        className="flex-1 overflow-y-auto px-6"
+        className="flex-1 overflow-y-auto px-6 py-4 pb-32 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-white/5 [&::-webkit-scrollbar-thumb]:bg-white/10 hover:[&::-webkit-scrollbar-thumb]:bg-white/20"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
+        transition={{ duration: 0.3, delay: 0.15, ease: 'easeOut' }}
       >
         <div className="space-y-4 pb-6">
           {INTERESTS.map((interest, index) => (
@@ -137,12 +138,27 @@ export const InterestsSelection: React.FC<InterestsSelectionProps> = ({
               key={interest.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: index * 0.1 }}
+              transition={{ 
+                duration: parseFloat(theme.animations.transition.normal) / 1000,
+                delay: index * 0.05,
+                ease: 'easeOut'
+              }}
+              whileHover={{ 
+                scale: 1.02,
+                y: -2,
+                transition: { duration: parseFloat(theme.animations.transition.fast) / 1000 } 
+              }}
+              whileTap={{ 
+                scale: 0.98,
+                transition: { duration: parseFloat(theme.animations.transition.fast) / 1000 } 
+              }}
               className={cn(
-                'flex cursor-pointer items-start space-x-4 rounded-xl border border-gray-700/50 p-5 backdrop-blur-sm',
-                'group transition-all duration-300 ease-in-out',
-                'hover:border-blue-500/30 hover:bg-blue-500/5 hover:shadow-lg hover:shadow-blue-500/5',
-                selectedInterests.includes(interest.id) && 'border-blue-500/50 bg-blue-500/10'
+                'group relative flex cursor-pointer items-start gap-4 rounded-lg border p-5',
+                'transition-all duration-300 ease-in-out backdrop-blur-md',
+                'hover:border-celestial-lilac/30 hover:bg-celestial-lilac/5',
+                'hover:shadow-light-md hover:shadow-celestial-lilac/5',
+                selectedInterests.includes(interest.id) && 'border-vedic-saffron/50 bg-vedic-saffron/10',
+                'font-body'
               )}
               onClick={() => toggleInterest(interest.id)}
             >
@@ -151,9 +167,9 @@ export const InterestsSelection: React.FC<InterestsSelectionProps> = ({
                   checked={selectedInterests.includes(interest.id)}
                   className={cn(
                     'h-5 w-5 border-2 transition-all duration-300',
-                    'border-gray-500/50 text-blue-500',
-                    'group-hover:border-blue-400/50',
-                    selectedInterests.includes(interest.id) && 'border-blue-500'
+                    'border-celestial-lilac/50 text-vedic-saffron',
+                    'group-hover:border-celestial-lilac',
+                    selectedInterests.includes(interest.id) && 'border-vedic-saffron scale-110'
                   )}
                   onCheckedChange={() => {
                     toggleInterest(interest.id);
@@ -163,14 +179,22 @@ export const InterestsSelection: React.FC<InterestsSelectionProps> = ({
               </div>
               <div className="flex-1 space-y-2">
                 <div className="flex items-center space-x-2">
-                  <span className="text-2xl drop-shadow-[0_0_0.5rem_rgba(59,130,246,0.5)] filter transition-transform duration-300 group-hover:scale-110">
+                  <motion.span 
+                    className="text-2xl drop-shadow-[0_0_8px_rgba(127,122,202,0.5)]"
+                    animate={{ scale: selectedInterests.includes(interest.id) ? 1.1 : 1 }}
+                    transition={{ duration: 0.3 }}
+                  >
                     {interest.icon}
-                  </span>
-                  <Label className="bg-gradient-to-r from-white to-white/90 bg-clip-text text-lg font-semibold text-transparent">
+                  </motion.span>
+                  <Label 
+                    className="font-heading text-lg font-medium text-cream-white transition-colors duration-300"
+                  >
                     {interest.title}
                   </Label>
                 </div>
-                <p className="text-sm leading-relaxed text-gray-400">{interest.description}</p>
+                <p className="text-sm font-normal leading-relaxed text-cool-gray/80 transition-colors duration-300">
+                  {interest.description}
+                </p>
               </div>
             </motion.div>
           ))}
@@ -178,10 +202,14 @@ export const InterestsSelection: React.FC<InterestsSelectionProps> = ({
       </motion.div>
 
       <motion.div
-        className="flex-none space-y-4 p-6"
+        className="fixed inset-x-0 bottom-0 space-y-4 bg-gradient-to-t from-[#1a1b26] to-[#1a1b26]/95 p-8 backdrop-blur-md"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.4 }}
+        transition={{ 
+          duration: 0.3,
+          delay: 0.15,
+          ease: 'easeOut'
+        }}
       >
         <AnimatePresence mode="wait">
           {error && (
@@ -189,7 +217,11 @@ export const InterestsSelection: React.FC<InterestsSelectionProps> = ({
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 20 }}
-              className="rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400"
+              transition={{ 
+                duration: parseFloat(theme.animations.transition.fast) / 1000,
+                ease: 'easeOut'
+              }}
+              className="rounded-lg border border-status-red/20 bg-status-red/10 px-4 py-3 text-sm font-medium text-status-red font-body"
             >
               {error}
             </motion.div>
@@ -198,9 +230,30 @@ export const InterestsSelection: React.FC<InterestsSelectionProps> = ({
         <Button
           onClick={handleNext}
           disabled={selectedInterests.length === 0 || isLoading}
-          className="relative w-full rounded-xl bg-gradient-to-r from-purple-500 to-purple-600 px-8 py-3.5 transition-all group-hover:bg-opacity-0"
+          className={cn(
+            'relative w-full overflow-hidden rounded-xl p-[1px] transition-all',
+            'bg-gradient-to-r from-[#F6A623] to-[#F6A623]/90',
+            'hover:shadow-[0_0_2rem_-0.5rem_#F6A623]',
+            'disabled:cursor-not-allowed disabled:opacity-50',
+            'group'
+          )}
         >
-          {t('common.next')}
+          <div className="relative rounded-xl bg-gradient-to-r from-[#F6A623] to-[#F6A623]/90 px-8 py-3.5 transition-all group-hover:bg-opacity-0">
+            <span className="relative z-10 text-base font-medium text-white">
+              {isLoading ? (
+                <span className="flex items-center justify-center gap-2">
+                  <motion.div
+                    className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent"
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                  />
+                  {t('common.loading')}
+                </span>
+              ) : (
+                t('common.next')
+              )}
+            </span>
+          </div>
         </Button>
       </motion.div>
     </div>

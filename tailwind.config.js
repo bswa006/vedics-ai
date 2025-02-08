@@ -7,6 +7,26 @@ export default {
   darkMode: 'class',
   theme: {
     extend: {
+      colors: {
+        'midnight-indigo': '#2E2A5D',
+        'vedic-saffron': '#F6A623',
+        'celestial-lilac': '#7F7ACA',
+        'cream-white': '#FDFBF7',
+        'cool-gray': '#8A8A8A',
+        'deep-charcoal': '#1F1F1F',
+        'greenish-teal': '#3FA796',
+        'status-red': '#E83B3B',
+      },
+      fontFamily: {
+        heading: ['Poppins', 'system-ui', 'sans-serif'],
+        body: ['Roboto', 'system-ui', 'sans-serif'],
+      },
+      fontSize: {
+        '2xs': '0.625rem',
+        '3xl': '1.875rem',
+        '4xl': '2.25rem',
+        '5xl': '3rem',
+      },
       keyframes: {
         'pulse-slow': {
           '0%, 100%': { transform: 'scale(1)' },

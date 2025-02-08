@@ -7,8 +7,6 @@ import { BirthDetailsForm } from './components/BirthDetailsForm';
 import { InterestsSelection } from './components/InterestsSelection';
 import { LanguageSelection } from './components/LanguageSelection';
 
-import OnboardingStepper from '../../components/OnboardingStepper';
-
 interface OnboardingFlowProps {
   onComplete: (data: OnboardingData) => void;
 }
@@ -106,26 +104,6 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) =>
           </motion.div>
         )}
       </AnimatePresence>
-      <div className="flex-none">
-        <OnboardingStepper
-          steps={[
-            {
-              title: 'Choose',
-              subtitle: 'Language'
-            },
-            {
-              title: 'Birth',
-              subtitle: 'Details'
-            },
-            {
-              title: 'Select',
-              subtitle: 'Interests'
-            }
-          ]}
-          currentStep={step}
-          setCurrentStep={setStep}
-        />
-      </div>
       <div className="flex-1 overflow-hidden">
         {step === 0 && (
           <LanguageSelection

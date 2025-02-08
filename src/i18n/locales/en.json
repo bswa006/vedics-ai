@@ -3,6 +3,25 @@
     "logoutConfirmTitle": "Confirm Logout",
     "logoutConfirmMessage": "Are you sure you want to logout?"
   },
+  "greetings": {
+    "morning": "Good Morning",
+    "afternoon": "Good Afternoon",
+    "evening": "Good Evening"
+  },
+  "navigation": {
+    "home": "Home",
+    "predictions": "Predictions",
+    "chat": "Chat",
+    "profile": "Profile"
+  },
+  "chat": {
+    "inputPlaceholder": "Type your message...",
+    "suggestedQuestions": {
+      "relationships": "how can i improve my relationships?",
+      "luckyColors": "what are my lucky colors for today?",
+      "remedies": "what remedies should i follow this week?"
+    }
+  },
   "common": {
     "save": "Save Changes",
     "cancel": "Cancel",
@@ -30,6 +49,11 @@
     "cancel": "cancel"
   },
   "login": {
+    "errors": {
+      "phoneRequired": "Phone number is required",
+      "invalidFormat": "Invalid phone number format",
+      "networkError": "Network error. Please try again."
+    },
     "title": "welcome seeker",
     "subtitle": "begin your journey of self-discovery",
     "phoneNumber": "phone number",
