@@ -24,6 +24,7 @@
   },
   "common": {
     "save": "Save Changes",
+    "saving": "Saving...",
     "cancel": "Cancel",
     "continue": "continue",
     "next": "next",
@@ -46,7 +47,8 @@
     "yes": "yes",
     "no": "no",
     "confirm": "confirm",
-    "cancel": "cancel"
+    "cancel": "cancel",
+    "logout": "Logout"
   },
   "login": {
     "errors": {
@@ -69,20 +71,30 @@
   "profile": {
     "title": "My Profile",
     "edit": "Edit Profile",
+    "editTitle": "Edit Profile",
+    "editSubtitle": "Update your profile information",
+    "editForm": "Edit Profile Form",
     "personalInfo": "Personal Information",
     "firstName": "First Name",
     "lastName": "Last Name",
     "email": "Email",
+    "phoneNumber": "Phone Number",
     "dateOfBirth": "Date of Birth",
     "timeOfBirth": "Time of Birth",
     "placeOfBirth": "Place of Birth",
+    "birthDate": "Birth Date",
+    "birthTime": "Birth Time",
+    "birthPlace": "Birth Place",
     "preferences": "Preferences",
     "preferredLanguage": "Preferred Language",
     "interests": "Areas of Interest",
     "updateError": "Failed to update profile. Please try again.",
-    "birthDetails": "birth details",
-    "pendingStatus": "profile status",
-    "pendingMessage": "your profile is currently under review. we'll notify you once the verification is complete."
+    "birthDetails": "Birth Details",
+    "pendingStatus": "Profile Status",
+    "pendingMessage": "Your profile is currently under review. We'll notify you once the verification is complete.",
+    "subtitle": "View and manage your profile information",
+    "placeOfBirthPlaceholder": "Enter your place of birth",
+    "placeOfBirthValidation": "Place of birth is required"
   },
   "birthDetails": {
     "birthDate": "birth date",

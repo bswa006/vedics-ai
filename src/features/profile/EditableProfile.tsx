@@ -80,7 +80,7 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
       aria-label={t('profile.editForm')}
     >
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="space-y-1">
           <motion.h1
             initial={{ opacity: 0, x: -20 }}
@@ -96,11 +96,11 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
           <p className="text-gray-300">{t('profile.editSubtitle')}</p>
         </div>
 
-        <div className="flex gap-3">
+        <div className="flex flex-shrink-0 gap-3">
           <motion.button
             type="button"
             onClick={onCancel}
-            className="rounded-xl border border-white/10 bg-white/5 px-6 py-2 text-sm font-medium text-white backdrop-blur-xl transition-all hover:bg-white/10"
+            className="rounded-xl border border-white/10 bg-white/5 px-4 sm:px-6 py-2 text-sm font-medium text-white backdrop-blur-xl transition-all hover:bg-white/10 whitespace-nowrap"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -109,12 +109,12 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
           <motion.button
             type="submit"
             disabled={loading}
-            className="group relative overflow-hidden rounded-xl p-[1px]"
+            className="group relative overflow-hidden rounded-xl p-[1px] whitespace-nowrap"
             style={{ background: theme.gradients.primary }}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            <div className="bg-midnightIndigo relative rounded-xl px-6 py-2 transition-all group-hover:bg-transparent">
+            <div className="bg-midnightIndigo relative rounded-xl px-4 sm:px-6 py-2 transition-all group-hover:bg-transparent">
               <span className="relative z-10 text-sm font-medium text-white">
                 {loading ? t('common.saving') : t('common.save')}
               </span>

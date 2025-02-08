@@ -94,7 +94,14 @@ export function TabNavigation({ activeTab, setActiveTab, availableTabs = [] }: T
   }
 
   return (
-    <div className="hide-scrollbar relative mb-4 touch-pan-x overflow-x-auto">
+    <div
+      className="hide-scrollbar relative touch-pan-x overflow-x-auto"
+      style={{
+        transform: 'translateZ(0)',
+        willChange: 'transform',
+        backfaceVisibility: 'hidden',
+      }}
+    >
       <Carousel
         items={tabItems}
         slidesPerView={Math.min(3, tabs.length)}
