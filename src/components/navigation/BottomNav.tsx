@@ -47,7 +47,14 @@ export function BottomNav({ currentPath, onNavigate }: BottomNavProps) {
   ];
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-white/5 bg-[#1a1b26]/95 backdrop-blur-lg">
+    <nav 
+      className="fixed inset-x-0 bottom-0 z-50 border-t border-white/5 bg-[#1a1b26]/95 backdrop-blur-lg" 
+      style={{ 
+        transform: 'translate3d(0, 0, 0)', 
+        backfaceVisibility: 'hidden',
+        WebkitBackfaceVisibility: 'hidden',
+        willChange: 'transform'
+      }}>
       <div className="mx-auto flex max-w-md items-center justify-around px-4 py-2">
         {navItems.map(item => (
           <motion.button

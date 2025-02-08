@@ -110,18 +110,16 @@ export function PredictionContent({ predictions }: PredictionContentProps): JSX.
 
   return (
     <div className="relative min-h-screen overflow-x-hidden">
-      <div className="h-[100px] w-full" />
-      <div
-        className="fixed inset-x-0 top-20 z-10 bg-[#1a1b26]/80 backdrop-blur-md"
+      <div className="h-20 w-full" />
+      <div 
+        className="fixed top-[80px] inset-x-0 z-10 bg-[#1a1b26]/80 backdrop-blur-md"
         style={{
           transform: 'translate3d(0, 0, 0)',
-          position: 'fixed',
-          top: '80px',
-          left: 0,
-          right: 0,
+          backfaceVisibility: 'hidden',
           WebkitBackfaceVisibility: 'hidden',
           WebkitPerspective: 1000,
-          WebkitTransform: 'translate3d(0, 0, 0)',
+          willChange: 'transform',
+          top: '80px'
         }}
       >
         <TabNavigation
@@ -130,8 +128,8 @@ export function PredictionContent({ predictions }: PredictionContentProps): JSX.
           availableTabs={availableTabs}
         />
       </div>
-
-      <div className="animate-fadeIn" data-testid={`${activeTab}-tab`}>
+      
+      <div className="animate-fadeIn pt-4" data-testid={`${activeTab}-tab`}>
         {Object.entries(content).map(([key, value]) => (
           <div key={key} className={cardStyle}>
             <h3 className="mb-5 flex items-center gap-2 text-xl font-medium text-gray-900 dark:text-white">
