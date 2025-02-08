@@ -108,7 +108,20 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) =>
       </AnimatePresence>
       <div className="flex-none">
         <OnboardingStepper
-          steps={['Choose Language', 'Birth Details', 'Select Interests']}
+          steps={[
+            {
+              title: 'Choose',
+              subtitle: 'Language'
+            },
+            {
+              title: 'Birth',
+              subtitle: 'Details'
+            },
+            {
+              title: 'Select',
+              subtitle: 'Interests'
+            }
+          ]}
           currentStep={step}
           setCurrentStep={setStep}
         />
@@ -163,7 +176,6 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) =>
             error={error}
           />
         )}
-
       </div>
     </div>
   );

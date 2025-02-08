@@ -140,6 +140,11 @@
     "focus_areas": "Focus Areas"
   },
   "onboarding": {
+    "language": {
+      "title": "Choose Your Language",
+      "description": "Select your preferred language for the app",
+      "search": "Search languages..."
+    },
     "interests": {
       "next": "Next"
     },

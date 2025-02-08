@@ -4,7 +4,6 @@ import { Button } from '../../../components/ui/button';
 import { Input } from '../../../components/ui/input';
 import { Label } from '../../../components/ui/label';
 import { format, parse } from 'date-fns';
-import { cn } from '../../../lib/utils';
 import { motion } from 'framer-motion';
 
 interface BirthDetails {
@@ -46,17 +45,17 @@ export const BirthDetailsForm: React.FC<BirthDetailsFormProps> = ({
   };
 
   return (
-    <div className="flex h-full flex-col bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
+    <div className="flex h-full flex-col bg-[#1a1b26] bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))] text-white">
       <motion.div
-        className="flex-none space-y-3 p-6"
+        className="flex-none space-y-3 p-8"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h2 className="bg-gradient-to-r from-white via-white to-white/80 bg-clip-text text-3xl font-bold tracking-tight text-transparent">
+        <h2 className="bg-gradient-to-r from-white via-white to-white/90 bg-clip-text text-3xl font-bold tracking-tight text-transparent">
           {t('onboarding.birthDetails.title')}
         </h2>
-        <p className="max-w-2xl text-lg leading-relaxed text-gray-400">
+        <p className="max-w-2xl text-base leading-relaxed text-gray-400/80">
           {t('onboarding.birthDetails.description')}
         </p>
       </motion.div>
@@ -75,95 +74,54 @@ export const BirthDetailsForm: React.FC<BirthDetailsFormProps> = ({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <Label className="text-sm font-medium text-gray-300">
+              <Label className="text-sm font-medium text-gray-400/80">
                 {t('onboarding.birthDetails.dateLabel')}
               </Label>
               <Input
                 type="datetime-local"
                 value={birthDetails.date ? format(birthDetails.date, "yyyy-MM-dd'T'HH:mm") : ''}
                 onChange={handleDateTimeChange}
-                className={cn(
-                  'h-12 rounded-xl px-4 py-2 text-white',
-                  'border border-gray-700/50 bg-gray-800/40 backdrop-blur-sm',
-                  'transition-all duration-300 ease-in-out',
-                  'focus:border-blue-500 focus:ring-1 focus:ring-blue-500',
-                  'hover:border-blue-500/30 hover:bg-blue-500/5'
-                )}
+                className="h-12 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-white backdrop-blur-xl placeholder:text-gray-500 hover:border-white/20 focus:border-blue-500/50 focus:outline-none focus:ring-1 focus:ring-blue-500/20"
               />
             </motion.div>
           ) : (
-            <>
-              <motion.div
-                className="space-y-2"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.1 }}
-              >
-                <Label className="text-sm font-medium text-gray-300">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label className="text-sm font-medium text-gray-400/80">
                   {t('onboarding.birthDetails.dateLabel')}
                 </Label>
                 <Input
                   type="date"
                   value={birthDetails.date ? format(birthDetails.date, 'yyyy-MM-dd') : ''}
                   onChange={handleDateTimeChange}
-                  className={cn(
-                    'h-12 rounded-xl px-4 py-2 text-white',
-                    'border border-gray-700/50 bg-gray-800/40 backdrop-blur-sm',
-                    'transition-all duration-300 ease-in-out',
-                    'focus:border-blue-500 focus:ring-1 focus:ring-blue-500',
-                    'hover:border-blue-500/30 hover:bg-blue-500/5'
-                  )}
+                  className="h-12 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-white backdrop-blur-xl placeholder:text-gray-500 hover:border-white/20 focus:border-blue-500/50 focus:outline-none focus:ring-1 focus:ring-blue-500/20"
                 />
-              </motion.div>
-
-              <motion.div
-                className="space-y-2"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.2 }}
-              >
-                <Label className="text-sm font-medium text-gray-300">
+              </div>
+              <div>
+                <Label className="text-sm font-medium text-gray-400/80">
                   {t('onboarding.birthDetails.timeLabel')}
                 </Label>
                 <Input
                   type="time"
                   value={birthDetails.time}
                   onChange={handleDateTimeChange}
-                  className={cn(
-                    'h-12 rounded-xl px-4 py-2 text-white',
-                    'border border-gray-700/50 bg-gray-800/40 backdrop-blur-sm',
-                    'transition-all duration-300 ease-in-out',
-                    'focus:border-blue-500 focus:ring-1 focus:ring-blue-500',
-                    'hover:border-blue-500/30 hover:bg-blue-500/5'
-                  )}
+                  className="h-12 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-white backdrop-blur-xl placeholder:text-gray-500 hover:border-white/20 focus:border-blue-500/50 focus:outline-none focus:ring-1 focus:ring-blue-500/20"
                 />
-              </motion.div>
-            </>
+              </div>
+            </div>
           )}
 
-          <motion.div
-            className="space-y-2"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.3 }}
-          >
-            <Label className="text-sm font-medium text-gray-300">
+          <div>
+            <Label className="text-sm font-medium text-gray-400/80">
               {t('onboarding.birthDetails.placeLabel')}
             </Label>
             <Input
               type="text"
               value={birthDetails.place}
               onChange={e => onBirthDetailsChange({ place: e.target.value })}
-              placeholder={t('onboarding.birthDetails.placePlaceholder')}
-              className={cn(
-                'h-12 rounded-xl px-4 py-2 text-white',
-                'border border-gray-700/50 bg-gray-800/40 backdrop-blur-sm',
-                'transition-all duration-300 ease-in-out',
-                'focus:border-blue-500 focus:ring-1 focus:ring-blue-500',
-                'hover:border-blue-500/30 hover:bg-blue-500/5'
-              )}
+              className="h-12 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-white backdrop-blur-xl placeholder:text-gray-500 hover:border-white/20 focus:border-blue-500/50 focus:outline-none focus:ring-1 focus:ring-blue-500/20"
             />
-          </motion.div>
+          </div>
         </div>
       </motion.div>
 
@@ -175,20 +133,9 @@ export const BirthDetailsForm: React.FC<BirthDetailsFormProps> = ({
       >
         <Button
           onClick={onNext}
-          disabled={!birthDetails.date || !birthDetails.time || !birthDetails.place}
-          className={cn(
-            'relative w-full overflow-hidden rounded-xl p-[1px] transition-all',
-            'bg-gradient-to-r from-blue-500 to-blue-600',
-            'hover:shadow-[0_0_2rem_-0.5rem_#3b82f6]',
-            'disabled:cursor-not-allowed disabled:opacity-50',
-            'group'
-          )}
+          className="relative w-full rounded-xl bg-gradient-to-r from-purple-500 to-purple-600 px-8 py-3.5 transition-all group-hover:bg-opacity-0"
         >
-          <div className="relative rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 px-8 py-3.5 transition-all group-hover:bg-opacity-0">
-            <span className="relative z-10 text-base font-medium text-white">
-              {t('common.next')}
-            </span>
-          </div>
+          {t('onboarding.nextButton')}
         </Button>
       </motion.div>
     </div>
