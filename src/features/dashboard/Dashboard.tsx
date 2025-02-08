@@ -1,7 +1,6 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Card } from '../../components/ui/Card';
+import { Card } from '../../components/ui/card';
 
 interface DashboardProps {
   userName?: string;
@@ -63,14 +62,10 @@ export function Dashboard({ userName }: DashboardProps) {
     <div className="space-y-6 px-4 py-6">
       {/* Welcome Section */}
       <section className="space-y-2">
-        <h2 className="font-heading text-2xl font-bold text-deepCharcoal dark:text-creamWhite">
-          {userName
-            ? t('dashboard.welcomeBack', { name: userName })
-            : t('dashboard.welcome')}
+        <h2 className="text-deepCharcoal dark:text-creamWhite font-heading text-2xl font-bold">
+          {userName ? t('dashboard.welcomeBack', { name: userName }) : t('dashboard.welcome')}
         </h2>
-        <p className="text-coolGray dark:text-coolGray/80">
-          {t('dashboard.subtitle')}
-        </p>
+        <p className="text-coolGray dark:text-coolGray/80">{t('dashboard.subtitle')}</p>
       </section>
 
       {/* Main Sections */}
@@ -80,23 +75,25 @@ export function Dashboard({ userName }: DashboardProps) {
         animate="visible"
         className="grid grid-cols-1 gap-4 sm:grid-cols-2"
       >
-        {sections.map((section) => (
+        {sections.map(section => (
           <motion.div key={section.id} variants={itemVariants}>
             <Card
               variant="interactive"
               icon={section.icon}
               title={section.title}
-              description={section.description}
-              onClick={() => window.location.href = section.link}
+              excerpt={section.description}
+              onClick={() => (window.location.href = section.link)}
               className="h-full"
-            />
+            >
+              <div>{section.description}</div>
+            </Card>
           </motion.div>
         ))}
       </motion.div>
 
       {/* Quick Actions */}
       <section className="space-y-4">
-        <h3 className="font-heading text-lg font-semibold text-deepCharcoal dark:text-creamWhite">
+        <h3 className="text-deepCharcoal dark:text-creamWhite font-heading text-lg font-semibold">
           {t('dashboard.quickActions')}
         </h3>
         <div className="grid grid-cols-2 gap-4">
@@ -104,13 +101,13 @@ export function Dashboard({ userName }: DashboardProps) {
             variant="highlight"
             icon="📅"
             title={t('dashboard.quickActions.schedule')}
-            onClick={() => window.location.href = '/schedule'}
+            onClick={() => (window.location.href = '/schedule')}
           />
           <Card
             variant="highlight"
             icon="📊"
             title={t('dashboard.quickActions.insights')}
-            onClick={() => window.location.href = '/insights'}
+            onClick={() => (window.location.href = '/insights')}
           />
         </div>
       </section>

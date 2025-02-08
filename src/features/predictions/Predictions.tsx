@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Card } from '../../components/ui/Card';
+import { Card } from '../../components/ui/card';
 
 type PredictionType = 'daily' | 'weekly' | 'monthly' | 'yearly';
 
@@ -77,12 +77,10 @@ export function Predictions() {
     <div className="space-y-6 px-4 py-6">
       {/* Header */}
       <section className="space-y-2">
-        <h1 className="font-heading text-2xl font-bold text-deepCharcoal dark:text-creamWhite">
+        <h1 className="text-deepCharcoal dark:text-creamWhite font-heading text-2xl font-bold">
           {t('predictions.title')}
         </h1>
-        <p className="text-coolGray dark:text-coolGray/80">
-          {t('predictions.subtitle')}
-        </p>
+        <p className="text-coolGray dark:text-coolGray/80">{t('predictions.subtitle')}</p>
       </section>
 
       {/* Timeframe Selection */}
@@ -120,7 +118,7 @@ export function Predictions() {
             exit={{ opacity: 0 }}
             className="flex items-center justify-center py-12"
           >
-            <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-vedicSaffron" />
+            <div className="border-vedicSaffron h-8 w-8 animate-spin rounded-full border-b-2 border-t-2" />
           </motion.div>
         ) : (
           <motion.div
@@ -132,30 +130,26 @@ export function Predictions() {
             className="space-y-6"
           >
             {/* Main Prediction */}
-            <Card
-              variant="default"
-              className="prose prose-lg dark:prose-invert"
-              contentClassName="space-y-4"
-            >
-              <p className="text-lg text-deepCharcoal dark:text-creamWhite">
+            <Card variant="default" className="prose prose-lg dark:prose-invert">
+              <p className="text-deepCharcoal dark:text-creamWhite text-lg">
                 {predictions[selectedType].content}
               </p>
             </Card>
 
             {/* Aspects */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-              {Object.entries(predictions[selectedType].aspects).map(
-                ([aspect, content]) => (
-                  <Card
-                    key={aspect}
-                    variant="interactive"
-                    icon={aspectIcons[aspect as keyof typeof aspectIcons]}
-                    title={t(`predictions.aspects.${aspect}`)}
-                    description={content}
-                    className="h-full"
-                  />
-                )
-              )}
+              {Object.entries(predictions[selectedType].aspects).map(([aspect, content]) => (
+                <Card
+                  key={aspect}
+                  variant="interactive"
+                  icon={aspectIcons[aspect as keyof typeof aspectIcons]}
+                  title={t(`predictions.aspects.${aspect}`)}
+                  excerpt={content}
+                  className="h-full"
+                >
+                  <div>{content}</div>
+                </Card>
+              ))}
             </div>
           </motion.div>
         )}

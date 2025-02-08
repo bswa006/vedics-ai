@@ -1,20 +1,18 @@
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ReactNode, useEffect, useState } from 'react';
-import { cn } from '../../lib/utils';
-import { Header } from './Header';
-import { BottomNav } from '../../components/navigation/BottomNav';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { BottomNav } from '../../components/navigation/BottomNav';
+import { cn } from '../../lib/utils';
 import { theme } from '../../styles/theme';
+import { Header } from './Header';
 
 interface LayoutProps {
   children: ReactNode;
-  darkMode: boolean;
-  setDarkMode: (value: boolean) => void;
   onLogout?: () => void;
   userId?: number | null;
 }
 
-export function Layout({ children, darkMode, setDarkMode, onLogout, userId }: LayoutProps) {
+export function Layout({ children, onLogout, userId }: LayoutProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const isOnboarding = location.pathname === '/onboarding';
@@ -57,7 +55,7 @@ export function Layout({ children, darkMode, setDarkMode, onLogout, userId }: La
 
   return (
     <motion.div className="from-midnight-indigo text-cream-white relative min-h-screen overflow-hidden bg-gradient-to-b via-[#1f1d3d] to-[#1a1b26] font-body transition-colors duration-300">
-      <Header darkMode={darkMode} setDarkMode={setDarkMode} onLogout={onLogout} userId={userId} />
+      <Header onLogout={onLogout} userId={userId} />
 
       <AnimatePresence mode="wait" initial={false}>
         <motion.main

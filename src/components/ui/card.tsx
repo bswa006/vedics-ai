@@ -1,13 +1,18 @@
-import { HTMLAttributes } from 'react';
+import { HTMLMotionProps, motion } from 'framer-motion';
+import * as React from 'react';
 import { cn } from '../../lib/utils';
-import { motion } from 'framer-motion';
 
-interface CardProps extends HTMLAttributes<HTMLDivElement> {
+interface CardProps extends HTMLMotionProps<'div'> {
   variant?: 'default' | 'interactive' | 'highlight';
   icon?: string;
   title?: string;
   excerpt?: string;
   cta?: string;
+  description?: string;
+  contentClassName?: string;
+  className?: string;
+  onClick?: () => void;
+  children?: React.ReactNode;
 }
 
 export function Card({
@@ -18,9 +23,10 @@ export function Card({
   excerpt,
   cta,
   children,
+  onClick,
   ...props
 }: CardProps) {
-  const variants = {
+  const variants: Record<NonNullable<CardProps['variant']>, string> = {
     default: 'bg-creamWhite dark:bg-midnightIndigo',
     interactive: 'cursor-pointer hover:border-celestialLilac/30 hover:bg-celestialLilac/5',
     highlight: 'border-vedicSaffron/50 bg-vedicSaffron/10',
@@ -28,16 +34,16 @@ export function Card({
 
   return (
     <motion.div
-      whileHover={variant === 'interactive' ? { scale: 1.02 } : undefined}
       className={cn(
         'rounded-xl border border-gray-200 dark:border-gray-700/50',
         'shadow-lg backdrop-blur-sm transition-all duration-300',
         variants[variant],
         className
       )}
+      onClick={onClick}
       {...props}
     >
-      <div className="p-5 space-y-4">
+      <div className="space-y-4 p-5">
         {(icon || title) && (
           <div className="flex items-center space-x-3">
             {icon && (
@@ -46,19 +52,21 @@ export function Card({
               </span>
             )}
             {title && (
-              <h3 className="font-heading font-semibold text-lg bg-gradient-to-r from-deepCharcoal to-deepCharcoal/90 dark:from-white dark:to-white/90 bg-clip-text text-transparent">
+              <h3 className="from-deepCharcoal to-deepCharcoal/90 bg-gradient-to-r bg-clip-text font-heading text-lg font-semibold text-transparent dark:from-white dark:to-white/90">
                 {title}
               </h3>
             )}
           </div>
         )}
         {excerpt && (
-          <p className="text-coolGray dark:text-gray-400 text-sm leading-relaxed">
-            {excerpt}
-          </p>
+          <p className="text-coolGray text-sm leading-relaxed dark:text-gray-400">{excerpt}</p>
         )}
         {cta && (
-          <button className="text-vedicSaffron hover:text-vedicSaffron/80 text-sm font-medium transition-colors">
+          <button
+            type="button"
+            className="text-vedicSaffron hover:text-vedicSaffron/80 text-sm font-medium transition-colors"
+            aria-label={cta}
+          >
             {cta}
           </button>
         )}

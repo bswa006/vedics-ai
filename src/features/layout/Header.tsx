@@ -1,17 +1,15 @@
 import { useTranslation } from 'react-i18next';
-import { LogOut, Moon, Sun } from 'lucide-react';
+import { LogOut } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { format } from 'date-fns';
 import LanguageSwitcher from '../../components/LanguageSwitcher';
 
 interface HeaderProps {
-  darkMode: boolean;
-  setDarkMode: (value: boolean) => void;
   onLogout: (() => void) | undefined;
   userId: number | null | undefined;
 }
 
-export function Header({ darkMode, setDarkMode, onLogout, userId }: HeaderProps) {
+export function Header({ onLogout, userId }: HeaderProps) {
   const { t } = useTranslation();
   const currentTime = new Date();
   const hours = currentTime.getHours();

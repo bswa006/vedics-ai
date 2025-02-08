@@ -37,8 +37,6 @@ const AppContent: React.FC<AppContentProps> = React.memo(
   ({
     userId,
     setUserId,
-    darkMode,
-    setDarkMode,
     handleLogout,
     showLogoutModal,
     setShowLogoutModal,
@@ -144,12 +142,7 @@ const AppContent: React.FC<AppContentProps> = React.memo(
           <Route
             path="/onboarding"
             element={
-              <Layout
-                darkMode={darkMode}
-                setDarkMode={setDarkMode}
-                onLogout={handleLogout}
-                userId={userId}
-              >
+              <Layout onLogout={handleLogout} userId={userId}>
                 <OnboardingFlow
                   onComplete={async (data: unknown) => {
                     await new Promise(resolve => setTimeout(resolve, 500));
@@ -173,12 +166,7 @@ const AppContent: React.FC<AppContentProps> = React.memo(
               !localStorage.getItem('token') ? (
                 <Navigate to="/login" replace />
               ) : (
-                <Layout
-                  darkMode={darkMode}
-                  setDarkMode={setDarkMode}
-                  onLogout={handleLogout}
-                  userId={userId}
-                >
+                <Layout onLogout={handleLogout} userId={userId}>
                   <div className="mx-auto max-w-5xl space-y-4 pb-4 text-text-light-primary transition-colors duration-200 dark:text-text-dark-primary">
                     {isUserOnboarding && predictions && predictions.length === 0 && (
                       <div className="mx-auto mt-4 max-w-3xl px-4">
@@ -326,12 +314,7 @@ const AppContent: React.FC<AppContentProps> = React.memo(
               ) : isUserOnboarding ? (
                 <Navigate to="/onboarding" replace />
               ) : (
-                <Layout
-                  darkMode={darkMode}
-                  setDarkMode={setDarkMode}
-                  onLogout={handleLogout}
-                  userId={userId}
-                >
+                <Layout onLogout={handleLogout} userId={userId}>
                   <Profile />
                 </Layout>
               )
@@ -345,12 +328,7 @@ const AppContent: React.FC<AppContentProps> = React.memo(
               ) : isUserOnboarding ? (
                 <Navigate to="/onboarding" replace />
               ) : (
-                <Layout
-                  darkMode={darkMode}
-                  setDarkMode={setDarkMode}
-                  onLogout={handleLogout}
-                  userId={userId}
-                >
+                <Layout onLogout={handleLogout} userId={userId}>
                   <Chat />
                 </Layout>
               )
@@ -364,12 +342,7 @@ const AppContent: React.FC<AppContentProps> = React.memo(
               ) : isUserOnboarding ? (
                 <Navigate to="/onboarding" replace />
               ) : (
-                <Layout
-                  darkMode={darkMode}
-                  setDarkMode={setDarkMode}
-                  onLogout={handleLogout}
-                  userId={userId}
-                >
+                <Layout onLogout={handleLogout} userId={userId}>
                   <DailyStars userId={userId as number} />
                 </Layout>
               )
@@ -431,10 +404,7 @@ const App: React.FC = () => {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
-  const [darkMode, setDarkMode] = useState(() => {
-    const storedDarkMode = localStorage.getItem('darkMode');
-    return storedDarkMode ? JSON.parse(storedDarkMode) : false;
-  });
+  const [darkMode, setDarkMode] = useState<boolean>(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const handleLogout = useCallback(() => {
@@ -457,12 +427,12 @@ const App: React.FC = () => {
         <AppContent
           userId={userId}
           setUserId={setUserId}
-          darkMode={darkMode}
-          setDarkMode={setDarkMode}
           handleLogout={handleLogout}
           showLogoutModal={showLogoutModal}
           setShowLogoutModal={setShowLogoutModal}
           confirmLogout={confirmLogout}
+          darkMode={darkMode}
+          setDarkMode={setDarkMode}
         />
       </UserDataProvider>
     </Router>

@@ -42,11 +42,12 @@ export function Onboarding() {
 
     try {
       // Update user profile with birth details
-      await api.profiles.updateProfile({
+      const userId = Number(localStorage.getItem('userId'));
+      await api.profiles.updateProfile(userId, {
         date_of_birth: birthDetails.date,
         time_of_birth: birthDetails.time,
         place_of_birth: birthDetails.place,
-        interests: selectedInterests,
+        area_of_interests: selectedInterests,
       });
 
       // Navigate to home page
@@ -220,6 +221,7 @@ export function Onboarding() {
                 <InterestsSelection
                   selectedInterests={selectedInterests}
                   onInterestsChange={setSelectedInterests}
+                  onNext={handleSubmit}
                 />
                 {error && (
                   <div className="rounded-lg bg-red-50 p-3 text-center text-sm text-red-500 dark:bg-red-900/20 dark:text-red-400">
