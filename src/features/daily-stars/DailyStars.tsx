@@ -121,7 +121,7 @@ export function DailyStars({ userId }: DailyStarsProps) {
     }
   };
 
-  const renderValue = (value: any, key: string): JSX.Element | JSX.Element[] => {
+  const renderValue = (value: any): JSX.Element | JSX.Element[] => {
     if (Array.isArray(value)) {
       return <div className="flex flex-wrap gap-2">{renderArrayContent(value)}</div>;
     } else if (typeof value === 'string') {
@@ -148,7 +148,7 @@ export function DailyStars({ userId }: DailyStarsProps) {
                 .map(word => word.charAt(0).toLowerCase() + word.slice(1))
                 .join(' ')}
             </h3>
-            {renderValue(value, key)}
+            {renderValue(value)}
           </div>
         ))}
     </div>
