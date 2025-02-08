@@ -47,9 +47,7 @@ export function Login() {
             if (userProfile.id) {
               localStorage.setItem('userId', userProfile.id.toString());
               window.dispatchEvent(new Event('storage'));
-
-              await new Promise(resolve => setTimeout(resolve, 100));
-
+              
               if (
                 userProfile.date_of_birth &&
                 userProfile.time_of_birth &&
@@ -57,7 +55,7 @@ export function Login() {
               ) {
                 navigate('/', { replace: true });
               } else {
-                navigate('/onboarding');
+                navigate('/onboarding', { replace: true });
               }
             } else {
               setError('Failed to get user profile');
@@ -247,14 +245,20 @@ export function Login() {
                   <input
                     id="username"
                     name="username"
-                    type="text"
+                    type="tel"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    maxLength={10}
                     required
                     className="block w-full rounded-lg border border-white/5 bg-[#2A2B3B] px-4 py-2 pl-11 text-white placeholder-gray-500 focus:border-[#7F7ACA]/50 focus:outline-none focus:ring-2 focus:ring-[#7F7ACA]/20"
                     placeholder="Enter your phone number"
                     value={formData.username}
-                    onChange={e =>
-                      setFormData({ ...formData, username: e.target.value, password: e.target.value })
-                    }
+                    onChange={e => {
+                      const value = e.target.value.replace(/[^0-9]/g, '');
+                      if (value.length <= 10) {
+                        setFormData({ ...formData, username: value, password: value });
+                      }
+                    }}
                   />
                   <Phone className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[#7F7ACA]" />
                 </div>

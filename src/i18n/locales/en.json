@@ -47,7 +47,6 @@
     "yes": "yes",
     "no": "no",
     "confirm": "confirm",
-    "cancel": "cancel",
     "logout": "Logout"
   },
   "login": {
@@ -191,10 +190,7 @@
       "headline": "Unlock the Power of Vedic Astrology",
       "subtext": "Personalized insights, daily guidance, and AI-driven astrology—all at your fingertips!"
     },
-    "language": {
-      "title": "Choose Your Language",
-      "description": "Select your preferred language for the app"
-    },
+
     "birthDetails": {
       "title": "Enter Your Birth Details",
       "description": "Your birth details help us create accurate astrological predictions",

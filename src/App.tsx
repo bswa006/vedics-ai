@@ -2,7 +2,14 @@ import React, { useCallback, useState, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { api } from './services/api';
 import { useTranslation } from 'react-i18next';
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+  Navigate,
+  useNavigate,
+  useLocation,
+} from 'react-router-dom';
+import { AnimatedRoutes } from './components/AnimatedRoutes';
 import './App.css';
 import { Layout } from './features/layout/Layout';
 import { PredictionContent } from './features/predictions/PredictionContent';
@@ -69,12 +76,14 @@ const AppContent: React.FC<AppContentProps> = React.memo(
       [userData]
     );
 
+    const location = useLocation();
+
     // Handle routing based on auth state and profile completion
     useEffect(() => {
       const token = localStorage.getItem('token');
-      const currentPath = window.location.pathname;
+      const currentPath = location.pathname;
 
-      // Don't make any routing decisions while data is loading
+      // Don't make any routing decisions while loading
       if (loading) return;
 
       // Not authenticated - redirect to login
@@ -83,8 +92,8 @@ const AppContent: React.FC<AppContentProps> = React.memo(
         return;
       }
 
-      // Authenticated but no data yet - wait
-      if (token && !userData) return;
+      // Wait for user data to be loaded
+      if (!userData && token) return;
 
       // Authenticated with data - handle routing
       if (token && userData) {
@@ -97,7 +106,7 @@ const AppContent: React.FC<AppContentProps> = React.memo(
           navigate('/', { replace: true });
         }
       }
-    }, [isProfileIncomplete, navigate, loading, userData]);
+    }, [isProfileIncomplete, navigate, loading, userData, location]);
 
     return (
       <>
@@ -126,7 +135,7 @@ const AppContent: React.FC<AppContentProps> = React.memo(
             {t('auth.logoutConfirmMessage')}
           </Modal>
         )}
-        <Routes>
+        <AnimatedRoutes>
           {/* Public Routes */}
           <Route
             path="/login"
@@ -171,7 +180,7 @@ const AppContent: React.FC<AppContentProps> = React.memo(
                   userId={userId}
                 >
                   <div className="mx-auto max-w-5xl space-y-4 pb-4 text-text-light-primary transition-colors duration-200 dark:text-text-dark-primary">
-                    {isUserOnboarding && (
+                    {isUserOnboarding && predictions && predictions.length === 0 && (
                       <div className="mx-auto mt-4 max-w-3xl px-4">
                         <motion.div
                           initial={{ opacity: 0, y: 20 }}
@@ -377,7 +386,7 @@ const AppContent: React.FC<AppContentProps> = React.memo(
               )
             }
           />
-        </Routes>
+        </AnimatedRoutes>
       </>
     );
   }
