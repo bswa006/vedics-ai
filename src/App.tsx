@@ -21,6 +21,7 @@ import './i18n/config';
 import { Modal } from './components/Modal';
 import { UserDataProvider, useUserDataContext } from './contexts/UserDataContext';
 import { OnboardingFlow } from './features/onboarding/OnboardingFlow';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 interface AppContentProps {
   userId: number | null;
@@ -422,20 +423,22 @@ const App: React.FC = () => {
   console.log('app rendering...');
 
   return (
-    <Router>
-      <UserDataProvider>
-        <AppContent
-          userId={userId}
-          setUserId={setUserId}
-          handleLogout={handleLogout}
-          showLogoutModal={showLogoutModal}
-          setShowLogoutModal={setShowLogoutModal}
-          confirmLogout={confirmLogout}
-          darkMode={darkMode}
-          setDarkMode={setDarkMode}
-        />
-      </UserDataProvider>
-    </Router>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+      <Router>
+        <UserDataProvider>
+          <AppContent
+            userId={userId}
+            setUserId={setUserId}
+            darkMode={darkMode}
+            setDarkMode={setDarkMode}
+            handleLogout={handleLogout}
+            showLogoutModal={showLogoutModal}
+            setShowLogoutModal={setShowLogoutModal}
+            confirmLogout={confirmLogout}
+          />
+        </UserDataProvider>
+      </Router>
+    </GoogleOAuthProvider>
   );
 };
 

@@ -143,6 +143,8 @@ export const api = {
         return handleAxiosError(error);
       }
     },
+    googleLogin: (data: { access_token: string }) =>
+      axiosInstance.post('/auth/google/', data).then(response => response.data),
   },
   profiles: {
     updateProfile: async (userId: number, data: {

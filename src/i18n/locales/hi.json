@@ -38,7 +38,9 @@
       "phoneNumber": "+91XXXXXXXXXX",
       "locationOfBirth": "शहर, देश"
     },
-    "submit": "यात्रा जारी रखें"
+    "submit": "यात्रा जारी रखें",
+    "orContinueWith": "या इससे जारी रखें",
+    "continueWithGoogle": "Google के साथ जारी रखें"
   },
   "birthDetails": {
     "birthDate": "जन्म तिथि",
