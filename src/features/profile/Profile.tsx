@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useUserDataContext } from '../../contexts/UserDataContext';
 import { theme } from '../../styles/theme';
+import { utcToLocal } from '../../utils/dateTime';
 import { EditableProfile } from './EditableProfile';
 
 export function Profile() {
@@ -136,13 +137,13 @@ export function Profile() {
                     <label className="block text-sm font-medium text-gray-300">
                       {t('profile.birthDate')}
                     </label>
-                    <p className="text-lg text-white">{userData.date_of_birth}</p>
+                    <p className="text-lg text-white">{userData.date_of_birth && userData.time_of_birth ? utcToLocal(userData.date_of_birth, userData.time_of_birth).localDate : userData.date_of_birth}</p>
                   </div>
                   <div className="space-y-2">
                     <label className="block text-sm font-medium text-gray-300">
                       {t('profile.birthTime')}
                     </label>
-                    <p className="text-lg text-white">{userData.time_of_birth}</p>
+                    <p className="text-lg text-white">{userData.date_of_birth && userData.time_of_birth ? utcToLocal(userData.date_of_birth, userData.time_of_birth).localTime : userData.time_of_birth}</p>
                   </div>
                   <div className="space-y-2">
                     <label className="block text-sm font-medium text-gray-300">

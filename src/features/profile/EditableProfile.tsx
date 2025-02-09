@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { LANGUAGES } from '../onboarding/components/LanguageSelection';
 import { api } from '../../services/api';
 import { theme } from '../../styles/theme';
+import { utcToLocal, localToUtc } from '../../utils/dateTime';
 
 interface EditableProfileProps {
   user: User;
@@ -16,12 +17,18 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  // Convert UTC to local time for initial display
+  const initialLocalDateTime =
+    user.date_of_birth && user.time_of_birth
+      ? utcToLocal(user.date_of_birth, user.time_of_birth)
+      : { localDate: user.date_of_birth || '', localTime: user.time_of_birth || '' };
+
   const [formData, setFormData] = useState({
     first_name: user.user.first_name,
     last_name: user.user.last_name,
     email: user.user.email,
-    date_of_birth: user.date_of_birth || '',
-    time_of_birth: user.time_of_birth || '',
+    date_of_birth: initialLocalDateTime.localDate,
+    time_of_birth: initialLocalDateTime.localTime,
     place_of_birth: user.place_of_birth || '',
     preferred_language: user.preferred_language,
     area_of_interests: user.area_of_interests || [],
@@ -51,9 +58,12 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
     setError('');
 
     try {
+      // Convert local time to UTC before saving
+      const utcDateTime = localToUtc(formData.date_of_birth, formData.time_of_birth);
+
       await api.profiles.updateProfile(user.id, {
-        date_of_birth: formData.date_of_birth,
-        time_of_birth: formData.time_of_birth,
+        date_of_birth: utcDateTime.utcDate,
+        time_of_birth: utcDateTime.utcTime,
         place_of_birth: formData.place_of_birth,
         preferred_language: formData.preferred_language,
         area_of_interests: formData.area_of_interests,
@@ -80,7 +90,7 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
       aria-label={t('profile.editForm')}
     >
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="space-y-1">
           <motion.h1
             initial={{ opacity: 0, x: -20 }}
@@ -100,7 +110,7 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
           <motion.button
             type="button"
             onClick={onCancel}
-            className="rounded-xl border border-white/10 bg-white/5 px-4 sm:px-6 py-2 text-sm font-medium text-white backdrop-blur-xl transition-all hover:bg-white/10 whitespace-nowrap"
+            className="whitespace-nowrap rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white backdrop-blur-xl transition-all hover:bg-white/10 sm:px-6"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -109,12 +119,12 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
           <motion.button
             type="submit"
             disabled={loading}
-            className="group relative overflow-hidden rounded-xl p-[1px] whitespace-nowrap"
+            className="group relative overflow-hidden whitespace-nowrap rounded-xl p-[1px]"
             style={{ background: theme.gradients.primary }}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            <div className="bg-midnightIndigo relative rounded-xl px-4 sm:px-6 py-2 transition-all group-hover:bg-transparent">
+            <div className="bg-midnightIndigo relative rounded-xl px-4 py-2 transition-all group-hover:bg-transparent sm:px-6">
               <span className="relative z-10 text-sm font-medium text-white">
                 {loading ? t('common.saving') : t('common.save')}
               </span>
@@ -172,7 +182,7 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
                   type="date"
                   value={formData.date_of_birth}
                   onChange={e => setFormData({ ...formData, date_of_birth: e.target.value })}
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white backdrop-blur-xl focus:border-celestialLilac/40 focus:outline-none focus:ring-0"
+                  className="focus:border-celestialLilac/40 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white backdrop-blur-xl focus:outline-none focus:ring-0"
                   required
                 />
               </div>
@@ -184,7 +194,7 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
                   type="time"
                   value={formData.time_of_birth}
                   onChange={e => setFormData({ ...formData, time_of_birth: e.target.value })}
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white backdrop-blur-xl focus:border-celestialLilac/40 focus:outline-none focus:ring-0"
+                  className="focus:border-celestialLilac/40 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white backdrop-blur-xl focus:outline-none focus:ring-0"
                   required
                 />
               </div>
@@ -196,7 +206,7 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
                   type="text"
                   value={formData.place_of_birth}
                   onChange={e => setFormData({ ...formData, place_of_birth: e.target.value })}
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white backdrop-blur-xl focus:border-celestialLilac/40 focus:outline-none focus:ring-0"
+                  className="focus:border-celestialLilac/40 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white backdrop-blur-xl focus:outline-none focus:ring-0"
                   required
                 />
               </div>
@@ -251,7 +261,7 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
                 <select
                   value={formData.preferred_language}
                   onChange={e => setFormData({ ...formData, preferred_language: e.target.value })}
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white backdrop-blur-xl focus:border-celestialLilac/40 focus:outline-none focus:ring-0"
+                  className="focus:border-celestialLilac/40 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white backdrop-blur-xl focus:outline-none focus:ring-0"
                 >
                   {LANGUAGES.map(lang => (
                     <option key={lang.code} value={lang.code}>

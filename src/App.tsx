@@ -167,79 +167,33 @@ const AppContent: React.FC<AppContentProps> = React.memo(
                 <Navigate to="/login" replace />
               ) : (
                 <Layout onLogout={handleLogout} userId={userId}>
-                  <div className="mx-auto max-w-5xl space-y-4 pb-4 text-text-light-primary transition-colors duration-200 dark:text-text-dark-primary">
-                    {isUserOnboarding && predictions && predictions.length === 0 && (
-                      <div className="mx-auto mt-4 max-w-3xl px-4">
-                        <motion.div
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className="relative overflow-hidden rounded-xl bg-gradient-to-r from-purple-50 via-blue-50 to-indigo-50 p-6 shadow-lg transition-all duration-300 hover:shadow-xl dark:from-purple-900/30 dark:via-blue-900/30 dark:to-indigo-900/30 dark:shadow-indigo-900/10"
-                        >
-                          {/* Animated background effect */}
+                  <div className="mx-auto flex min-h-0 w-full max-w-5xl flex-col text-text-light-primary transition-colors duration-200 dark:text-text-dark-primary">
+                    <div className="pt-20">
+                      {isUserOnboarding && (
+                        <div className="z-50 mx-auto w-full max-w-3xl px-4">
                           <motion.div
-                            className="absolute inset-0 bg-gradient-to-r from-purple-200/20 via-blue-200/20 to-indigo-200/20 dark:from-purple-500/10 dark:via-blue-500/10 dark:to-indigo-500/10"
-                            animate={{
-                              opacity: [0.5, 0.8, 0.5],
-                              scale: [1, 1.1, 1],
-                            }}
-                            transition={{
-                              duration: 4,
-                              repeat: Infinity,
-                              ease: 'easeInOut',
-                            }}
-                          />
-                          <div className="relative flex items-center gap-6">
-                            <div className="flex-none">
-                              <div className="relative">
-                                {/* Rotating gradient border */}
-                                <motion.div
-                                  className="absolute -inset-1 rounded-xl bg-gradient-to-r from-violet-600 via-blue-600 to-purple-600 opacity-75 blur-sm group-hover:opacity-100"
-                                  animate={{
-                                    background: [
-                                      'linear-gradient(0deg, #4F46E5, #7C3AED, #2563EB)',
-                                      'linear-gradient(360deg, #2563EB, #4F46E5, #7C3AED)',
-                                    ],
-                                  }}
-                                  transition={{
-                                    duration: 3,
-                                    repeat: Infinity,
-                                    ease: 'linear',
-                                  }}
-                                />
-                                <motion.div
-                                  animate={{
-                                    rotate: [0, 360],
-                                  }}
-                                  transition={{
-                                    duration: 8,
-                                    repeat: Infinity,
-                                    ease: 'linear',
-                                  }}
-                                  className="relative flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500/10 via-purple-500/10 to-pink-500/10 p-[1px] backdrop-blur-xl"
-                                >
-                                  {/* Inner content with glass effect */}
-                                  <div className="relative h-full w-full overflow-hidden rounded-xl bg-white/90 dark:bg-gray-900/90">
-                                    {/* Animated background shapes */}
-                                    <motion.div
-                                      className="absolute inset-0 opacity-30"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="bg-midnightIndigo mt-4 overflow-hidden rounded-xl border border-white/10 p-3 backdrop-blur-xl"
+                          >
+                            <div className="relative flex items-center gap-4">
+                              <div className="flex-none">
+                                <div className="relative">
+                                  <motion.div
+                                    animate={{
+                                      rotate: [0, 360],
+                                    }}
+                                    transition={{
+                                      duration: 8,
+                                      repeat: Infinity,
+                                      ease: 'linear',
+                                    }}
+                                    className="bg-celestialLilac/20 relative flex h-10 w-10 items-center justify-center rounded-lg"
+                                  >
+                                    <motion.span
+                                      className="text-white"
                                       animate={{
-                                        background: [
-                                          'radial-gradient(circle at 50% 50%, #4F46E5 0%, transparent 50%)',
-                                          'radial-gradient(circle at 60% 40%, #7C3AED 0%, transparent 50%)',
-                                          'radial-gradient(circle at 40% 60%, #2563EB 0%, transparent 50%)',
-                                        ],
-                                      }}
-                                      transition={{
-                                        duration: 4,
-                                        repeat: Infinity,
-                                        ease: 'easeInOut',
-                                      }}
-                                    />
-                                    {/* Animated icon */}
-                                    <motion.div
-                                      className="relative flex h-full w-full items-center justify-center text-2xl"
-                                      animate={{
-                                        scale: [1, 1.2, 1],
+                                        scale: [1, 1.1, 1],
                                       }}
                                       transition={{
                                         duration: 2,
@@ -247,38 +201,24 @@ const AppContent: React.FC<AppContentProps> = React.memo(
                                         ease: 'easeInOut',
                                       }}
                                     >
-                                      <motion.span
-                                        className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent"
-                                        animate={{
-                                          opacity: [0.7, 1, 0.7],
-                                          scale: [1, 1.1, 1],
-                                          rotate: [0, 15, -15, 0],
-                                        }}
-                                        transition={{
-                                          duration: 3,
-                                          repeat: Infinity,
-                                          ease: 'easeInOut',
-                                        }}
-                                      >
-                                        ✨
-                                      </motion.span>
-                                    </motion.div>
-                                  </div>
-                                </motion.div>
+                                      ✨
+                                    </motion.span>
+                                  </motion.div>
+                                </div>
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <h2 className="text-base font-medium text-white">
+                                  {t('onboarding.pendingTitle')}
+                                </h2>
+                                <p className="text-sm text-gray-400">
+                                  {t('onboarding.pendingDescription')}
+                                </p>
                               </div>
                             </div>
-                            <div className="min-w-0 flex-1 space-y-2">
-                              <h2 className="bg-gradient-to-r from-purple-900 via-blue-900 to-indigo-900 bg-clip-text text-lg font-semibold text-transparent dark:from-purple-200 dark:via-blue-200 dark:to-indigo-200">
-                                {t('onboarding.pendingTitle')}
-                              </h2>
-                              <p className="text-sm leading-relaxed text-purple-800/80 dark:text-purple-200/80">
-                                {t('onboarding.pendingDescription')}
-                              </p>
-                            </div>
-                          </div>
-                        </motion.div>
-                      </div>
-                    )}
+                          </motion.div>
+                        </div>
+                      )}
+                    </div>
                     {error ? (
                       <div className="text-center text-red-500 transition-colors duration-200 dark:text-red-400">
                         {t('common.error')}: {error}
