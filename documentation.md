@@ -1,138 +1,141 @@
 # Vedics App Documentation
 
 ## Project Overview
-Vedics App is a comprehensive Vedic astrology application that provides personalized predictions, daily readings, and spiritual guidance based on user's birth details. The application is built using modern web technologies including React, TypeScript, and Tailwind CSS.
-
-## Project Timeline and Components
-
-### Initial Setup (Foundation)
-- Set up a React + TypeScript project using Vite
-- Implemented basic project structure with routing and component organization
-- Added essential dependencies including:
-  - React Router for navigation
-  - Axios for API communication
-  - i18next for internationalization
-  - TailwindCSS for styling
-
-### Core Features Development
-
-#### Birth Details Module
-- Implemented user registration flow
-- Created birth details form capturing:
-  - Date of birth
-  - Time of birth
-  - Place of birth
-  - Phone number
-- Added geocoding functionality using node-geocoder for accurate birth location data
-
-#### Predictions System
-Developed a comprehensive predictions system with multiple categories:
-
-1. Core Personality and Life Path
-   - Personality traits analysis
-   - Strengths and weaknesses assessment
-   - Social perception insights
-   - Past life influences
-
-2. Career Success and Wealth
-   - Ideal profession recommendations
-   - Financial growth predictions
-   - Career transformation periods
-   - Foreign opportunities analysis
-   - Business vs employment guidance
-
-3. Relationships, Love, and Marriage
-   - Relationship trait analysis
-   - Marriage predictions
-   - Partner compatibility traits
-   - Relationship challenges
-
-4. Health and Wellbeing
-   - Health concerns identification
-   - Personalized recommendations
-   - Long-term health predictions
-
-5. Challenges and Remedies
-   - Personal challenge identification
-   - Customized remedies including:
-     - Mantras
-     - Spiritual practices
-     - Astrological recommendations
-
-6. Major Life Periods
-   - Early life predictions
-   - Mid-life forecasts
-   - Later years insights
-
-#### Today's Readings Feature
-- Implemented daily personalized readings
-- API integration for fresh daily content
-- User-specific reading generation
-
-#### Interactive Chat System
-- Developed an AI-powered chat system
-- Implemented session management
-- Created user message history
-- Integrated with backend API for responses
-
-### Technical Architecture
-
-#### Frontend Structure
-- `/src/components/`: Reusable UI components
-- `/src/features/`: Feature-specific components and logic
-- `/src/services/`: API and service integrations
-- `/src/types/`: TypeScript type definitions
-- `/src/hooks/`: Custom React hooks
-- `/src/i18n/`: Internationalization setup
-
-#### API Integration
-- Centralized API service with axios
-- Structured endpoint organization
-- Error handling and response typing
-- Session management
-
-#### State Management
-- React hooks for local state
-- Context API for global state
-- Type-safe state management
-
-## Current State
-The application currently serves as a comprehensive Vedic astrology platform with:
-- User registration and profile management
-- Detailed birth chart analysis
-- Multiple prediction categories
-- Daily readings
-- Interactive chat support
-- Mobile-responsive design
-- Multi-language support
-
-## Future Development Plans
-1. Enhanced prediction accuracy
-2. Additional prediction categories
-3. Advanced chart visualization
-4. Community features
-5. Offline support
-6. Push notifications
-7. Premium features integration
+Vedics App is a modern Vedic astrology application built with React and TypeScript. It provides personalized astrological insights, daily readings, and an AI-powered chat system for spiritual guidance.
 
 ## Technical Stack
-- Frontend: React + TypeScript
-- Build Tool: Vite
-- Styling: TailwindCSS
-- Testing: Vitest
-- API Communication: Axios
-- Routing: React Router
-- Code Quality: ESLint + Prettier
-- Version Control: Git
-- CI/CD: (To be documented)
+- **Frontend Framework**: React 18.3.1 with TypeScript
+- **Build Tool**: Vite 6.1.0
+- **Styling**: TailwindCSS with clsx and tailwind-merge for class composition
+- **UI Components**: Radix UI primitives
+- **Animations**: Framer Motion 12.3.0
+- **Routing**: React Router 7.1.5
+- **API Communication**: Axios 1.7.9
+- **Internationalization**: i18next 24.2.2
+- **Date Handling**: date-fns 4.1.0
+- **Markdown Rendering**: react-markdown 9.0.3
+- **Icons**: Lucide React 0.474.0
+- **Testing**: Vitest with React Testing Library
 
-## Getting Started
-1. Clone the repository
-2. Install dependencies: `npm install`
-3. Start development server: `npm run dev`
-4. Build for production: `npm run build`
+## Project Structure
+
+### Core Directories
+- `/src/components/`: Reusable UI components
+  - `/ui/`: Radix UI based components
+  - `/navigation/`: Navigation-related components
+- `/src/features/`: Feature-specific modules
+  - `/auth/`: Authentication
+  - `/chat/`: AI chat system
+  - `/daily-stars/`: Daily readings
+  - `/onboarding/`: User onboarding flow
+  - `/predictions/`: Astrological predictions
+  - `/profile/`: User profile management
+- `/src/services/`: API services
+- `/src/hooks/`: Custom React hooks
+- `/src/contexts/`: React context providers
+- `/src/i18n/`: Internationalization setup
+- `/src/types/`: TypeScript type definitions
+
+## Core Features
+
+### Authentication & User Management
+- Secure login system
+- User profile management
+- Birth details collection and storage
+- Multi-language support
+
+### Predictions System
+Implements a modular prediction system that displays various types of astrological insights:
+- Renders predictions in a tabbed interface
+- Supports multiple prediction types
+- Handles both text and structured data
+- Responsive and interactive prediction cards
+
+### Daily Stars Feature
+- Fetches personalized daily readings
+- Real-time updates
+- Error handling and loading states
+- Responsive layout for different screen sizes
+
+### AI Chat System
+Implements an interactive chat system with:
+- Real-time message handling
+- Session management
+- Message history
+- Suggested questions
+- Markdown support for formatted responses
+- Typing indicators
+
+### Onboarding Flow
+- Multi-step user onboarding
+- Birth details collection
+- Language selection
+- Interest selection
+- Form validation
+
+## Development Setup
+
+### Prerequisites
+- Node.js (Latest LTS version)
+- npm or yarn
+
+### Installation
+```bash
+npm install
+```
+
+### Development Commands
+```bash
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Run tests
+npm test
+
+# Run linting
+npm run lint
+
+# Format code
+npm run format
+```
+
+### Code Quality Tools
+- ESLint for code linting
+- Prettier for code formatting
+- Husky for git hooks
+- TypeScript for type checking
+
+## Build and Optimization
+- Optimized chunk splitting
+- Modern bundle size management
+- Source maps for production debugging
+- TypeScript strict mode enabled
+
+## Testing
+- Unit testing with Vitest
+- React Testing Library for component tests
+- Jest DOM for DOM testing utilities
+- User event simulation support
+
+## Future Development
+1. Enhanced prediction algorithms
+2. Advanced chart visualizations
+3. Offline support
+4. Push notifications
+5. Community features
+6. Premium subscription features
+7. Mobile app development
 
 ## Contributing
+- Follow the established code style
+- Write tests for new features
+- Update documentation for significant changes
+- Use conventional commits for version control
+
+
 - Follow the established code style
 - Write tests for new features
 - Update documentation for significant changes
