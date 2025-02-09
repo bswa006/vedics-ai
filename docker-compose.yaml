@@ -1,0 +1,15 @@
+version: '3.8'  # Use a version compatible with your Docker Engine version
+
+services:
+  app:
+    image: vedic-portal
+    build: .
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - NODE_ENV=development
+    restart: always
+    command: npm run dev -- --host 0.0.0.0

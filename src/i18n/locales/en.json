@@ -65,7 +65,9 @@
       "phoneNumber": "+1234567890",
       "locationOfBirth": "City, Country"
     },
-    "submit": "continue journey"
+    "submit": "continue journey",
+    "orContinueWith": "Or continue with",
+    "continueWithGoogle": "Continue with Google"
   },
   "profile": {
     "title": "My Profile",
