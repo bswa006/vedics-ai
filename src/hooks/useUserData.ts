@@ -88,19 +88,20 @@ export const useUserData = () => {
     const token = localStorage.getItem('token');
     const userId = localStorage.getItem('userId');
     
-
-    
     if (!token || !userId) {
-      // Clear any remaining localStorage items
       localStorage.clear();
-      // Only navigate if we're not already on the login page
       if (window.location.pathname !== '/login') {
         navigate('/login');
       }
       return;
     }
 
-    // Start polling if we're on the home page and long-term reading is pending
+    // Immediately fetch data if we have valid credentials
+    if (!userData) {
+      fetchUserData();
+    }
+
+    // Setup polling only if needed
     const shouldPoll = 
       window.location.pathname === '/' && 
       userData?.long_term_reading_status !== 'completed';
@@ -109,10 +110,7 @@ export const useUserData = () => {
 
     if (shouldPoll) {
       console.log('Starting polling for profile and predictions...');
-      pollInterval = setInterval(fetchUserData, 5000); // Poll every 5 seconds
-    } else if (!userData && !loading && !error) {
-      // Initial fetch if no data
-      fetchUserData();
+      pollInterval = setInterval(fetchUserData, 5000);
     }
 
     return () => {
@@ -120,7 +118,7 @@ export const useUserData = () => {
         clearInterval(pollInterval);
       }
     };
-  }, [navigate, loading, error, fetchUserData, userData?.long_term_reading_status]);
+  }, [navigate, fetchUserData, userData]);
 
   return { userData, predictions, loading, error, fetchUserData, isOnboardingPending };
 };

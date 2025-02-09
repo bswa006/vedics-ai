@@ -171,7 +171,7 @@ const AppContent: React.FC<AppContentProps> = React.memo(
                   <div className="mx-auto flex min-h-0 w-full max-w-5xl flex-col text-text-light-primary transition-colors duration-200 dark:text-text-dark-primary">
                     <div className="pt-20">
                       {isUserOnboarding && (
-                        <div className="z-50 mx-auto w-full max-w-3xl px-4">
+                        <div className="z-50 mx-auto mt-6 w-full max-w-3xl px-4">
                           <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
