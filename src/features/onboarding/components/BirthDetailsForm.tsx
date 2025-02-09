@@ -46,7 +46,7 @@ export const BirthDetailsForm: React.FC<BirthDetailsFormProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 flex flex-col bg-gradient-to-b from-[#2E2A5D] via-[#1f1d3d] to-[#1a1b26] pt-20 text-white">
+    <div className="fixed inset-0 flex flex-col bg-gradient-to-b from-[#2E2A5D] via-[#1f1d3d] to-[#1a1b26] text-white pt-20">
       <motion.div
         className="flex-none space-y-3 bg-gradient-to-b from-[#2E2A5D] to-[#2E2A5D]/95 p-8"
         initial={{ opacity: 0, y: -20 }}

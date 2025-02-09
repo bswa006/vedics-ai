@@ -88,15 +88,20 @@ export const PredictionThemes: React.FC<PredictionThemesProps> = ({
   const { t } = useTranslation();
 
   return (
-    <div className="flex flex-col min-h-screen p-6 space-y-8 bg-gradient-to-br from-[#0B1120]/90 via-[#0F172A]/80 to-[#0B1120]/90">
-      <div className="space-y-2 text-center">
-        <h2 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-white via-white to-white/80 bg-clip-text text-transparent">
+    <div className="fixed inset-0 flex flex-col bg-gradient-to-b from-[#2E2A5D] via-[#1f1d3d] to-[#1a1b26] text-white pt-20">
+      <motion.div
+        className="flex-none space-y-3 bg-gradient-to-b from-[#2E2A5D] to-[#2E2A5D]/95 p-8"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <h2 className="text-3xl font-bold tracking-tight text-white/90">
           {t('onboarding.themes.title')}
         </h2>
-        <p className="bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent">
+        <p className="max-w-2xl text-base leading-relaxed text-gray-300/80">
           {t('onboarding.themes.description')}
         </p>
-      </div>
+      </motion.div>
 
       <div className="space-y-4 max-h-[60vh] overflow-y-auto px-4 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-white/5 [&::-webkit-scrollbar-thumb]:bg-white/10 hover:[&::-webkit-scrollbar-thumb]:bg-white/20">
         {PREDICTION_THEMES.map((theme) => (

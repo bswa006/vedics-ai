@@ -453,14 +453,11 @@ export function Login() {
                 className="group relative flex w-full justify-center rounded-lg bg-[#7F7ACA] px-6 py-3 text-sm font-medium text-white transition-all duration-200 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[#7F7ACA]/50 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <motion.span
-                  animate={
-                    loading
-                      ? {
-                          opacity: [1, 0.7, 1],
-                          scale: [1, 0.98, 1],
-                        }
-                      : { opacity: 1, scale: 1 }
-                  }
+                  className="rounded-lg"
+                  animate={{
+                    opacity: loading ? [1, 0.7, 1] : 1,
+                    scale: loading ? [1, 0.98, 1] : 1,
+                  }}
                   transition={{
                     duration: 1,
                     repeat: loading ? Infinity : 0,
@@ -470,7 +467,7 @@ export function Login() {
                   {loading ? 'Signing in...' : 'Begin Journey'}
                 </motion.span>
                 <motion.div
-                  className="absolute inset-0 -z-10 opacity-0 group-hover:opacity-100"
+                  className="absolute inset-0 -z-10 rounded-lg opacity-0 group-hover:opacity-100"
                   style={{
                     background: theme.gradients.accent,
                     transition: `opacity ${parseFloat(theme.animations.transition.normal) / 1000}s ease-in-out`,
@@ -480,23 +477,19 @@ export function Login() {
                 />
                 <motion.span
                   className="ml-2"
-                  animate={
-                    loading
-                      ? {
-                          rotate: 360,
-                          scale: [1, 1.2, 1],
-                        }
-                      : {}
-                  }
+                  animate={{
+                    rotate: loading ? 360 : 0,
+                    scale: loading ? [1, 1.2, 1] : 1,
+                  }}
                   transition={{
                     rotate: {
                       duration: 2,
-                      repeat: Infinity,
+                      repeat: loading ? Infinity : 0,
                       ease: 'linear',
                     },
                     scale: {
                       duration: 1.5,
-                      repeat: Infinity,
+                      repeat: loading ? Infinity : 0,
                       ease: 'easeInOut',
                     },
                   }}
