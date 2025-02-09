@@ -109,7 +109,7 @@ export function PredictionContent({ predictions }: PredictionContentProps): JSX.
   if (!content) return null;
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden">
+    <div className="relative">
       <div
         className="fixed inset-x-0 top-[80px] z-10 bg-[#1a1b26]/80 backdrop-blur-md"
         style={{
