@@ -406,9 +406,9 @@ export function Login() {
             )}
 
             <div
-              className="border-celestialLilac/20 space-y-6 rounded-xl border bg-white/5 backdrop-blur-xl"
+              className="border-celestialLilac/20 space-y-4 rounded-xl border bg-white/5 backdrop-blur-xl"
               style={{
-                padding: theme.spacing['2xl'],
+                padding: theme.spacing.lg,
                 boxShadow: `0 8px 32px ${theme.colors.celestialLilac}10`,
                 backdropFilter: 'blur(12px)',
                 WebkitBackdropFilter: 'blur(12px)',
@@ -418,7 +418,7 @@ export function Login() {
                 <label
                   htmlFor="username"
                   aria-label={t('login.phoneNumber')}
-                  className="mb-1.5 block text-sm font-medium text-white"
+                  className="mb-1 block text-sm font-medium text-white"
                 >
                   Phone Number
                 </label>
@@ -431,7 +431,7 @@ export function Login() {
                     pattern="[0-9]*"
                     maxLength={10}
                     required
-                    className="block w-full rounded-lg border border-white/5 bg-[#2A2B3B] px-4 py-2 pl-11 text-white placeholder-gray-500 focus:border-[#7F7ACA]/50 focus:outline-none focus:ring-2 focus:ring-[#7F7ACA]/20"
+                    className="block w-full rounded-lg border border-white/5 bg-[#2A2B3B] px-4 py-1.5 pl-11 text-white placeholder-gray-500 focus:border-[#7F7ACA]/50 focus:outline-none focus:ring-2 focus:ring-[#7F7ACA]/20"
                     placeholder="Enter your phone number"
                     value={formData.username}
                     onChange={e => {
