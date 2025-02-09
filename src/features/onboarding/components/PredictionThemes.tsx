@@ -98,7 +98,7 @@ export const PredictionThemes: React.FC<PredictionThemesProps> = ({
         </p>
       </div>
 
-      <div className="space-y-4 max-h-[60vh] overflow-y-auto px-4 scrollbar-thin scrollbar-thumb-blue-500/20 scrollbar-track-white/5">
+      <div className="space-y-4 max-h-[60vh] overflow-y-auto px-4 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-white/5 [&::-webkit-scrollbar-thumb]:bg-white/10 hover:[&::-webkit-scrollbar-thumb]:bg-white/20">
         {PREDICTION_THEMES.map((theme) => (
           <div
             key={theme.id}
