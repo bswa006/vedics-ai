@@ -48,6 +48,11 @@ export function PredictionContent({
     }
   }, [predictions, activeTab, availableTabs]);
 
+  // Scroll to top when active tab changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [activeTab]);
+
   const cardStyle = `
     group relative px-8 py-6 transition-all duration-300
     bg-white dark:bg-gray-900 backdrop-blur-sm
