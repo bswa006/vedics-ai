@@ -1,8 +1,8 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { User } from '../types/user';
 import { PredictionResponse } from '../types/predictions';
 import { useUserApi } from './useUserApi';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export const useUserData = () => {
   const { getLongTermPredictions, getProfile } = useUserApi();
@@ -12,6 +12,7 @@ export const useUserData = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [isOnboardingPending, setIsOnboardingPending] = useState(false);
+  const hasFetchedRef = useRef(false);
 
   const fetchUserData = useCallback(async () => {
     const token = localStorage.getItem('token');
@@ -78,11 +79,19 @@ export const useUserData = () => {
         navigate('/login');
         return;
       }
+      // Stop polling on 500 errors
+      if (err.response?.status >= 500) {
+        setError('Server error occurred. Please try again later.');
+        return;
+      }
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
     }
   }, [getProfile, getLongTermPredictions, navigate]);
+
+  const location = useLocation();
+  const initialProfile = location.state?.initialProfile;
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -96,21 +105,24 @@ export const useUserData = () => {
       return;
     }
 
-    // Immediately fetch data if we have valid credentials
-    if (!userData) {
+    // Only fetch if we haven't already fetched and don't have userData
+    if (!hasFetchedRef.current && !userData) {
+      hasFetchedRef.current = true;
       fetchUserData();
     }
 
-    // Setup polling only if needed
+    // Setup polling only if needed and no errors
     const shouldPoll = 
       window.location.pathname === '/' && 
-      userData?.long_term_reading_status !== 'completed';
+      userData?.long_term_reading_status !== 'completed' &&
+      !error; // Don't poll if there's an error
 
     let pollInterval: NodeJS.Timeout | null = null;
 
     if (shouldPoll) {
-      console.log('Starting polling for profile and predictions...');
-      pollInterval = setInterval(fetchUserData, 5000);
+      // Add jitter to prevent thundering herd
+      const jitter = Math.random() * 1000; // Random delay between 0-1000ms
+      pollInterval = setInterval(fetchUserData, 5000 + jitter);
     }
 
     return () => {
@@ -118,7 +130,7 @@ export const useUserData = () => {
         clearInterval(pollInterval);
       }
     };
-  }, [navigate, fetchUserData, userData]);
+  }, [userData, fetchUserData, initialProfile, navigate, error]);
 
   return { userData, predictions, loading, error, fetchUserData, isOnboardingPending };
 };

@@ -42,7 +42,6 @@ export function Header({ onLogout, userId }: HeaderProps) {
         </div>
 
         <div className="flex items-center space-x-3">
-          <LanguageSwitcher />
           {userId && onLogout && (
             <motion.button
               whileHover={{ scale: 1.05 }}

@@ -48,9 +48,6 @@ const AppContent: React.FC<AppContentProps> = React.memo(
     const navigate = useNavigate();
 
     // Data fetching is now handled in useUserData hook
-    useEffect(() => {
-      console.log('userData: ------------', userData);
-    }, [userData]);
 
     const isProfileIncomplete = useMemo(() => {
       // Don't consider incomplete while loading
