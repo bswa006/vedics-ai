@@ -28,8 +28,8 @@ export function Carousel({
       <Swiper
         modules={[Navigation, Mousewheel, Scrollbar]}
         spaceBetween={spaceBetween}
-        slidesPerView={slidesPerView}
-        speed={600}
+        slidesPerView={'auto'}
+        speed={400}
         navigation={{
           nextEl: '.swiper-button-next',
           prevEl: '.swiper-button-prev',
@@ -39,28 +39,36 @@ export function Carousel({
         rewind={false}
         mousewheel={{
           forceToAxis: true,
-          sensitivity: 0.5,
-          thresholdDelta: 50,
+          sensitivity: 1,
+          thresholdDelta: 30,
           releaseOnEdges: true,
         }}
         scrollbar={{
           el: '.swiper-scrollbar',
           draggable: true,
           snapOnRelease: true,
-          dragSize: 100,
+          dragSize: 60,
+          hide: true,
         }}
         grabCursor={true}
         centeredSlides={false}
-        slidesOffsetBefore={0}
-        slidesOffsetAfter={0}
-        resistance={false}
-        shortSwipes={false}
-        longSwipesRatio={0.3}
-        touchRatio={1.5}
+        slidesOffsetBefore={16}
+        slidesOffsetAfter={16}
+        resistance={true}
+        resistanceRatio={0.85}
+        shortSwipes={true}
+        longSwipesRatio={0.2}
+        touchRatio={2}
+        touchAngle={45}
+        touchStartPreventDefault={false}
+        touchStartForcePreventDefault={false}
+        threshold={5}
+        touchMoveStopPropagation={true}
+        preventInteractionOnTransition={true}
         breakpoints={{
-          480: { slidesPerView: 2.2 },
-          640: { slidesPerView: 3.2 },
-          768: { slidesPerView: 3.5 },
+          320: { slidesPerView: 'auto', spaceBetween: 12 },
+          480: { slidesPerView: 'auto', spaceBetween: 16 },
+          768: { slidesPerView: 'auto', spaceBetween: 20 },
         }}
         centeredSlidesBounds={true}
         onSlideChange={swiper => {

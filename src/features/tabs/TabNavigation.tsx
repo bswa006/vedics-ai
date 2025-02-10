@@ -60,29 +60,33 @@ export function TabNavigation({ activeTab, setActiveTab, availableTabs = [] }: T
       key={tab.id}
       onClick={() => setActiveTab(tab.id)}
       data-state={activeTab === tab.id ? 'active' : 'inactive'}
-      className={`group relative flex flex-col items-center justify-start pt-2 ${styles['tab-hover']}`}
+      className={`group relative flex min-w-[100px] flex-col items-center justify-start px-2 py-3 ${styles['tab-hover']}`}
     >
-      <div className="relative z-10 flex flex-col items-center space-y-1">
+      <div className="relative z-10 flex flex-col items-center space-y-2">
         <div
-          className={`rounded-full p-2 ${
+          className={`rounded-full p-2.5 transition-all duration-300 ${
             activeTab === tab.id
-              ? 'bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-lg'
-              : 'text-[#8B93B8] hover:bg-white/5 hover:text-white'
+              ? 'bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-lg scale-110'
+              : 'text-[#8B93B8] hover:bg-white/5 hover:text-white hover:scale-105'
           }`}
         >
           {tab.icon}
         </div>
         <span
-          className={`inline-block max-w-[80px] break-words text-center text-[11px] leading-tight tracking-wide ${
+          className={`inline-block max-w-[100px] break-words text-center text-[12px] leading-tight tracking-wide transition-all duration-300 ${
             activeTab === tab.id
-              ? 'font-semibold text-indigo-500 dark:text-indigo-400'
-              : 'font-medium text-[#8B93B8]'
+              ? 'font-semibold text-indigo-500 dark:text-indigo-400 transform translate-y-0.5'
+              : 'font-medium text-[#8B93B8] hover:text-gray-300'
           }`}
         >
           {tab.label}
         </span>
       </div>
-      <div className={styles['tab-indicator']} />
+      <div 
+        className={`${styles['tab-indicator']} transition-transform duration-300 ${
+          activeTab === tab.id ? 'scale-100' : 'scale-0'
+        }`} 
+      />
     </button>
   ));
 
