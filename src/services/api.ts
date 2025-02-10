@@ -27,19 +27,26 @@ export const setNavigationCallback = (callback: (path: string) => void) => {
   navigationCallback = callback;
 };
 
-// Add response interceptor to handle 403 errors
+// Add response interceptor to handle auth errors
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 403) {
-      // Clear all localStorage
-      localStorage.clear();
+    // Only handle auth-related errors (401, 403)
+    if (error.response?.status === 401 || error.response?.status === 403) {
+      // Don't clear localStorage for requests to auth endpoints
+      const isAuthEndpoint = error.config?.url?.includes('/api/v1/api-token-auth/') || 
+                            error.config?.url?.includes('/api/v1/users/');
       
-      // Use navigation callback if set, otherwise fallback to window.location
-      if (navigationCallback) {
-        navigationCallback('/login');
-      } else {
-        window.location.href = '/login';
+      if (!isAuthEndpoint) {
+        // Clear all localStorage only for non-auth endpoint failures
+        localStorage.clear();
+        
+        // Use navigation callback if set, otherwise fallback to window.location
+        if (navigationCallback) {
+          navigationCallback('/login');
+        } else {
+          window.location.href = '/login';
+        }
       }
     }
     return Promise.reject(error);
@@ -173,24 +180,22 @@ export const api = {
     },
     getProfile: async (): Promise<UserProfile> => {
       try {
-        const response = await axiosInstance.get<ProfileResponse>('/profiles/profiles/')
-          .then((response) => {
-            const profileResponse = response.data;
-            if (!profileResponse.results?.length) {
-              throw new Error('Profile not found');
-            }
-            // Assert that we will always have a profile at this point
-            return profileResponse.results[0]!;
-          })
-          .catch((error) => {
-            if (axios.isAxiosError(error)) {
-              throw new Error(`Failed to fetch profile: ${error.message}`);
-            }
-            throw error;
-          });
-        return response;
+        const response = await axiosInstance.get<ProfileResponse>('/profiles/profiles/');
+        const profileResponse = response.data;
+        
+        // Check if we have any results
+        if (!profileResponse.results?.length) {
+          throw new Error('Profile not found');
+        }
+        
+        // Return the first profile with type assertion
+        return profileResponse.results[0] as UserProfile;
       } catch (error) {
-        return handleAxiosError(error);
+        if (axios.isAxiosError(error)) {
+          console.error('Profile fetch error:', error.response?.data);
+          throw new Error(`Failed to fetch profile: ${error.message}`);
+        }
+        throw error;
       }
     },
   },

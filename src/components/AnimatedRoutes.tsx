@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
-import { Routes, useLocation } from 'react-router-dom';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { useLocation } from 'react-router-dom';
 
 interface AnimatedRoutesProps {
   children: ReactNode;
@@ -8,23 +8,43 @@ interface AnimatedRoutesProps {
 
 export function AnimatedRoutes({ children }: AnimatedRoutesProps) {
   const location = useLocation();
+  const shouldReduceMotion = useReducedMotion();
+
+  const slideVariants = {
+    enter: {
+      x: shouldReduceMotion ? 0 : 20,
+      opacity: 0,
+    },
+    center: {
+      x: 0,
+      opacity: 1,
+    },
+    exit: {
+      x: shouldReduceMotion ? 0 : -20,
+      opacity: 0,
+    },
+  };
+
+  const transition = {
+    duration: 0.25,
+    ease: [0.32, 0.72, 0, 1],
+  };
 
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={location.pathname}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.15 }}
-        style={{
-          width: '100%',
-          height: '100%',
-          position: 'relative',
-        }}
-      >
-        <Routes location={location}>{children}</Routes>
-      </motion.div>
-    </AnimatePresence>
+    <div className="w-full">
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={location.pathname}
+          variants={slideVariants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          transition={transition}
+          className="w-full"
+        >
+          {children}
+        </motion.div>
+      </AnimatePresence>
+    </div>
   );
 }

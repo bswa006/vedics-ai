@@ -1,93 +1,47 @@
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { BottomNav } from '../../components/navigation/BottomNav';
+import { useUserDataContext } from '../../contexts/UserDataContext';
 import { cn } from '../../lib/utils';
-import { theme } from '../../styles/theme';
 import { Header } from './Header';
 
 interface LayoutProps {
   children: ReactNode;
   onLogout?: () => void;
-  userId?: number | null;
 }
 
-export function Layout({ children, onLogout, userId }: LayoutProps) {
+export function Layout({ children, onLogout }: LayoutProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const isOnboarding = location.pathname === '/onboarding';
-  const shouldReduceMotion = useReducedMotion();
-  const [isRouteChanging, setIsRouteChanging] = useState(false);
-
-  useEffect(() => {
-    if (location.pathname) {
-      setIsRouteChanging(true);
-      const timer = setTimeout(() => setIsRouteChanging(false), 300);
-      return () => clearTimeout(timer);
-    }
-    return undefined;
-  }, [location.pathname]);
-
-  const pageVariants = {
-    initial: {
-      opacity: 0,
-      y: shouldReduceMotion ? 0 : 10,
-      scale: shouldReduceMotion ? 1 : 0.98,
-    },
-    animate: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-    },
-    exit: {
-      opacity: 0,
-      y: shouldReduceMotion ? 0 : -10,
-      scale: shouldReduceMotion ? 1 : 0.98,
-    },
-  };
-
-  const transition = {
-    type: shouldReduceMotion ? 'tween' : 'spring',
-    duration: shouldReduceMotion ? parseFloat(theme.animations.transition.fast) / 1000 : undefined,
-    stiffness: 200,
-    damping: 20,
-  };
+  const { userData } = useUserDataContext();
 
   return (
-    <motion.div className="from-midnight-indigo text-cream-white relative min-h-screen overflow-hidden bg-gradient-to-b via-[#1f1d3d] to-[#1a1b26] font-body transition-colors duration-300">
-      <Header onLogout={onLogout} userId={userId} />
+    <div className="from-midnight-indigo text-cream-white min-h-screen bg-gradient-to-b via-[#1f1d3d] to-[#1a1b26] font-body transition-colors duration-300">
+      {/* Header is already fixed in its component */}
+      <Header onLogout={onLogout} userId={userData?.id} />
 
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.main
-          key={location.pathname}
-          variants={pageVariants}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          transition={transition}
+      {/* Content area with proper spacing for fixed header */}
+      <div className="flex min-h-[calc(100vh-5rem)] flex-col pt-20">
+        <main
           className={cn(
-            'relative mx-auto w-full max-w-lg overflow-y-auto',
-            'transition-all duration-300 ease-in-out',
-            'mt-20 pb-16', // Account for fixed header and bottom nav
+            'mx-auto w-full max-w-lg flex-1 overflow-y-auto',
+            'pb-20', // Extra padding for bottom nav
             '[&::-webkit-scrollbar-track]:bg-white/5 [&::-webkit-scrollbar]:w-2',
-            '[&::-webkit-scrollbar-thumb]:bg-white/10 hover:[&::-webkit-scrollbar-thumb]:bg-white/20',
-            isRouteChanging ? 'opacity-50' : 'opacity-100',
-            !shouldReduceMotion && 'perspective-1000 preserve-3d'
+            '[&::-webkit-scrollbar-thumb]:bg-white/10 hover:[&::-webkit-scrollbar-thumb]:bg-white/20'
           )}
         >
           {children}
-        </motion.main>
-      </AnimatePresence>
+        </main>
 
-      {userId && !isOnboarding && (
-        <BottomNav
-          currentPath={location.pathname}
-          onNavigate={path => {
-            setIsRouteChanging(true);
-            navigate(path);
-          }}
-        />
-      )}
-    </motion.div>
+        {localStorage.getItem('token') &&
+          !isOnboarding &&
+          !localStorage.getItem('isProfileIncomplete') && (
+            <div className="pb-safe fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-t from-[#1a1b26] via-[#1a1b26] to-transparent pt-4">
+              <BottomNav currentPath={location.pathname} onNavigate={path => navigate(path)} />
+            </div>
+          )}
+      </div>
+    </div>
   );
 }

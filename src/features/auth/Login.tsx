@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../services/api';
+import { isProfileComplete } from '../../utils/profile';
 import { theme } from '../../styles/theme';
 import { useGoogleLogin } from '@react-oauth/google';
 
@@ -38,14 +39,10 @@ export function Login() {
           try {
             const userProfile = await api.profiles.getProfile();
             if (userProfile.id) {
-              localStorage.setItem('userId', userProfile.id.toString());
-              window.dispatchEvent(new Event('storage'));
+              // Store both token and userId
+              localStorage.setItem('userId', userProfile.user.id);
 
-              if (
-                userProfile.date_of_birth &&
-                userProfile.time_of_birth &&
-                userProfile.place_of_birth
-              ) {
+              if (isProfileComplete(userProfile)) {
                 navigate('/', { replace: true });
               } else {
                 navigate('/onboarding', { replace: true });
@@ -93,14 +90,10 @@ export function Login() {
           try {
             const userProfile = await api.profiles.getProfile();
             if (userProfile.id) {
-              localStorage.setItem('userId', userProfile.id.toString());
-              window.dispatchEvent(new Event('storage'));
+              // Store both token and userId
+              localStorage.setItem('userId', userProfile.user.id);
 
-              if (
-                userProfile.date_of_birth &&
-                userProfile.time_of_birth &&
-                userProfile.place_of_birth
-              ) {
+              if (isProfileComplete(userProfile)) {
                 navigate('/', { replace: true });
               } else {
                 navigate('/onboarding', { replace: true });
@@ -128,9 +121,15 @@ export function Login() {
           try {
             const userProfile = await api.profiles.getProfile();
             if (userProfile.id) {
-              localStorage.setItem('userId', userProfile.id.toString());
-              window.dispatchEvent(new Event('storage'));
-              navigate('/onboarding', { replace: true });
+              // Store userId
+              localStorage.setItem('userId', userProfile.user.id);
+              
+              // For new users, always check profile completion
+              if (isProfileComplete(userProfile)) {
+                navigate('/', { replace: true });
+              } else {
+                navigate('/onboarding', { replace: true });
+              }
             }
           } catch (error) {
             console.error('Failed to get user profile:', error);

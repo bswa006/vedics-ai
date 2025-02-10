@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { TodayReading } from '../../types/readings';
 import api from '../../services/api';
 
@@ -10,51 +10,52 @@ export function DailyStars({ userId }: DailyStarsProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [todayReadings, setTodayReadings] = useState<TodayReading | null>(null);
+  const fetchInProgressRef = useRef(false);
 
-  useEffect(() => {
-    if (!userId) {
-      console.log('No userId provided');
-      return;
-    }
+  const fetchTodayReadings = useCallback(async (signal: AbortSignal) => {
+    if (fetchInProgressRef.current) return;
+    fetchInProgressRef.current = true;
 
-    console.log('Fetching readings for userId:', userId);
-    let isSubscribed = true;
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const response: any = await api.readings.getTodayReadings();
 
-    const fetchTodayReadings = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        console.log('Making API call to getTodayReadings...');
-        const response: any = await api.readings.getTodayReadings();
-        console.log('API Response:', response);
-
-        if (isSubscribed) {
-          if (response?.message?.content) {
-            console.log('Setting today readings:', response.message.content);
-            setTodayReadings(response.message.content);
-          } else {
-            console.log('No today_reading found in response');
-            setError('No readings available for today');
-          }
-        }
-      } catch (err) {
-        console.error('API call failed:', err);
-        if (isSubscribed) {
-          setError(err instanceof Error ? err.message : "Failed to fetch today's readings");
-        }
-      } finally {
-        if (isSubscribed) {
-          setLoading(false);
+      if (!signal.aborted) {
+        if (response?.message?.content) {
+          setTodayReadings(response.message.content);
+        } else {
+          setError('No readings available for today');
         }
       }
-    };
+    } catch (err) {
+      if (!signal.aborted) {
+        console.error('Failed to fetch daily readings:', err);
+        setError(err instanceof Error ? err.message : "Failed to fetch today's readings");
+      }
+    } finally {
+      if (!signal.aborted) {
+        setLoading(false);
+      }
+      fetchInProgressRef.current = false;
+    }
+  }, []);
 
-    fetchTodayReadings();
+  useEffect(() => {
+    if (!userId) return;
+
+    const abortController = new AbortController();
+    
+    // Only fetch if we don't have readings
+    if (!todayReadings) {
+      fetchTodayReadings(abortController.signal);
+    }
 
     return () => {
-      isSubscribed = false;
+      abortController.abort();
     };
-  }, [userId]);
+  }, [userId, todayReadings, fetchTodayReadings]);
 
   if (loading) {
     return (

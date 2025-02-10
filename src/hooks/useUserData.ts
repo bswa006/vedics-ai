@@ -13,21 +13,17 @@ export const useUserData = () => {
   const [loading, setLoading] = useState(false);
   const [isOnboardingPending, setIsOnboardingPending] = useState(false);
   const hasFetchedRef = useRef(false);
+  const location = useLocation();
 
-  const fetchUserData = useCallback(async () => {
+  const fetchUserData = useCallback(async (isPolling = false) => {
     const token = localStorage.getItem('token');
-    if (!token) {
-      navigate('/login');
-      return;
-    }
+    if (!token) return;
 
     try {
-      setLoading(true);
+      if (!isPolling) setLoading(true);
       setError(null);
 
       const profileResponse = await getProfile();
-
-      
       if (!profileResponse) {
         throw new Error('No profile data found');
       }
@@ -46,90 +42,55 @@ export const useUserData = () => {
         updated_at: profileResponse.updated_at
       };
 
-      // Check if all required fields are present
       const hasAllRequiredFields = 
         profileResponse.time_of_birth && 
         profileResponse.date_of_birth && 
         profileResponse.place_of_birth;
 
       if (hasAllRequiredFields) {
-        if (window.location.pathname === '/login') {
-          navigate('/');
-        }
-        // Only fetch predictions if profile is complete
-
         const predictionsResponse = await getLongTermPredictions();
-
         setPredictions(predictionsResponse);
       } else {
-
         setPredictions(null);
       }
+
       setUserData(user);
-      
-      // Update onboarding status based on long_term_reading_status
       setIsOnboardingPending(user.long_term_reading_status === 'pending' || user.long_term_reading_status === 'started');
     } catch (err: any) {
-
       if (err.response?.status === 403) {
-        // Clear all localStorage
         localStorage.clear();
-        // Navigate to login page
-        navigate('/login');
         return;
       }
-      // Stop polling on 500 errors
       if (err.response?.status >= 500) {
         setError('Server error occurred. Please try again later.');
         return;
       }
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
-      setLoading(false);
+      if (!isPolling) setLoading(false);
     }
-  }, [getProfile, getLongTermPredictions, navigate]);
+  }, [getProfile, getLongTermPredictions]);
 
-  const location = useLocation();
-  const initialProfile = location.state?.initialProfile;
-
+  // Initial data fetch
   useEffect(() => {
     const token = localStorage.getItem('token');
-    const userId = localStorage.getItem('userId');
+    if (!token || hasFetchedRef.current) return;
     
-    if (!token || !userId) {
-      localStorage.clear();
-      if (window.location.pathname !== '/login') {
-        navigate('/login');
-      }
+    hasFetchedRef.current = true;
+    fetchUserData();
+  }, [fetchUserData]);
+
+  // Handle polling
+  useEffect(() => {
+    if (!userData || location.pathname !== '/' || userData.long_term_reading_status === 'completed' || error) {
       return;
     }
 
-    // Only fetch if we haven't already fetched and don't have userData
-    if (!hasFetchedRef.current && !userData) {
-      hasFetchedRef.current = true;
-      fetchUserData();
-    }
+    const jitter = Math.random() * 1000;
+    const pollInterval = setInterval(() => fetchUserData(true), 5000 + jitter);
 
-    // Setup polling only if needed and no errors
-    const shouldPoll = 
-      window.location.pathname === '/' && 
-      userData?.long_term_reading_status !== 'completed' &&
-      !error; // Don't poll if there's an error
-
-    let pollInterval: NodeJS.Timeout | null = null;
-
-    if (shouldPoll) {
-      // Add jitter to prevent thundering herd
-      const jitter = Math.random() * 1000; // Random delay between 0-1000ms
-      pollInterval = setInterval(fetchUserData, 5000 + jitter);
-    }
-
-    return () => {
-      if (pollInterval) {
-        clearInterval(pollInterval);
-      }
-    };
-  }, [userData, fetchUserData, initialProfile, navigate, error]);
+    return () => clearInterval(pollInterval);
+  }, [userData, location.pathname, error, fetchUserData]);
 
   return { userData, predictions, loading, error, fetchUserData, isOnboardingPending };
 };

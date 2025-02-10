@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useUserApi } from '../../hooks/useUserApi';
+import { useUserDataContext } from '../../contexts/UserDataContext';
 import { BirthDetailsForm } from './components/BirthDetailsForm';
 import { InterestsSelection } from './components/InterestsSelection';
 import { LanguageSelection } from './components/LanguageSelection';
@@ -23,7 +24,8 @@ export interface OnboardingData {
 
 export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) => {
   const { t, i18n } = useTranslation();
-  const { updateProfile } = useUserApi();
+  const { updateProfile, getProfile } = useUserApi();
+  const { fetchUserData, userData } = useUserDataContext();
   const [step, setStep] = useState(0);
   const [error, setError] = useState('');
   const [isChangingLanguage, setIsChangingLanguage] = useState(false);
@@ -59,14 +61,13 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) =>
       const [datePart = '', timePart = ''] = utcDateTime.split('T');
       const timeWithoutSeconds = timePart.substring(0, 5); // Get only HH:mm
 
-      // Update the user's profile with onboarding data
-      const userId = parseInt(localStorage.getItem('userId') || '', 10);
-      if (!userId) {
-        setError('User ID not found');
+      if (!userData?.id) {
+        setError('Profile data not found');
         return false;
       }
 
-      await updateProfile(userId, {
+      // Update profile
+      await updateProfile(userData.id, {
         date_of_birth: datePart,
         time_of_birth: timeWithoutSeconds,
         place_of_birth: birthDetails.place.trim(),
@@ -74,6 +75,12 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({ onComplete }) =>
         area_of_interests: selectedThemes,
       });
 
+      // Get updated profile
+      const updatedProfile = await getProfile();
+      console.log('Updated Profile:', updatedProfile);
+
+      // Fetch updated user data to trigger route change
+      await fetchUserData();
       return true;
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;

@@ -5,10 +5,30 @@ import { BasePrediction, PredictionType } from '../../types/predictions';
 
 interface PredictionContentProps {
   predictions: BasePrediction[];
+  loading?: boolean;
 }
 
-export function PredictionContent({ predictions }: PredictionContentProps): JSX.Element | null {
+export function PredictionContent({
+  predictions,
+  loading = false,
+}: PredictionContentProps): JSX.Element | null {
   console.log('Predictions:', predictions);
+
+  if (loading) {
+    return (
+      <div className="flex min-h-[50vh] items-center justify-center">
+        <div className="text-center">
+          <div className="mb-4 text-4xl">🌟</div>
+          <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+            Generating your predictions...
+          </h2>
+          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+            This may take a few moments
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   if (!predictions || predictions.length === 0) return null;
 
@@ -106,9 +126,9 @@ export function PredictionContent({ predictions }: PredictionContentProps): JSX.
   if (!content) return null;
 
   return (
-    <div className="relative">
+    <div className="relative min-h-screen">
       <div
-        className="fixed inset-x-0 top-[80px] z-10 bg-[#1a1b26]/80 backdrop-blur-md"
+        className="fixed inset-x-0 top-[80px] z-10 bg-[#1a1b26]/80 shadow-lg backdrop-blur-md"
         style={{
           transform: 'translate3d(0, 0, 0)',
           backfaceVisibility: 'hidden',
@@ -133,7 +153,7 @@ export function PredictionContent({ predictions }: PredictionContentProps): JSX.
         />
       </div>
 
-      <div className="animate-fadeIn pt-4" data-testid={`${activeTab}-tab`}>
+      <div className="animate-fadeIn pt-28" data-testid={`${activeTab}-tab`}>
         {Object.entries(content).map(([key, value]) => (
           <div key={key} className={cardStyle}>
             <h3 className="mb-5 flex items-center gap-2 text-xl font-medium text-gray-900 dark:text-white">
