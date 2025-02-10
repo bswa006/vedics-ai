@@ -20,41 +20,25 @@ export const useChatApi = () => {
   const [error, setError] = useState<string | null>(null);
 
   const createSessionId = useCallback(() => {
-    // Check if we already have a session for this page load
-    const pageLoadTime = sessionStorage.getItem('pageLoadTime');
+    const userId = localStorage.getItem('userId');
+    if (!userId) throw new Error('User not authenticated');
+
+    // Check if we already have a session for this user
+    const currentSession = sessionStorage.getItem(`chat_session_${userId}`);
+    if (currentSession) return currentSession;
+
+    // Create new session
     const currentTime = new Date().getTime();
-
-    // If this is a page reload or first load
-    if (!pageLoadTime || (currentTime - parseInt(pageLoadTime)) > 1000) {
-      // Clear previous chat data
-      Object.keys(sessionStorage).forEach(key => {
-        if (key.startsWith('chat_') || key === 'currentChatSession') {
-          sessionStorage.removeItem(key);
-        }
-      });
-      // Set new page load time
-      sessionStorage.setItem('pageLoadTime', currentTime.toString());
-      
-      // Create new session
-      const sessionId = `session_${currentTime}`;
-      sessionStorage.setItem('currentChatSession', sessionId);
-      return sessionId;
-    }
-
-    // If we're just reopening the widget, use existing session
-    const existingSession = sessionStorage.getItem('currentChatSession');
-    if (existingSession) {
-      return existingSession;
-    }
-
-    // Fallback: create new session
     const sessionId = `session_${currentTime}`;
-    sessionStorage.setItem('currentChatSession', sessionId);
+    sessionStorage.setItem(`chat_session_${userId}`, sessionId);
     return sessionId;
   }, []);
 
   const getCurrentSession = useCallback(() => {
-    const currentSession = sessionStorage.getItem('currentChatSession');
+    const userId = localStorage.getItem('userId');
+    if (!userId) throw new Error('User not authenticated');
+
+    const currentSession = sessionStorage.getItem(`chat_session_${userId}`);
     if (currentSession) return currentSession;
     
     // If no session exists, create one
@@ -63,21 +47,30 @@ export const useChatApi = () => {
 
   const saveMessages = useCallback((sessionId: string, messages: ChatMessage[]) => {
     if (!sessionId) return;
+    const userId = localStorage.getItem('userId');
+    if (!userId) return;
+
     const messagesToSave = messages.map(msg => ({
       ...msg,
       timestamp: msg.timestamp instanceof Date ? msg.timestamp.toISOString() : msg.timestamp
     }));
-    sessionStorage.setItem(`chat_${sessionId}`, JSON.stringify(messagesToSave));
+    sessionStorage.setItem(`chat_messages_${userId}_${sessionId}`, JSON.stringify(messagesToSave));
   }, []);
 
   const loadMessages = useCallback((sessionId: string): ChatMessage[] => {
     if (!sessionId) return [];
-    const saved = sessionStorage.getItem(`chat_${sessionId}`);
+    const userId = localStorage.getItem('userId');
+    if (!userId) return [];
+
+    const saved = sessionStorage.getItem(`chat_messages_${userId}_${sessionId}`);
     if (!saved) return [];
     
     try {
       const messages = JSON.parse(saved);
-      return Array.isArray(messages) ? messages : [];
+      return Array.isArray(messages) ? messages.map(msg => ({
+        ...msg,
+        timestamp: new Date(msg.timestamp)
+      })) : [];
     } catch {
       return [];
     }

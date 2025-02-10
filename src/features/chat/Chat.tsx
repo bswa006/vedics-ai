@@ -12,7 +12,7 @@ type ExtendedChatMessage = ChatMessage & {
 
 export function Chat() {
   const { t } = useTranslation();
-  const { createSessionId, getCurrentSession, saveMessages, sendMessage } = useChatApi();
+  const { createSessionId, getCurrentSession, saveMessages, sendMessage, loadMessages } = useChatApi();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const [sessionId, setSessionId] = useState<string>('');
@@ -38,15 +38,25 @@ export function Chat() {
     const currentSessionId = getCurrentSession();
     setSessionId(currentSessionId);
 
-    // Clear existing messages and set initial message on every page load
-    const initialMessage = {
-      text: t('common.chatGreeting'),
-      isUser: false,
-      timestamp: new Date(),
-    };
-    setMessages([initialMessage]);
-    // Save initial message
-    saveMessages(currentSessionId, [initialMessage]);
+    // Load existing messages or set initial message
+    const existingMessages = loadMessages(currentSessionId);
+    if (existingMessages.length > 0) {
+      // Convert timestamps to Date objects
+      const messagesWithDateTimestamps = existingMessages.map(msg => ({
+        ...msg,
+        timestamp: msg.timestamp instanceof Date ? msg.timestamp : new Date(msg.timestamp)
+      }));
+      setMessages(messagesWithDateTimestamps);
+    } else {
+      const initialMessage: ExtendedChatMessage = {
+        text: t('common.chatGreeting'),
+        isUser: false,
+        timestamp: new Date(),
+      };
+      setMessages([initialMessage]);
+      // Save initial message
+      saveMessages(currentSessionId, [initialMessage]);
+    }
   }, [getCurrentSession, createSessionId, saveMessages, t]);
 
   const scrollToBottom = () => {
