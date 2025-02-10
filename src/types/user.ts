@@ -12,7 +12,6 @@ export interface User {
   date_of_birth: string | null;
   time_of_birth: string | null;
   place_of_birth: string;
-  phone_number: string;
   preferred_language: string;
   area_of_interests: string[];
   long_term_reading_status: string;
@@ -33,7 +32,6 @@ export interface UserProfile {
   date_of_birth: string | null;
   time_of_birth: string | null;
   place_of_birth: string;
-  phone_number: string;
   preferred_language: string;
   area_of_interests: string[];
   long_term_reading_status: string;

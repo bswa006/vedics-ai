@@ -95,7 +95,14 @@
     "pendingMessage": "Your profile is currently under review. We'll notify you once the verification is complete.",
     "subtitle": "View and manage your profile information",
     "placeOfBirthPlaceholder": "Enter your place of birth",
-    "placeOfBirthValidation": "Place of birth is required"
+    "placeOfBirthValidation": "Place of birth is required",
+    "birthDateHelp": "Enter your birth date in DD/MM/YYYY format",
+    "birthTimeHelp": "Enter your birth time in 24-hour format (HH:MM)",
+    "firstNamePlaceholder": "Enter your first name",
+    "firstNameHelp": "Your given name or first name",
+    "lastNamePlaceholder": "Enter your last name",
+    "lastNameHelp": "Your family name or surname",
+    "preferredLanguageHelp": "Choose your preferred language for the app"
   },
   "birthDetails": {
     "birthDate": "birth date",

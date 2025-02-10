@@ -6,6 +6,7 @@ import { LANGUAGES } from '../onboarding/components/LanguageSelection';
 import { api } from '../../services/api';
 import { theme } from '../../styles/theme';
 import { utcToLocal, localToUtc } from '../../utils/dateTime';
+import { AlertCircle, Calendar, MapPin, Mail, Languages, Target, User as UserIcon } from 'lucide-react';
 
 interface EditableProfileProps {
   user: User;
@@ -61,12 +62,19 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
       // Convert local time to UTC before saving
       const utcDateTime = localToUtc(formData.date_of_birth, formData.time_of_birth);
 
+      // Update user profile
       await api.profiles.updateProfile(user.id, {
         date_of_birth: utcDateTime.utcDate,
         time_of_birth: utcDateTime.utcTime,
         place_of_birth: formData.place_of_birth,
         preferred_language: formData.preferred_language,
         area_of_interests: formData.area_of_interests,
+      });
+
+      // Update user details
+      await api.users.updateUser(user.user.id, {
+        first_name: formData.first_name,
+        last_name: formData.last_name,
       });
       await onUpdate();
     } catch (err: any) {
@@ -106,28 +114,36 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
           <p className="text-gray-300">{t('profile.editSubtitle')}</p>
         </div>
 
-        <div className="flex flex-shrink-0 gap-3">
+        <div className="flex flex-shrink-0 gap-4">
           <motion.button
             type="button"
             onClick={onCancel}
-            className="whitespace-nowrap rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white backdrop-blur-xl transition-all hover:bg-white/10 sm:px-6"
+            className="group flex items-center gap-2 whitespace-nowrap rounded-xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-medium text-white backdrop-blur-xl transition-all hover:bg-white/10"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
+            <span className="transform transition-transform group-hover:-translate-x-0.5">←</span>
             {t('common.cancel')}
           </motion.button>
           <motion.button
             type="submit"
             disabled={loading}
-            className="group relative overflow-hidden whitespace-nowrap rounded-xl p-[1px]"
+            className="group relative flex items-center gap-2 overflow-hidden whitespace-nowrap rounded-xl p-[1px]"
             style={{ background: theme.gradients.primary }}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            <div className="bg-midnightIndigo relative rounded-xl px-4 py-2 transition-all group-hover:bg-transparent sm:px-6">
+            <div className="bg-midnightIndigo relative flex items-center gap-2 rounded-xl px-6 py-3 transition-all group-hover:bg-transparent">
               <span className="relative z-10 text-sm font-medium text-white">
                 {loading ? t('common.saving') : t('common.save')}
               </span>
+              {loading ? (
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+              ) : (
+                <span className="transform transition-transform group-hover:translate-x-0.5">
+                  →
+                </span>
+              )}
             </div>
           </motion.button>
         </div>
@@ -137,19 +153,13 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="border-statusRed/20 bg-statusRed/5 rounded-xl border p-4 backdrop-blur-xl"
+          className="border-status-red/20 bg-status-red/5 rounded-xl border p-4 backdrop-blur-xl"
         >
           <div className="flex items-center gap-3">
             <div className="flex-shrink-0">
-              <svg className="text-statusRed h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path
-                  fillRule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
-                  clipRule="evenodd"
-                />
-              </svg>
+              <AlertCircle className="text-status-red h-5 w-5" />
             </div>
-            <p className="text-statusRed text-sm font-medium">{error}</p>
+            <p className="text-status-red text-sm font-medium">{error}</p>
           </div>
         </motion.div>
       )}
@@ -167,36 +177,48 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
             style={{ background: `${theme.gradients.primary}10` }}
           />
           <div className="relative">
-            <h3 className="mb-4 flex items-center gap-3 text-xl font-medium text-white">
-              <span className="bg-celestialLilac/20 flex h-10 w-10 items-center justify-center rounded-lg text-white">
-                ✧
+            <h3 className="mb-6 flex items-center gap-3 text-xl font-medium text-white">
+              <span className="bg-celestialLilac/20 flex h-12 w-12 items-center justify-center rounded-lg text-xl text-white">
+                <Calendar className="h-6 w-6" />
               </span>
               {t('profile.birthDetails')}
             </h3>
             <div className="space-y-4">
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-300">
-                  {t('profile.birthDate')}
+                <label className="block text-base font-medium text-gray-200">
+                  {t('profile.birthDate')} *
                 </label>
-                <input
-                  type="date"
-                  value={formData.date_of_birth}
-                  onChange={e => setFormData({ ...formData, date_of_birth: e.target.value })}
-                  className="focus:border-celestialLilac/40 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white backdrop-blur-xl focus:outline-none focus:ring-0"
-                  required
-                />
+                <div className="relative">
+                  <input
+                    type="date"
+                    value={formData.date_of_birth}
+                    onChange={e => setFormData({ ...formData, date_of_birth: e.target.value })}
+                    className="focus:border-celestialLilac/40 focus:ring-celestialLilac/20 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white backdrop-blur-xl transition-all duration-200 hover:bg-white/10 focus:outline-none focus:ring-2"
+                    required
+                  />
+                  <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 transform text-gray-400">
+                    📅
+                  </div>
+                </div>
+                <p className="mt-1 text-sm text-gray-400">{t('profile.birthDateHelp')}</p>
               </div>
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-300">
-                  {t('profile.birthTime')}
+                <label className="block text-base font-medium text-gray-200">
+                  {t('profile.birthTime')} *
                 </label>
-                <input
-                  type="time"
-                  value={formData.time_of_birth}
-                  onChange={e => setFormData({ ...formData, time_of_birth: e.target.value })}
-                  className="focus:border-celestialLilac/40 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white backdrop-blur-xl focus:outline-none focus:ring-0"
-                  required
-                />
+                <div className="relative">
+                  <input
+                    type="time"
+                    value={formData.time_of_birth}
+                    onChange={e => setFormData({ ...formData, time_of_birth: e.target.value })}
+                    className="focus:border-celestialLilac/40 focus:ring-celestialLilac/20 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white backdrop-blur-xl transition-all duration-200 hover:bg-white/10 focus:outline-none focus:ring-2"
+                    required
+                  />
+                  <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 transform text-gray-400">
+                    <Calendar className="h-5 w-5" />
+                  </div>
+                </div>
+                <p className="mt-1 text-sm text-gray-400">{t('profile.birthTimeHelp')}</p>
               </div>
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-300">
@@ -227,48 +249,77 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
           <div className="relative">
             <h3 className="mb-4 flex items-center gap-3 text-xl font-medium text-white">
               <span className="bg-celestialLilac/20 flex h-10 w-10 items-center justify-center rounded-lg text-white">
-                ⭐
+                <UserIcon className="h-6 w-6" />
               </span>
               {t('profile.personalInfo')}
             </h3>
-            <div className="grid gap-4">
+            <div className="space-y-6">
+              {/* First Name */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-300">
-                  {t('profile.firstName')}
+                <label className="block text-base font-medium text-gray-200">
+                  {t('profile.firstName')} *
                 </label>
-                <input
-                  type="text"
-                  value={formData.first_name}
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white backdrop-blur-xl"
-                  disabled
-                />
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={formData.first_name}
+                    onChange={e => setFormData({ ...formData, first_name: e.target.value })}
+                    className="focus:border-celestialLilac/40 focus:ring-celestialLilac/20 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 pl-10 text-white backdrop-blur-xl transition-all duration-200 hover:bg-white/10 focus:outline-none focus:ring-2"
+                    required
+                    placeholder={t('profile.firstNamePlaceholder')}
+                  />
+                  <div className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 transform text-gray-400">
+                    <UserIcon className="h-5 w-5" />
+                  </div>
+                </div>
+                <p className="mt-1 text-sm text-gray-400">{t('profile.firstNameHelp')}</p>
               </div>
+
+              {/* Last Name */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-300">
-                  {t('profile.lastName')}
+                <label className="block text-base font-medium text-gray-200">
+                  {t('profile.lastName')} *
                 </label>
-                <input
-                  type="text"
-                  value={formData.last_name}
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white backdrop-blur-xl"
-                  disabled
-                />
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={formData.last_name}
+                    onChange={e => setFormData({ ...formData, last_name: e.target.value })}
+                    className="focus:border-celestialLilac/40 focus:ring-celestialLilac/20 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 pl-10 text-white backdrop-blur-xl transition-all duration-200 hover:bg-white/10 focus:outline-none focus:ring-2"
+                    required
+                    placeholder={t('profile.lastNamePlaceholder')}
+                  />
+                  <div className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 transform text-gray-400">
+                    <UserIcon className="h-5 w-5" />
+                  </div>
+                </div>
+                <p className="mt-1 text-sm text-gray-400">{t('profile.lastNameHelp')}</p>
               </div>
+
+              {/* Preferred Language */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-300">
-                  {t('profile.preferredLanguage')}
+                <label className="block text-base font-medium text-gray-200">
+                  {t('profile.preferredLanguage')} *
                 </label>
-                <select
-                  value={formData.preferred_language}
-                  onChange={e => setFormData({ ...formData, preferred_language: e.target.value })}
-                  className="focus:border-celestialLilac/40 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white backdrop-blur-xl focus:outline-none focus:ring-0"
-                >
-                  {LANGUAGES.map(lang => (
-                    <option key={lang.code} value={lang.code}>
-                      {lang.name}
-                    </option>
-                  ))}
-                </select>
+                <div className="relative">
+                  <select
+                    value={formData.preferred_language}
+                    onChange={e => setFormData({ ...formData, preferred_language: e.target.value })}
+                    className="focus:border-celestialLilac/40 focus:ring-celestialLilac/20 w-full appearance-none rounded-xl border border-white/10 bg-white/5 px-4 py-3 pl-10 text-white backdrop-blur-xl transition-all duration-200 hover:bg-white/10 focus:outline-none focus:ring-2"
+                    required
+                  >
+                    {LANGUAGES.map(lang => (
+                      <option key={lang.code} value={lang.code} className="bg-gray-800">
+                        {lang.name}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 transform text-gray-400">
+                    <Languages className="h-5 w-5" />
+                  </div>
+                  
+                </div>
+                <p className="mt-1 text-sm text-gray-400">{t('profile.preferredLanguageHelp')}</p>
               </div>
             </div>
           </div>

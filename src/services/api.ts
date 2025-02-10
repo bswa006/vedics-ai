@@ -38,7 +38,6 @@ export interface UserBirthDetails {
   date_of_birth: string;
   birth_time: string;
   place_of_birth: string;
-  phone: string;
 }
 
 export interface LoginCredentials {
@@ -69,7 +68,6 @@ export interface UserProfile {
   date_of_birth: string | null;
   time_of_birth: string | null;
   place_of_birth: string;
-  phone_number: string;
   preferred_language: string;
   area_of_interests: string[];
   long_term_reading_status: string;
@@ -195,6 +193,15 @@ export const api = {
     },
   },
   users: {
+    updateUser(userId: string, data: {
+      first_name?: string;
+      last_name?: string;
+    }): Promise<UserData> {
+      return axiosInstance
+        .patch(`/users/${userId}/`, data)
+        .then((response) => response.data)
+        .catch(handleAxiosError);
+    },
   },
   chat: {
     sendMessage: async (request: ChatRequest): Promise<ChatResponse> => {

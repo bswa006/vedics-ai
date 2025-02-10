@@ -2,7 +2,6 @@ import { useTranslation } from 'react-i18next';
 import { LogOut } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { format } from 'date-fns';
-import LanguageSwitcher from '../../components/LanguageSwitcher';
 
 interface HeaderProps {
   onLogout: (() => void) | undefined;

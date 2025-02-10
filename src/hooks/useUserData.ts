@@ -38,7 +38,6 @@ export const useUserData = () => {
         date_of_birth: profileResponse.date_of_birth,
         time_of_birth: profileResponse.time_of_birth,
         place_of_birth: profileResponse.place_of_birth,
-        phone_number: profileResponse.phone_number,
         preferred_language: profileResponse.preferred_language,
         area_of_interests: profileResponse.area_of_interests,
         long_term_reading_status: profileResponse.long_term_reading_status,
