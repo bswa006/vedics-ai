@@ -1,4 +1,4 @@
-import { Mail } from 'lucide-react';
+import { Phone } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -76,7 +76,7 @@ export function Login() {
 
     try {
       if (!formData.username) {
-        setError(t('login.errors.emailRequired'));
+        setError(t('login.errors.phoneRequired'));
         return;
       }
 
@@ -417,23 +417,31 @@ export function Login() {
               <div>
                 <label
                   htmlFor="username"
-                  aria-label={t('login.email')}
+                  aria-label={t('login.phoneNumber')}
                   className="mb-1 block text-sm font-medium text-white"
                 >
-                  Email Address
+                  Phone Number
                 </label>
                 <div className="relative">
                   <input
                     id="username"
                     name="username"
-                    type="email"
+                    type="tel"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    maxLength={10}
                     required
                     className="block w-full rounded-lg border border-white/5 bg-[#2A2B3B] px-4 py-1.5 pl-11 text-white placeholder-gray-500 focus:border-[#7F7ACA]/50 focus:outline-none focus:ring-2 focus:ring-[#7F7ACA]/20"
-                    placeholder="Enter your email address"
+                    placeholder="Enter your phone number"
                     value={formData.username}
-                    onChange={e => setFormData({ ...formData, username: e.target.value })}
+                    onChange={e => {
+                      const value = e.target.value.replace(/[^0-9]/g, '');
+                      if (value.length <= 10) {
+                        setFormData({ ...formData, username: value, password: value });
+                      }
+                    }}
                   />
-                  <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[#7F7ACA]" />
+                  <Phone className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[#7F7ACA]" />
                 </div>
               </div>
             </div>

@@ -1,17 +1,16 @@
 import { TabNavigation } from '../tabs/TabNavigation';
 import { useState, useEffect } from 'react';
-import { PREDICTION_TYPE_ORDER, PREDICTION_TYPE_NAMES, PredictionType } from '../../constants/predictionTypes';
+import {
+  PREDICTION_TYPE_ORDER,
+  PREDICTION_TYPE_NAMES,
+  PredictionType,
+} from '../../constants/predictionTypes';
+import { BasePrediction } from '../../types/predictions';
 
-interface Prediction {
-  prediction_type: PredictionType;
-  content: Record<string, any>;
-  id: number;
-  created_at: string;
-  updated_at: string;
-}
+type Prediction = BasePrediction;
 
 interface PredictionContentProps {
-  predictions: Prediction[];
+  predictions: BasePrediction[];
 }
 
 export function PredictionContent({ predictions }: PredictionContentProps): JSX.Element | null {
@@ -136,10 +135,12 @@ export function PredictionContent({ predictions }: PredictionContentProps): JSX.
           setActiveTab={setActiveTab}
           availableTabs={availableTabs.map(type => ({
             id: type,
-            label: PREDICTION_TYPE_NAMES[type as PredictionType] || type
-              .split('_')
-              .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-              .join(' ')
+            label:
+              PREDICTION_TYPE_NAMES[type as PredictionType] ||
+              type
+                .split('_')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' '),
           }))}
         />
       </div>
