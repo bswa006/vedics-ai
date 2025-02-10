@@ -3,9 +3,12 @@ import styles from './TabNavigation.module.css';
 import type { Swiper } from 'swiper';
 import { Carousel } from '../../components/ui/Carousel';
 
-interface Tab {
+interface TabItem {
   id: string;
   label: string;
+}
+
+interface Tab extends TabItem {
   icon: JSX.Element;
   color: string;
 }
@@ -13,7 +16,7 @@ interface Tab {
 interface TabNavigationProps {
   activeTab: string;
   setActiveTab: (id: string) => void;
-  availableTabs: string[];
+  availableTabs: TabItem[];
 }
 
 function getTabColor(index: number): string {
@@ -31,21 +34,15 @@ function getTabColor(index: number): string {
   return colors[index % colors.length];
 }
 
-function formatLabel(id: string): string {
-  return id
-    .split('_')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
-}
+
 
 export function TabNavigation({ activeTab, setActiveTab, availableTabs = [] }: TabNavigationProps) {
   if (!availableTabs || availableTabs.length === 0) {
     return null;
   }
 
-  const tabs: Tab[] = availableTabs.map((tabId, index) => ({
-    id: tabId,
-    label: formatLabel(tabId),
+  const tabs: Tab[] = availableTabs.map((tab, index) => ({
+    ...tab,
     icon: <Star className="h-6 w-6" />,
     color: getTabColor(index),
   }));

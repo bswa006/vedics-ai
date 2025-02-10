@@ -1,14 +1,17 @@
 import { TabNavigation } from '../tabs/TabNavigation';
 import { useState, useEffect } from 'react';
+import { PREDICTION_TYPE_ORDER, PREDICTION_TYPE_NAMES, PredictionType } from '../../constants/predictionTypes';
+
+interface Prediction {
+  prediction_type: PredictionType;
+  content: Record<string, any>;
+  id: number;
+  created_at: string;
+  updated_at: string;
+}
 
 interface PredictionContentProps {
-  predictions: Array<{
-    prediction_type: string;
-    content: Record<string, any>;
-    id: number;
-    created_at: string;
-    updated_at: string;
-  }>;
+  predictions: Prediction[];
 }
 
 export function PredictionContent({ predictions }: PredictionContentProps): JSX.Element | null {
@@ -16,7 +19,14 @@ export function PredictionContent({ predictions }: PredictionContentProps): JSX.
 
   if (!predictions || predictions.length === 0) return null;
 
-  const availableTabs = predictions.map(p => p.prediction_type);
+  // Sort predictions according to the defined order
+  const sortedPredictions = [...predictions].sort((a, b) => {
+    const indexA = PREDICTION_TYPE_ORDER.indexOf(a.prediction_type);
+    const indexB = PREDICTION_TYPE_ORDER.indexOf(b.prediction_type);
+    return indexA - indexB;
+  });
+
+  const availableTabs = sortedPredictions.map(p => p.prediction_type);
   const [activeTab, setActiveTab] = useState<string>(availableTabs[0] || '');
 
   useEffect(() => {
@@ -102,7 +112,7 @@ export function PredictionContent({ predictions }: PredictionContentProps): JSX.
     return <></>;
   };
 
-  const activePrediction = predictions.find(p => p.prediction_type === activeTab);
+  const activePrediction = sortedPredictions.find(p => p.prediction_type === activeTab);
   if (!activePrediction) return null;
 
   const content = activePrediction.content;
@@ -124,7 +134,13 @@ export function PredictionContent({ predictions }: PredictionContentProps): JSX.
         <TabNavigation
           activeTab={activeTab}
           setActiveTab={setActiveTab}
-          availableTabs={availableTabs}
+          availableTabs={availableTabs.map(type => ({
+            id: type,
+            label: PREDICTION_TYPE_NAMES[type as PredictionType] || type
+              .split('_')
+              .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+              .join(' ')
+          }))}
         />
       </div>
 
