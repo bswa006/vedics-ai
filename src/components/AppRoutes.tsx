@@ -94,7 +94,7 @@ export const AppRoutes: React.FC<AppRoutesProps> = ({ handleLogout, userData, lo
               index
               element={
                 <ProtectedRoute>
-                  <PredictionContent predictions={predictions || []} loading={predictionsLoading} />
+                  <PredictionContent predictions={predictions || []} loading={predictionsLoading} userData={userData} />
                 </ProtectedRoute>
               }
             />

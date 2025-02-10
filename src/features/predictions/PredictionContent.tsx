@@ -2,15 +2,20 @@ import { TabNavigation } from '../tabs/TabNavigation';
 import { useState, useEffect } from 'react';
 import { PREDICTION_TYPE_NAMES } from '../../constants/predictionTypes';
 import { BasePrediction, PredictionType } from '../../types/predictions';
+import { isLongTermReadingComplete } from '../../utils/profile';
+import { motion } from 'framer-motion';
+import { User } from '../../types/user';
 
 interface PredictionContentProps {
   predictions: BasePrediction[];
   loading?: boolean;
+  userData: User | null;
 }
 
 export function PredictionContent({
   predictions,
   loading = false,
+  userData,
 }: PredictionContentProps): JSX.Element | null {
   console.log('Predictions:', predictions);
 
@@ -128,7 +133,7 @@ export function PredictionContent({
   return (
     <div className="relative min-h-screen">
       <div
-        className="fixed inset-x-0 top-[80px] z-10 bg-[#1a1b26]/80 shadow-lg backdrop-blur-md"
+        className="fixed inset-x-0 top-[80px] z-50 flex flex-col bg-[#1a1b26]/80 shadow-lg backdrop-blur-md"
         style={{
           transform: 'translate3d(0, 0, 0)',
           backfaceVisibility: 'hidden',
@@ -151,9 +156,36 @@ export function PredictionContent({
                 .join(' '),
           }))}
         />
+        {!isLongTermReadingComplete(userData) && (
+          <div className="flex items-center justify-center bg-gradient-to-r from-purple-900/20 via-indigo-900/20 to-purple-900/20 py-4">
+            <div className="text-center">
+              <motion.div
+                className="mb-2 inline-flex items-center justify-center"
+                animate={{
+                  scale: [1, 1.2, 1],
+                  rotate: [0, 180, 360],
+                }}
+                transition={{
+                  duration: 3,
+                  ease: 'easeInOut',
+                  repeat: Infinity,
+                }}
+              >
+                <span className="text-2xl">✧</span>
+              </motion.div>
+              <p className="text-sm font-medium text-purple-200">Preparing your cosmic data...</p>
+            </div>
+          </div>
+        )}
       </div>
 
-      <div className="animate-fadeIn pt-28" data-testid={`${activeTab}-tab`}>
+      <div
+        className="animate-fadeIn relative z-0"
+        data-testid={`${activeTab}-tab`}
+        style={{
+          paddingTop: !isLongTermReadingComplete(userData) ? '200px' : '110px',
+        }}
+      >
         {Object.entries(content).map(([key, value]) => (
           <div key={key} className={cardStyle}>
             <h3 className="mb-5 flex items-center gap-2 text-xl font-medium text-gray-900 dark:text-white">

@@ -26,7 +26,7 @@ export function Layout({ children, onLogout }: LayoutProps) {
         <main
           className={cn(
             'mx-auto w-full max-w-lg flex-1 overflow-y-auto',
-            'pb-20', // Extra padding for bottom nav
+            'pb-16', // Extra padding for bottom nav
             '[&::-webkit-scrollbar-track]:bg-white/5 [&::-webkit-scrollbar]:w-2',
             '[&::-webkit-scrollbar-thumb]:bg-white/10 hover:[&::-webkit-scrollbar-thumb]:bg-white/20'
           )}
