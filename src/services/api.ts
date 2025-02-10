@@ -19,6 +19,14 @@ axiosInstance.interceptors.request.use((config) => {
   return config;
 });
 
+// Navigation callback for auth redirects
+let navigationCallback: ((path: string) => void) | null = null;
+
+// Function to set the navigation callback
+export const setNavigationCallback = (callback: (path: string) => void) => {
+  navigationCallback = callback;
+};
+
 // Add response interceptor to handle 403 errors
 axiosInstance.interceptors.response.use(
   (response) => response,
@@ -27,8 +35,12 @@ axiosInstance.interceptors.response.use(
       // Clear all localStorage
       localStorage.clear();
       
-      // Redirect to login page
-      window.location.href = '/login';
+      // Use navigation callback if set, otherwise fallback to window.location
+      if (navigationCallback) {
+        navigationCallback('/login');
+      } else {
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }

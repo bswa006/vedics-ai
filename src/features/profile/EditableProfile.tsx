@@ -1,12 +1,12 @@
-import { useState, useRef, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { User } from '../../types/user';
 import { motion } from 'framer-motion';
-import { LANGUAGES } from '../onboarding/components/LanguageSelection';
+import { AlertCircle, Calendar, Languages, User as UserIcon } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { api } from '../../services/api';
 import { theme } from '../../styles/theme';
-import { utcToLocal, localToUtc } from '../../utils/dateTime';
-import { AlertCircle, Calendar, MapPin, Mail, Languages, Target, User as UserIcon } from 'lucide-react';
+import { User } from '../../types/user';
+import { localToUtc, utcToLocal } from '../../utils/dateTime';
+import { LANGUAGES } from '../onboarding/components/LanguageSelection';
 
 interface EditableProfileProps {
   user: User;
@@ -317,7 +317,6 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
                   <div className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 transform text-gray-400">
                     <Languages className="h-5 w-5" />
                   </div>
-                  
                 </div>
                 <p className="mt-1 text-sm text-gray-400">{t('profile.preferredLanguageHelp')}</p>
               </div>

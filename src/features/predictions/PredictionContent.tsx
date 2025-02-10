@@ -1,13 +1,7 @@
 import { TabNavigation } from '../tabs/TabNavigation';
 import { useState, useEffect } from 'react';
-import {
-  PREDICTION_TYPE_ORDER,
-  PREDICTION_TYPE_NAMES,
-  PredictionType,
-} from '../../constants/predictionTypes';
-import { BasePrediction } from '../../types/predictions';
-
-type Prediction = BasePrediction;
+import { PREDICTION_TYPE_NAMES } from '../../constants/predictionTypes';
+import { BasePrediction, PredictionType } from '../../types/predictions';
 
 interface PredictionContentProps {
   predictions: BasePrediction[];
@@ -18,20 +12,14 @@ export function PredictionContent({ predictions }: PredictionContentProps): JSX.
 
   if (!predictions || predictions.length === 0) return null;
 
-  // Sort predictions according to the defined order
-  const sortedPredictions = [...predictions].sort((a, b) => {
-    const indexA = PREDICTION_TYPE_ORDER.indexOf(a.prediction_type);
-    const indexB = PREDICTION_TYPE_ORDER.indexOf(b.prediction_type);
-    return indexA - indexB;
-  });
-
-  const availableTabs = sortedPredictions.map(p => p.prediction_type);
-  const [activeTab, setActiveTab] = useState<string>(availableTabs[0] || '');
+  // Use the API's natural order
+  const availableTabs = predictions.map(p => p.prediction_type);
+  const [activeTab, setActiveTab] = useState<PredictionType>(availableTabs[0] || 'today_reading');
 
   useEffect(() => {
     // Update active tab if predictions change and current tab is no longer available
     if (!availableTabs.includes(activeTab)) {
-      setActiveTab(availableTabs[0] || '');
+      setActiveTab(availableTabs[0] || 'today_reading');
     }
   }, [predictions, activeTab, availableTabs]);
 
@@ -111,7 +99,7 @@ export function PredictionContent({ predictions }: PredictionContentProps): JSX.
     return <></>;
   };
 
-  const activePrediction = sortedPredictions.find(p => p.prediction_type === activeTab);
+  const activePrediction = predictions.find(p => p.prediction_type === activeTab);
   if (!activePrediction) return null;
 
   const content = activePrediction.content;
@@ -132,7 +120,7 @@ export function PredictionContent({ predictions }: PredictionContentProps): JSX.
       >
         <TabNavigation
           activeTab={activeTab}
-          setActiveTab={setActiveTab}
+          setActiveTab={(id: string) => setActiveTab(id as PredictionType)}
           availableTabs={availableTabs.map(type => ({
             id: type,
             label:

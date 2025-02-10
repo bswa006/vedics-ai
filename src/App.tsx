@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { api } from './services/api';
+import { setNavigationCallback } from './services/api';
 import { useTranslation } from 'react-i18next';
 import {
   BrowserRouter as Router,
@@ -46,6 +46,11 @@ const AppContent: React.FC<AppContentProps> = React.memo(
     const { t } = useTranslation();
     const { userData, predictions, error, loading } = useUserDataContext();
     const navigate = useNavigate();
+
+    // Set up navigation callback for API service
+    useEffect(() => {
+      setNavigationCallback(navigate);
+    }, [navigate]);
 
     // Data fetching is now handled in useUserData hook
 
@@ -144,7 +149,7 @@ const AppContent: React.FC<AppContentProps> = React.memo(
                 <OnboardingFlow
                   onComplete={async (data: unknown) => {
                     await new Promise(resolve => setTimeout(resolve, 500));
-                    window.location.href = '/';
+                    navigate('/');
                     console.log('Onboarding completed:', data);
                     const storedUserId = localStorage.getItem('userId');
                     if (storedUserId) {
@@ -303,47 +308,19 @@ const AppContent: React.FC<AppContentProps> = React.memo(
   }
 );
 
-const App: React.FC = () => {
-  const [userId, setUserId] = useState<number | null>(() => {
-    const storedUserId = localStorage.getItem('userId');
-    return storedUserId ? parseInt(storedUserId, 10) : null;
-  });
-
-  // Fetch user profile and set userId when token exists but userId doesn't
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      const token = localStorage.getItem('token');
-      const storedUserId = localStorage.getItem('userId');
-
-      if (token && !storedUserId) {
-        try {
-          const userProfile = await api.profiles.getProfile();
-          if (userProfile.id) {
-            localStorage.setItem('userId', userProfile.id.toString());
-            window.dispatchEvent(new Event('storage'));
-          }
-        } catch (error) {
-          console.error('Failed to fetch user profile:', error);
-        }
-      }
-    };
-
-    fetchUserProfile();
-  }, []);
-
-  // Listen for changes in localStorage
-  useEffect(() => {
-    const handleStorageChange = () => {
-      const storedUserId = localStorage.getItem('userId');
-      setUserId(storedUserId ? parseInt(storedUserId, 10) : null);
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
-
-  const [darkMode, setDarkMode] = useState<boolean>(false);
+const AppWrapper = ({
+  userId,
+  setUserId,
+}: {
+  userId: number | null;
+  setUserId: (id: number | null) => void;
+}) => {
+  const navigate = useNavigate();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    const savedMode = localStorage.getItem('darkMode');
+    return savedMode ? JSON.parse(savedMode) : false;
+  });
 
   const handleLogout = useCallback(() => {
     setShowLogoutModal(true);
@@ -354,8 +331,28 @@ const App: React.FC = () => {
     localStorage.removeItem('token');
     setUserId(null);
     setShowLogoutModal(false);
-    window.location.href = '/login';
-  }, []);
+    navigate('/login');
+  }, [navigate, setUserId]);
+
+  return (
+    <AppContent
+      userId={userId}
+      setUserId={setUserId}
+      darkMode={darkMode}
+      setDarkMode={setDarkMode}
+      handleLogout={handleLogout}
+      showLogoutModal={showLogoutModal}
+      setShowLogoutModal={setShowLogoutModal}
+      confirmLogout={confirmLogout}
+    />
+  );
+};
+
+function App() {
+  const [userId, setUserId] = useState<number | null>(() => {
+    const savedId = localStorage.getItem('userId');
+    return savedId ? parseInt(savedId, 10) : null;
+  });
 
   console.log('app rendering...');
 
@@ -363,20 +360,11 @@ const App: React.FC = () => {
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
       <Router>
         <UserDataProvider>
-          <AppContent
-            userId={userId}
-            setUserId={setUserId}
-            darkMode={darkMode}
-            setDarkMode={setDarkMode}
-            handleLogout={handleLogout}
-            showLogoutModal={showLogoutModal}
-            setShowLogoutModal={setShowLogoutModal}
-            confirmLogout={confirmLogout}
-          />
+          <AppWrapper userId={userId} setUserId={setUserId} />
         </UserDataProvider>
       </Router>
     </GoogleOAuthProvider>
   );
-};
+}
 
 export default React.memo(App);

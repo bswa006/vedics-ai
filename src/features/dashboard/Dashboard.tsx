@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { Card } from '../../components/ui/card';
 
 interface DashboardProps {
@@ -82,7 +83,7 @@ export function Dashboard({ userName }: DashboardProps) {
               icon={section.icon}
               title={section.title}
               excerpt={section.description}
-              onClick={() => (window.location.href = section.link)}
+              onClick={() => navigate(section.link)}
               className="h-full"
             >
               <div>{section.description}</div>
@@ -101,13 +102,13 @@ export function Dashboard({ userName }: DashboardProps) {
             variant="highlight"
             icon="📅"
             title={t('dashboard.quickActions.schedule')}
-            onClick={() => (window.location.href = '/schedule')}
+            onClick={() => navigate('/schedule')}
           />
           <Card
             variant="highlight"
             icon="📊"
             title={t('dashboard.quickActions.insights')}
-            onClick={() => (window.location.href = '/insights')}
+            onClick={() => navigate('/insights')}
           />
         </div>
       </section>
