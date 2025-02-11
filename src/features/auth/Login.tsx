@@ -123,7 +123,7 @@ export function Login() {
             if (userProfile.id) {
               // Store userId
               localStorage.setItem('userId', userProfile.user.id);
-              
+
               // For new users, always check profile completion
               if (isProfileComplete(userProfile)) {
                 navigate('/', { replace: true });
@@ -363,7 +363,7 @@ export function Login() {
               }}
               className="mt-6 text-3xl font-medium tracking-tight text-white"
             >
-              Welcome to Vedics.ai
+              welcome to vedics.ai
             </motion.h2>
             <motion.p
               initial={{ y: 20, opacity: 0 }}

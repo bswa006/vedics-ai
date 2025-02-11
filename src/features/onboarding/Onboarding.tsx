@@ -61,16 +61,16 @@ export function Onboarding() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-midnightIndigo">
+    <div className="bg-midnightIndigo relative min-h-screen overflow-hidden">
       {/* Background gradient */}
-      <div 
-        className="pointer-events-none absolute inset-0" 
+      <div
+        className="pointer-events-none absolute inset-0"
         style={{ background: theme.gradients.background }}
       />
       {/* Decorative elements */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -left-4 top-0 h-64 w-64 rounded-full bg-celestialLilac/30 blur-3xl" />
-        <div className="absolute -right-4 bottom-0 h-64 w-64 rounded-full bg-vedicSaffron/30 blur-3xl" />
+        <div className="bg-celestialLilac/30 absolute -left-4 top-0 h-64 w-64 rounded-full blur-3xl" />
+        <div className="bg-vedicSaffron/30 absolute -right-4 bottom-0 h-64 w-64 rounded-full blur-3xl" />
       </div>
 
       {/* Main content */}
@@ -84,12 +84,12 @@ export function Onboarding() {
               transition={{ duration: 0.5 }}
               className="mx-auto h-24 w-24"
             >
-              <div 
+              <div
                 className="relative h-full w-full rounded-full p-[2px]"
                 style={{ background: theme.gradients.primary }}
               >
-                <div className="h-full w-full rounded-full bg-midnightIndigo p-4">
-                  <div 
+                <div className="bg-midnightIndigo h-full w-full rounded-full p-4">
+                  <div
                     className="h-full w-full rounded-full opacity-90"
                     style={{ background: theme.gradients.accent }}
                   />
@@ -100,10 +100,10 @@ export function Onboarding() {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.5 }}
-              className={`mt-6 text-3xl font-light tracking-tight text-creamWhite ${theme.typography.heading.fontFamily}`}
+              className={`text-creamWhite mt-6 text-3xl font-light tracking-tight ${theme.typography.heading.fontFamily}`}
               style={{ fontWeight: theme.typography.heading.weights.medium }}
             >
-              Welcome to Vedics.ai
+              welcome to vedics.ai
             </motion.h2>
           </div>
 
@@ -116,24 +116,24 @@ export function Onboarding() {
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: -50, opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                className="space-y-6 rounded-2xl border border-celestialLilac/20 bg-white/5 p-8 backdrop-blur-xl"
+                className="border-celestialLilac/20 space-y-6 rounded-2xl border bg-white/5 p-8 backdrop-blur-xl"
               >
-                <div className="space-y-4 text-center text-creamWhite">
+                <div className="text-creamWhite space-y-4 text-center">
                   <p className="text-lg">
                     Begin your journey of self-discovery through ancient Vedic wisdom.
                   </p>
-                  <p className="text-sm text-creamWhite/80">
+                  <p className="text-creamWhite/80 text-sm">
                     We'll need some information to provide you with personalized insights.
                   </p>
                 </div>
                 <button
                   onClick={handleNext}
-                  className={`group relative flex w-full justify-center overflow-hidden px-6 py-3.5 text-sm font-medium text-creamWhite shadow-lg backdrop-blur-sm transition-all duration-300 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-celestialLilac/50 focus:ring-offset-2 active:scale-[0.98] ${theme.typography.body.fontFamily}`}
-                style={{ 
-                  background: theme.gradients.primary,
-                  borderRadius: theme.borderRadius.lg,
-                  fontWeight: theme.typography.body.weights.medium 
-                }}
+                  className={`text-creamWhite focus:ring-celestialLilac/50 group relative flex w-full justify-center overflow-hidden px-6 py-3.5 text-sm font-medium shadow-lg backdrop-blur-sm transition-all duration-300 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 active:scale-[0.98] ${theme.typography.body.fontFamily}`}
+                  style={{
+                    background: theme.gradients.primary,
+                    borderRadius: theme.borderRadius.lg,
+                    fontWeight: theme.typography.body.weights.medium,
+                  }}
                 >
                   Begin Journey
                   <ChevronRight className="ml-2 h-5 w-5" />
@@ -148,45 +148,45 @@ export function Onboarding() {
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: -50, opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                className="space-y-6 rounded-2xl border border-celestialLilac/20 bg-white/5 p-8 backdrop-blur-xl"
+                className="border-celestialLilac/20 space-y-6 rounded-2xl border bg-white/5 p-8 backdrop-blur-xl"
               >
                 <div className="space-y-4">
-                  <label className="block text-sm font-medium text-creamWhite">
+                  <label className="text-creamWhite block text-sm font-medium">
                     Date of Birth
                     <input
                       type="date"
                       value={birthDetails.date}
                       onChange={e => setBirthDetails({ ...birthDetails, date: e.target.value })}
-                      className="mt-1 block w-full rounded-xl border border-celestialLilac/20 bg-white/5 px-4 py-2 text-creamWhite placeholder-coolGray shadow-sm backdrop-blur-sm transition-all duration-200 focus:border-celestialLilac/40 focus:outline-none focus:ring-2 focus:ring-celestialLilac/20"
+                      className="border-celestialLilac/20 text-creamWhite placeholder-coolGray focus:border-celestialLilac/40 focus:ring-celestialLilac/20 mt-1 block w-full rounded-xl border bg-white/5 px-4 py-2 shadow-sm backdrop-blur-sm transition-all duration-200 focus:outline-none focus:ring-2"
                     />
                   </label>
-                  <label className="block text-sm font-medium text-creamWhite">
+                  <label className="text-creamWhite block text-sm font-medium">
                     Time of Birth
                     <input
                       type="time"
                       value={birthDetails.time}
                       onChange={e => setBirthDetails({ ...birthDetails, time: e.target.value })}
-                      className="mt-1 block w-full rounded-xl border border-celestialLilac/20 bg-white/5 px-4 py-2 text-creamWhite placeholder-coolGray shadow-sm backdrop-blur-sm transition-all duration-200 focus:border-celestialLilac/40 focus:outline-none focus:ring-2 focus:ring-celestialLilac/20"
+                      className="border-celestialLilac/20 text-creamWhite placeholder-coolGray focus:border-celestialLilac/40 focus:ring-celestialLilac/20 mt-1 block w-full rounded-xl border bg-white/5 px-4 py-2 shadow-sm backdrop-blur-sm transition-all duration-200 focus:outline-none focus:ring-2"
                     />
                   </label>
-                  <label className="block text-sm font-medium text-creamWhite">
+                  <label className="text-creamWhite block text-sm font-medium">
                     Place of Birth
                     <input
                       type="text"
                       value={birthDetails.place}
                       onChange={e => setBirthDetails({ ...birthDetails, place: e.target.value })}
                       placeholder="Enter your place of birth"
-                      className="mt-1 block w-full rounded-xl border border-celestialLilac/20 bg-white/5 px-4 py-2 text-creamWhite placeholder-coolGray shadow-sm backdrop-blur-sm transition-all duration-200 focus:border-celestialLilac/40 focus:outline-none focus:ring-2 focus:ring-celestialLilac/20"
+                      className="border-celestialLilac/20 text-creamWhite placeholder-coolGray focus:border-celestialLilac/40 focus:ring-celestialLilac/20 mt-1 block w-full rounded-xl border bg-white/5 px-4 py-2 shadow-sm backdrop-blur-sm transition-all duration-200 focus:outline-none focus:ring-2"
                     />
                   </label>
                 </div>
                 <div className="flex justify-between space-x-4">
                   <button
                     onClick={handleBack}
-                    className={`flex items-center justify-center border border-celestialLilac/20 bg-white/5 px-6 py-3.5 text-sm font-medium text-creamWhite shadow-lg backdrop-blur-sm transition-all duration-300 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-celestialLilac/50 focus:ring-offset-2 active:scale-[0.98] ${theme.typography.body.fontFamily}`}
-                    style={{ 
+                    className={`border-celestialLilac/20 text-creamWhite focus:ring-celestialLilac/50 flex items-center justify-center border bg-white/5 px-6 py-3.5 text-sm font-medium shadow-lg backdrop-blur-sm transition-all duration-300 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-offset-2 active:scale-[0.98] ${theme.typography.body.fontFamily}`}
+                    style={{
                       borderRadius: theme.borderRadius.lg,
-                      fontWeight: theme.typography.body.weights.medium 
+                      fontWeight: theme.typography.body.weights.medium,
                     }}
                   >
                     <ChevronLeft className="mr-2 h-5 w-5" />
@@ -195,11 +195,11 @@ export function Onboarding() {
                   <button
                     onClick={handleNext}
                     disabled={!birthDetails.date || !birthDetails.time || !birthDetails.place}
-                    className={`flex flex-1 items-center justify-center px-6 py-3.5 text-sm font-medium text-creamWhite shadow-lg backdrop-blur-sm transition-all duration-300 hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-celestialLilac/50 focus:ring-offset-2 active:scale-[0.98] ${theme.typography.body.fontFamily}`}
-                    style={{ 
+                    className={`text-creamWhite focus:ring-celestialLilac/50 flex flex-1 items-center justify-center px-6 py-3.5 text-sm font-medium shadow-lg backdrop-blur-sm transition-all duration-300 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 ${theme.typography.body.fontFamily}`}
+                    style={{
                       background: theme.gradients.primary,
                       borderRadius: theme.borderRadius.lg,
-                      fontWeight: theme.typography.body.weights.medium 
+                      fontWeight: theme.typography.body.weights.medium,
                     }}
                   >
                     Next
@@ -216,7 +216,7 @@ export function Onboarding() {
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: -50, opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                className="space-y-6 rounded-2xl border border-celestialLilac/20 bg-white/5 p-8 backdrop-blur-xl"
+                className="border-celestialLilac/20 space-y-6 rounded-2xl border bg-white/5 p-8 backdrop-blur-xl"
               >
                 <InterestsSelection
                   selectedInterests={selectedInterests}
@@ -231,7 +231,7 @@ export function Onboarding() {
                 <div className="flex justify-between space-x-4">
                   <button
                     onClick={handleBack}
-                    className="flex items-center justify-center rounded-xl border border-celestialLilac/20 bg-white/5 px-6 py-3.5 text-sm font-medium text-creamWhite shadow-lg backdrop-blur-sm transition-all duration-300 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-celestialLilac/50 focus:ring-offset-2 active:scale-[0.98]"
+                    className="border-celestialLilac/20 text-creamWhite focus:ring-celestialLilac/50 flex items-center justify-center rounded-xl border bg-white/5 px-6 py-3.5 text-sm font-medium shadow-lg backdrop-blur-sm transition-all duration-300 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-offset-2 active:scale-[0.98]"
                   >
                     <ChevronLeft className="mr-2 h-5 w-5" />
                     Back
@@ -239,7 +239,7 @@ export function Onboarding() {
                   <button
                     onClick={handleSubmit}
                     disabled={loading || selectedInterests.length === 0}
-                    className="flex flex-1 items-center justify-center rounded-xl bg-gradient-to-r from-celestialLilac to-vedicSaffron px-6 py-3.5 text-sm font-medium text-creamWhite shadow-lg backdrop-blur-sm transition-all duration-300 hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-celestialLilac/50 focus:ring-offset-2 active:scale-[0.98]"
+                    className="from-celestialLilac to-vedicSaffron text-creamWhite focus:ring-celestialLilac/50 flex flex-1 items-center justify-center rounded-xl bg-gradient-to-r px-6 py-3.5 text-sm font-medium shadow-lg backdrop-blur-sm transition-all duration-300 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     {loading ? 'Completing Setup...' : 'Complete Setup'}
                     <ChevronRight className="ml-2 h-5 w-5" />
