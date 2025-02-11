@@ -7,6 +7,7 @@ import { UserDataProvider, useUserDataContext } from './contexts/UserDataContext
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { AppRoutes } from './components/AppRoutes';
 import { useTranslation } from 'react-i18next';
+import { api } from './services/api';
 
 interface AppContentProps {
   handleLogout: () => void;
@@ -64,18 +65,29 @@ const AppWrapper = () => {
   }, []);
 
   const confirmLogout = useCallback(() => {
-    // Clear all localStorage items
-    localStorage.clear();
+    try {
+      // Close modal first to prevent UI glitches
+      setShowLogoutModal(false);
 
-    // Clear any session storage if exists
-    sessionStorage.clear();
+      // Clear any cache headers for API requests
+      if (api.clearCache) {
+        api.clearCache();
+      }
 
-    // Reset all context data
-    resetData();
+      // Clear all storage
+      localStorage.clear();
+      sessionStorage.clear();
 
-    // Close modal and navigate
-    setShowLogoutModal(false);
-    navigate('/login', { replace: true });
+      // Reset context data
+      resetData();
+
+      // Finally navigate
+      navigate('/login', { replace: true });
+    } catch (error) {
+      console.error('Error during logout:', error);
+      // Ensure we still navigate to login even if something fails
+      navigate('/login', { replace: true });
+    }
   }, [navigate, resetData]);
 
   return (

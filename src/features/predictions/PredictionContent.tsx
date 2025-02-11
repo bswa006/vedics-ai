@@ -35,8 +35,6 @@ export function PredictionContent({
     );
   }
 
-  if (!predictions || predictions.length === 0) return null;
-
   // Use the API's natural order
   const availableTabs = predictions.map(p => p.prediction_type);
   const [activeTab, setActiveTab] = useState<PredictionType>(availableTabs[0] || 'today_reading');
@@ -130,10 +128,12 @@ export function PredictionContent({
   };
 
   const activePrediction = predictions.find(p => p.prediction_type === activeTab);
-  if (!activePrediction) return null;
+  // if (!activePrediction) return null;
 
-  const content = activePrediction.content;
-  if (!content) return null;
+  const content = activePrediction?.content;
+
+  // console.log(content);
+  // if (!content) return null;
 
   return (
     <div className="relative min-h-screen">
@@ -191,20 +191,21 @@ export function PredictionContent({
           paddingTop: !isLongTermReadingComplete(userData) ? '200px' : '110px',
         }}
       >
-        {Object.entries(content).map(([key, value]) => (
-          <div key={key} className={cardStyle}>
-            <h3 className="mb-5 flex items-center gap-2 text-xl font-medium text-gray-900 dark:text-white">
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400">
-                ✧
-              </span>
-              {key
-                .split('_')
-                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                .join(' ')}
-            </h3>
-            {renderValue(value, key)}
-          </div>
-        ))}
+        {content &&
+          Object.entries(content).map(([key, value]) => (
+            <div key={key} className={cardStyle}>
+              <h3 className="mb-5 flex items-center gap-2 text-xl font-medium text-gray-900 dark:text-white">
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400">
+                  ✧
+                </span>
+                {key
+                  .split('_')
+                  .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                  .join(' ')}
+              </h3>
+              {renderValue(value, key)}
+            </div>
+          ))}
       </div>
     </div>
   );

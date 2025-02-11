@@ -62,7 +62,7 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
       // Convert local time to UTC before saving
       const utcDateTime = localToUtc(formData.date_of_birth, formData.time_of_birth);
 
-      // Update user profile
+      // Update profile with all data in one call
       await api.profiles.updateProfile(user.id, {
         date_of_birth: utcDateTime.utcDate,
         time_of_birth: utcDateTime.utcTime,
@@ -71,11 +71,14 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
         area_of_interests: formData.area_of_interests,
       });
 
-      // Update user details
-      await api.users.updateUser(user.user.id, {
-        first_name: formData.first_name,
-        last_name: formData.last_name,
-      });
+      // Update user details if they have changed
+      if (formData.first_name !== user.user.first_name || formData.last_name !== user.user.last_name) {
+        await api.users.updateUser(user.user.id, {
+          first_name: formData.first_name,
+          last_name: formData.last_name,
+        });
+      }
+
       await onUpdate();
     } catch (err: any) {
       setError(err?.message || t('profile.updateError'));
@@ -257,7 +260,7 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
               {/* First Name */}
               <div className="space-y-2">
                 <label className="block text-base font-medium text-gray-200">
-                  {t('profile.firstName')} *
+                  {t('profile.firstName')}
                 </label>
                 <div className="relative">
                   <input
@@ -265,7 +268,6 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
                     value={formData.first_name}
                     onChange={e => setFormData({ ...formData, first_name: e.target.value })}
                     className="focus:border-celestialLilac/40 focus:ring-celestialLilac/20 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 pl-10 text-white backdrop-blur-xl transition-all duration-200 hover:bg-white/10 focus:outline-none focus:ring-2"
-                    required
                     placeholder={t('profile.firstNamePlaceholder')}
                   />
                   <div className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 transform text-gray-400">
@@ -278,7 +280,7 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
               {/* Last Name */}
               <div className="space-y-2">
                 <label className="block text-base font-medium text-gray-200">
-                  {t('profile.lastName')} *
+                  {t('profile.lastName')}
                 </label>
                 <div className="relative">
                   <input
@@ -286,7 +288,6 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
                     value={formData.last_name}
                     onChange={e => setFormData({ ...formData, last_name: e.target.value })}
                     className="focus:border-celestialLilac/40 focus:ring-celestialLilac/20 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 pl-10 text-white backdrop-blur-xl transition-all duration-200 hover:bg-white/10 focus:outline-none focus:ring-2"
-                    required
                     placeholder={t('profile.lastNamePlaceholder')}
                   />
                   <div className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 transform text-gray-400">

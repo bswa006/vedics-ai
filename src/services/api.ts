@@ -128,6 +128,11 @@ export const handleAxiosError = (error: any) => {
 };
 
 export const api = {
+  clearCache: () => {
+    // Add cache-busting headers to future requests
+    axiosInstance.defaults.headers['Cache-Control'] = 'no-cache';
+    axiosInstance.defaults.headers['Pragma'] = 'no-cache';
+  },
   readings: {
     getTodayReadings: async (): Promise<TodayReadingsResponse> => {
       try {
@@ -170,6 +175,8 @@ export const api = {
       place_of_birth?: string;
       preferred_language?: string;
       area_of_interests?: string[];
+      first_name?: string;
+      last_name?: string;
     }): Promise<UserProfile> => {
       try {
         const response = await axiosInstance.patch(`/profiles/profiles/${userId}/`, data);

@@ -15,9 +15,21 @@ export const useUserData = () => {
   const hasFetchedRef = useRef(false);
   const location = useLocation();
 
+  const resetData = useCallback(() => {
+    setUserData(null);
+    setPredictions(null);
+    setError(null);
+    setLoading(false);
+    setIsOnboardingPending(false);
+    hasFetchedRef.current = false;
+  }, []);
+
   const fetchUserData = useCallback(async (isPolling = false) => {
     const token = localStorage.getItem('token');
-    if (!token) return;
+    if (!token) {
+      resetData();
+      return;
+    }
 
     try {
       if (!isPolling) setLoading(true);
