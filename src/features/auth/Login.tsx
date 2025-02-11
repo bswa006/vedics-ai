@@ -404,6 +404,7 @@ export function Login() {
               </div>
             )}
 
+            {/* Phone login temporarily disabled
             <div
               className="border-celestialLilac/20 space-y-4 rounded-xl border bg-white/5 backdrop-blur-xl"
               style={{
@@ -501,17 +502,9 @@ export function Login() {
                 </motion.span>
               </button>
             </div>
+            */}
 
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-white/10" />
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="bg-midnightIndigo px-2 text-gray-400">
-                  {t('login.orContinueWith')}
-                </span>
-              </div>
-            </div>
+            {/* Removed divider since phone login is disabled */}
 
             <button
               type="button"
