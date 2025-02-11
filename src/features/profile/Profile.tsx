@@ -188,16 +188,7 @@ export function Profile() {
                     </h3>
                     <div className="space-y-6">
                       {[
-                        {
-                          label: 'firstName',
-                          value: userData.user.first_name,
-                          icon: <UserIcon className="h-5 w-5" />,
-                        },
-                        {
-                          label: 'lastName',
-                          value: userData.user.last_name,
-                          icon: <UserIcon className="h-5 w-5" />,
-                        },
+
                         {
                           label: 'preferredLanguage',
                           value: userData.preferred_language,
