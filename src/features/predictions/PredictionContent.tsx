@@ -19,21 +19,21 @@ export function PredictionContent({
 }: PredictionContentProps): JSX.Element | null {
   console.log('Predictions:', predictions);
 
-  if (loading) {
-    return (
-      <div className="flex min-h-[50vh] items-center justify-center">
-        <div className="text-center">
-          <div className="mb-4 text-4xl">🌟</div>
-          <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">
-            Generating your predictions...
-          </h2>
-          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-            This may take a few moments
-          </p>
-        </div>
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="flex min-h-[50vh] items-center justify-center">
+  //       <div className="text-center">
+  //         <div className="mb-4 text-4xl">🌟</div>
+  //         <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+  //           Generating your predictions...
+  //         </h2>
+  //         <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+  //           This may take a few moments
+  //         </p>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   // Use the API's natural order
   const availableTabs = predictions.map(p => p.prediction_type);
@@ -132,7 +132,7 @@ export function PredictionContent({
 
   const content = activePrediction?.content;
 
-  // console.log(content);
+  console.log(content);
   // if (!content) return null;
 
   return (

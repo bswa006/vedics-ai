@@ -53,9 +53,6 @@ export const useUserData = () => {
         updated_at: profileResponse.updated_at
       };
 
-      // Always clear predictions first to avoid stale data
-      setPredictions(null);
-      
       if (!skipPredictions) {
         const hasAllRequiredFields = 
           profileResponse.time_of_birth && 
@@ -64,8 +61,17 @@ export const useUserData = () => {
 
         if (hasAllRequiredFields) {
           const predictionsResponse = await getLongTermPredictions();
-          setPredictions(predictionsResponse);
+          // Only update predictions if we get valid data
+          if (predictionsResponse) {
+            setPredictions(predictionsResponse);
+          }
+        } else if (!isPolling) {
+          // Clear predictions only on initial load if required fields are missing
+          setPredictions(null);
         }
+      } else if (!isPolling) {
+        // Clear predictions only on initial load if skipping predictions
+        setPredictions(null);
       }
 
       setUserData(user);
