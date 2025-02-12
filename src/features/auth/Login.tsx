@@ -1,4 +1,3 @@
-import { Phone } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -20,7 +19,7 @@ export function Login() {
   const { fetchUserData } = useUserDataContext();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState<FormData>({
+  const [formData] = useState<FormData>({
     username: '',
     password: '',
   });
@@ -46,7 +45,7 @@ export function Login() {
 
               // Fetch predictions and other data
               await fetchUserData(false, false, userProfile);
-              
+
               if (isProfileComplete(userProfile)) {
                 navigate('/', { replace: true });
               } else {
@@ -100,7 +99,7 @@ export function Login() {
 
               // Fetch predictions and other data
               await fetchUserData(false, false, userProfile);
-              
+
               if (isProfileComplete(userProfile)) {
                 navigate('/', { replace: true });
               } else {
@@ -135,7 +134,7 @@ export function Login() {
               // For new users, always check profile completion
               // Fetch predictions and other data
               await fetchUserData(false, false, userProfile);
-              
+
               if (isProfileComplete(userProfile)) {
                 navigate('/', { replace: true });
               } else {
@@ -416,7 +415,7 @@ export function Login() {
             )}
 
             {/* Phone login temporarily disabled */}
-            <div
+            {/* <div
               className="border-celestialLilac/20 space-y-4 rounded-xl border bg-white/5 backdrop-blur-xl"
               style={{
                 padding: theme.spacing.lg,
@@ -455,9 +454,9 @@ export function Login() {
                   <Phone className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[#7F7ACA]" />
                 </div>
               </div>
-            </div>
+            </div> */}
 
-            <div>
+            {/* <div>
               <button
                 type="submit"
                 disabled={loading}
@@ -512,7 +511,7 @@ export function Login() {
                   ✨
                 </motion.span>
               </button>
-            </div>
+            </div> */}
 
             {/* Removed divider since phone login is disabled */}
 

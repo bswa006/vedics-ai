@@ -18,7 +18,7 @@ interface CarouselProps {
 
 export function Carousel({
   items,
-  slidesPerView = 3.5,
+
   spaceBetween = 8,
   onSlideChange,
 }: CarouselProps) {

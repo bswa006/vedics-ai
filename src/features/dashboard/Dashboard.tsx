@@ -9,6 +9,7 @@ interface DashboardProps {
 
 export function Dashboard({ userName }: DashboardProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const sections = [
     {

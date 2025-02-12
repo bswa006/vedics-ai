@@ -23,7 +23,7 @@ interface AppRoutesProps {
 export const AppRoutes: React.FC<AppRoutesProps> = ({ handleLogout, userData, loading }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { predictions, loading: predictionsLoading } = useUserDataContext();
+  const { predictions } = useUserDataContext();
 
   // Not authenticated - only show login route
   const token = localStorage.getItem('token');
@@ -94,7 +94,7 @@ export const AppRoutes: React.FC<AppRoutesProps> = ({ handleLogout, userData, lo
               index
               element={
                 <ProtectedRoute>
-                  <PredictionContent predictions={predictions || []} loading={predictionsLoading} userData={userData} />
+                  <PredictionContent predictions={predictions || []} userData={userData} />
                 </ProtectedRoute>
               }
             />

@@ -8,13 +8,11 @@ import { User } from '../../types/user';
 
 interface PredictionContentProps {
   predictions: BasePrediction[];
-  loading?: boolean;
   userData: User | null;
 }
 
 export function PredictionContent({
   predictions,
-  loading = false,
   userData,
 }: PredictionContentProps): JSX.Element | null {
   console.log('Predictions:', predictions);
