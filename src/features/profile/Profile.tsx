@@ -17,13 +17,13 @@ export function Profile() {
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="border-statusRed/20 bg-statusRed/5 mx-auto max-w-md rounded-xl border p-6 backdrop-blur-xl"
+        className="border-status-red/20 bg-status-red/5 mx-auto max-w-md rounded-xl border p-6 backdrop-blur-xl"
       >
         <div className="flex items-center justify-center gap-3">
           <div className="flex-shrink-0">
             <AlertCircle className="text-status-red h-5 w-5" />
           </div>
-          <p className="text-statusRed text-sm font-medium">{error}</p>
+          <p className="text-status-red text-sm font-medium">{error}</p>
         </div>
       </motion.div>
     );

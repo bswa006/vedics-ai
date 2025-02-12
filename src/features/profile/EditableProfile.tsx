@@ -17,7 +17,7 @@ interface EditableProfileProps {
 export function EditableProfile({ user, onUpdate, onCancel }: EditableProfileProps) {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   // Convert UTC to local time for initial display
   const initialLocalDateTime =
     user.date_of_birth && user.time_of_birth
@@ -45,6 +45,26 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [onCancel]);
 
+  // References for error fields
+  const errorRefs = {
+    date_of_birth: useRef<HTMLDivElement>(null),
+    time_of_birth: useRef<HTMLDivElement>(null),
+    place_of_birth: useRef<HTMLDivElement>(null),
+    preferred_language: useRef<HTMLDivElement>(null),
+    general: useRef<HTMLDivElement>(null),
+  };
+
+  const scrollToError = (errors: Record<string, string>) => {
+    // Find the first error field
+    const firstErrorField = Object.keys(errors)[0];
+    if (firstErrorField && errorRefs[firstErrorField as keyof typeof errorRefs]?.current) {
+      errorRefs[firstErrorField as keyof typeof errorRefs].current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      });
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formRef.current?.checkValidity()) {
@@ -53,7 +73,7 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
     }
 
     setLoading(true);
-    setError('');
+    setFieldErrors({});
 
     try {
       // Convert local time to UTC before saving
@@ -68,12 +88,19 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
         area_of_interests: formData.area_of_interests,
       });
 
-
-
       await onUpdate();
     } catch (err: any) {
-      setError(err?.message || t('profile.updateError'));
-      console.error('Profile update error:', err);
+      try {
+        const errorObj = JSON.parse(err?.message);
+        console.log('Validation errors:', errorObj); // Debug log
+        setFieldErrors(errorObj);
+        scrollToError(errorObj);
+      } catch (parseErr) {
+        console.log('Error parsing:', err?.message); // Debug log
+        const generalError = { general: err?.message || t('profile.updateError') };
+        setFieldErrors(generalError);
+        scrollToError(generalError);
+      }
     } finally {
       setLoading(false);
     }
@@ -143,17 +170,18 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
         </div>
       </div>
 
-      {error && (
+      {fieldErrors.general && (
         <motion.div
+          ref={errorRefs.general}
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="border-status-red/20 bg-status-red/5 rounded-xl border p-4 backdrop-blur-xl"
+          className="rounded-xl border border-red-500/20 bg-red-500/5 p-4 backdrop-blur-xl"
         >
           <div className="flex items-center gap-3">
             <div className="flex-shrink-0">
-              <AlertCircle className="text-status-red h-5 w-5" />
+              <AlertCircle className="h-5 w-5 text-red-500" />
             </div>
-            <p className="text-status-red text-sm font-medium">{error}</p>
+            <p className="text-sm font-medium text-red-500">{fieldErrors.general}</p>
           </div>
         </motion.div>
       )}
@@ -194,6 +222,11 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
                     📅
                   </div>
                 </div>
+                <div ref={errorRefs.date_of_birth}>
+                {fieldErrors.date_of_birth && (
+                  <p className="mt-2 text-sm font-medium text-red-500">{fieldErrors.date_of_birth}</p>
+                )}
+                </div>
                 <p className="mt-1 text-sm text-gray-400">{t('profile.birthDateHelp')}</p>
               </div>
               <div className="space-y-2">
@@ -212,6 +245,11 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
                     <Calendar className="h-5 w-5" />
                   </div>
                 </div>
+                <div ref={errorRefs.time_of_birth}>
+                {fieldErrors.time_of_birth && (
+                  <p className="mt-2 text-sm font-medium text-red-500">{fieldErrors.time_of_birth}</p>
+                )}
+                </div>
                 <p className="mt-1 text-sm text-gray-400">{t('profile.birthTimeHelp')}</p>
               </div>
               <div className="space-y-2">
@@ -225,6 +263,11 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
                   className="focus:border-celestialLilac/40 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white backdrop-blur-xl focus:outline-none focus:ring-0"
                   required
                 />
+                <div ref={errorRefs.place_of_birth}>
+                {fieldErrors.place_of_birth && (
+                  <p className="mt-2 text-sm font-medium text-red-500">{fieldErrors.place_of_birth}</p>
+                )}
+                </div>
               </div>
             </div>
           </div>
@@ -248,7 +291,6 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
               {t('profile.personalInfo')}
             </h3>
             <div className="space-y-6">
-
               {/* Preferred Language */}
               <div className="space-y-2">
                 <label className="block text-base font-medium text-gray-200">
@@ -270,6 +312,11 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
                   <div className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 transform text-gray-400">
                     <Languages className="h-5 w-5" />
                   </div>
+                </div>
+                <div ref={errorRefs.preferred_language}>
+                {fieldErrors.preferred_language && (
+                  <p className="mt-2 text-sm font-medium text-red-500">{fieldErrors.preferred_language}</p>
+                )}
                 </div>
                 <p className="mt-1 text-sm text-gray-400">{t('profile.preferredLanguageHelp')}</p>
               </div>

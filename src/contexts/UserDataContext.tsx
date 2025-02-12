@@ -8,7 +8,7 @@ interface UserDataContextType {
   predictions: PredictionResponse | null;
   loading: boolean;
   error: string | null;
-  fetchUserData: () => Promise<void>;
+  fetchUserData: (isPolling?: boolean, skipPredictions?: boolean, existingProfile?: any) => Promise<void>;
   isOnboardingPending: boolean;
   resetData: () => void;
 }

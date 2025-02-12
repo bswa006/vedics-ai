@@ -13,8 +13,8 @@ export interface LanguageOption {
 
 export const LANGUAGES: LanguageOption[] = [
   // South Asian Languages
-  { code: 'en', name: 'English' },
-  { code: 'hi', name: 'हिंदी (Hindi)' },
+  { code: 'english', name: 'English' },
+  { code: 'hindi', name: 'हिंदी (Hindi)' },
   { code: 'tamil', name: 'தமிழ் (Tamil)' },
   { code: 'telugu', name: 'తెలుగు (Telugu)' },
   { code: 'bengali', name: 'বাংলা (Bengali)' },
@@ -41,8 +41,8 @@ export const LANGUAGES: LanguageOption[] = [
   { code: 'vietnamese', name: 'Tiếng Việt (Vietnamese)' },
   { code: 'indonesian', name: 'Bahasa Indonesia (Indonesian)' },
   { code: 'malay', name: 'Bahasa Melayu (Malay)' },
-  { code: 'tagalog', name: 'Tagalog (Filipino)' },
-  { code: 'lao', name: 'ລາວ (Lao)' },
+  { code: 'filipino', name: 'Tagalog (Filipino)' },
+  { code: 'laotian', name: 'ລາວ (Lao)' },
   { code: 'javanese', name: 'Basa Jawa (Javanese)' },
   { code: 'sundanese', name: 'Basa Sunda (Sundanese)' },
 

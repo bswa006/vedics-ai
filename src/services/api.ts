@@ -122,16 +122,31 @@ interface RatingResponse {
 // Helper function to handle axios errors
 export const handleAxiosError = (error: any) => {
   if (axios.isAxiosError(error)) {
-    throw new Error(error.response?.data?.message || 'API request failed');
+    const responseData = error.response?.data;
+
+    if (responseData?.errors) {
+      // Convert array values to single strings
+      const formattedErrors = Object.fromEntries(
+        Object.entries(responseData.errors).map(([key, value]) => [
+          key,
+          Array.isArray(value) ? value[0] : value
+        ])
+      );
+
+      throw new Error(JSON.stringify(formattedErrors));
+    }
+
+    throw new Error(responseData?.message || 'API request failed');
   }
   throw error;
 };
 
 export const api = {
   clearCache: () => {
-    // Add cache-busting headers to future requests
-    axiosInstance.defaults.headers['Cache-Control'] = 'no-cache';
-    axiosInstance.defaults.headers['Pragma'] = 'no-cache';
+    // Remove any existing cache headers
+    delete axiosInstance.defaults.headers['Cache-Control'];
+    delete axiosInstance.defaults.headers['Pragma'];
+    localStorage.clear();
   },
   readings: {
     getTodayReadings: async (): Promise<TodayReadingsResponse> => {
@@ -165,8 +180,18 @@ export const api = {
         return handleAxiosError(error);
       }
     },
-    googleLogin: (data: { access_token: string }) =>
-      axiosInstance.post('/auth/google/', data).then(response => response.data),
+    googleLogin: async (data: { access_token: string }): Promise<LoginResponse> => {
+      try {
+        const response = await axiosInstance.post('/auth/google/', data, {
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+        return response.data;
+      } catch (error) {
+        return handleAxiosError(error);
+      }
+    },
   },
   profiles: {
     updateProfile: async (userId: number, data: {

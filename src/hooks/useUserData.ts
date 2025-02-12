@@ -1,12 +1,11 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { User } from '../types/user';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { PredictionResponse } from '../types/predictions';
+import { User } from '../types/user';
 import { useUserApi } from './useUserApi';
-import { useNavigate, useLocation } from 'react-router-dom';
 
 export const useUserData = () => {
   const { getLongTermPredictions, getProfile } = useUserApi();
-  const navigate = useNavigate();
   const [predictions, setPredictions] = useState<PredictionResponse | null>(null);
   const [userData, setUserData] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -24,7 +23,7 @@ export const useUserData = () => {
     hasFetchedRef.current = false;
   }, []);
 
-  const fetchUserData = useCallback(async (isPolling = false) => {
+  const fetchUserData = useCallback(async (isPolling = false, skipPredictions = false, existingProfile?: any) => {
     const token = localStorage.getItem('token');
     if (!token) {
       resetData();
@@ -35,7 +34,7 @@ export const useUserData = () => {
       if (!isPolling) setLoading(true);
       setError(null);
 
-      const profileResponse = await getProfile();
+      const profileResponse = existingProfile || await getProfile();
       if (!profileResponse) {
         throw new Error('No profile data found');
       }
@@ -54,16 +53,19 @@ export const useUserData = () => {
         updated_at: profileResponse.updated_at
       };
 
-      const hasAllRequiredFields = 
-        profileResponse.time_of_birth && 
-        profileResponse.date_of_birth && 
-        profileResponse.place_of_birth;
+      // Always clear predictions first to avoid stale data
+      setPredictions(null);
+      
+      if (!skipPredictions) {
+        const hasAllRequiredFields = 
+          profileResponse.time_of_birth && 
+          profileResponse.date_of_birth && 
+          profileResponse.place_of_birth;
 
-      if (hasAllRequiredFields) {
-        const predictionsResponse = await getLongTermPredictions();
-        setPredictions(predictionsResponse);
-      } else {
-        setPredictions(null);
+        if (hasAllRequiredFields) {
+          const predictionsResponse = await getLongTermPredictions();
+          setPredictions(predictionsResponse);
+        }
       }
 
       setUserData(user);

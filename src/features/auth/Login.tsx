@@ -7,6 +7,7 @@ import { api } from '../../services/api';
 import { isProfileComplete } from '../../utils/profile';
 import { theme } from '../../styles/theme';
 import { useGoogleLogin } from '@react-oauth/google';
+import { useUserDataContext } from '../../contexts/UserDataContext';
 
 interface FormData {
   username: string;
@@ -16,6 +17,7 @@ interface FormData {
 export function Login() {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { fetchUserData } = useUserDataContext();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<FormData>({
@@ -42,6 +44,9 @@ export function Login() {
               // Store both token and userId
               localStorage.setItem('userId', userProfile.user.id);
 
+              // Fetch predictions and other data
+              await fetchUserData(false, false, userProfile);
+              
               if (isProfileComplete(userProfile)) {
                 navigate('/', { replace: true });
               } else {
@@ -93,6 +98,9 @@ export function Login() {
               // Store both token and userId
               localStorage.setItem('userId', userProfile.user.id);
 
+              // Fetch predictions and other data
+              await fetchUserData(false, false, userProfile);
+              
               if (isProfileComplete(userProfile)) {
                 navigate('/', { replace: true });
               } else {
@@ -125,6 +133,9 @@ export function Login() {
               localStorage.setItem('userId', userProfile.user.id);
 
               // For new users, always check profile completion
+              // Fetch predictions and other data
+              await fetchUserData(false, false, userProfile);
+              
               if (isProfileComplete(userProfile)) {
                 navigate('/', { replace: true });
               } else {
@@ -404,7 +415,7 @@ export function Login() {
               </div>
             )}
 
-            {/* Phone login temporarily disabled
+            {/* Phone login temporarily disabled */}
             <div
               className="border-celestialLilac/20 space-y-4 rounded-xl border bg-white/5 backdrop-blur-xl"
               style={{
@@ -502,7 +513,6 @@ export function Login() {
                 </motion.span>
               </button>
             </div>
-            */}
 
             {/* Removed divider since phone login is disabled */}
 
