@@ -1,16 +1,43 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { TodayReading } from '../../types/readings';
 import api from '../../services/api';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Star, Sparkles, RefreshCw } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { format } from 'date-fns';
 
 interface DailyStarsProps {
   userId: number;
 }
 
 export function DailyStars({ userId }: DailyStarsProps) {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [todayReadings, setTodayReadings] = useState<TodayReading | null>(null);
   const fetchInProgressRef = useRef(false);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.4
+      }
+    }
+  };
 
   const fetchTodayReadings = useCallback(async (signal: AbortSignal) => {
     if (fetchInProgressRef.current) return;
@@ -37,10 +64,21 @@ export function DailyStars({ userId }: DailyStarsProps) {
     } finally {
       if (!signal.aborted) {
         setLoading(false);
+        setRefreshing(false);
       }
       fetchInProgressRef.current = false;
     }
   }, []);
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    const abortController = new AbortController();
+    fetchTodayReadings(abortController.signal);
+    
+    return () => {
+      abortController.abort();
+    };
+  };
 
   useEffect(() => {
     if (!userId) return;
@@ -57,133 +95,139 @@ export function DailyStars({ userId }: DailyStarsProps) {
     };
   }, [userId, todayReadings, fetchTodayReadings]);
 
-  if (loading) {
+  // Loading state
+  if (loading && !refreshing) {
     return (
-      <div className="flex h-full items-center justify-center p-8">
-        <div className="text-center text-gray-500">Loading your daily stars...</div>
+      <div className="flex h-[80vh] items-center justify-center">
+        <motion.div 
+          className="text-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <motion.div 
+            className="mb-6 text-6xl flex justify-center"
+            animate={{ 
+              rotate: [0, 360],
+              scale: [1, 1.2, 1]
+            }}
+            transition={{ 
+              duration: 3,
+              repeat: Infinity,
+              ease: "easeInOut" 
+            }}
+          >
+            <Sparkles className="text-purple-500" size={48} />
+          </motion.div>
+          <h2 className="text-xl font-medium text-gray-900 dark:text-gray-100 mb-2">
+            Reading the stars...
+          </h2>
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            Aligning cosmic energies for your daily guidance
+          </p>
+        </motion.div>
       </div>
     );
   }
 
+  // Error state
   if (error) {
     return (
-      <div className="flex h-full items-center justify-center">
-        <div className="text-center text-red-500">{error}</div>
+      <div className="flex h-[80vh] items-center justify-center p-6">
+        <motion.div 
+          className="text-center max-w-md"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="mb-6 text-4xl flex justify-center text-red-500">⚠️</div>
+          <h2 className="text-xl font-medium text-gray-900 dark:text-gray-100 mb-3">
+            Cosmic Interference
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-6">
+            {error}
+          </p>
+          <button
+            onClick={handleRefresh}
+            className="inline-flex items-center px-4 py-2 rounded-full bg-purple-600 text-white hover:bg-purple-700 transition-colors"
+          >
+            <RefreshCw size={16} className="mr-2" />
+            Try Again
+          </button>
+        </motion.div>
       </div>
     );
   }
 
+  // No readings state
   if (!todayReadings) {
     return (
-      <div className="flex h-full items-center justify-center">
-        <div className="text-center text-gray-500">No readings available for today.</div>
+      <div className="flex h-[80vh] items-center justify-center p-6">
+        <motion.div 
+          className="text-center max-w-md"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="mb-6 text-4xl flex justify-center text-gray-400">🔭</div>
+          <h2 className="text-xl font-medium text-gray-900 dark:text-gray-100 mb-3">
+            Stars Are Aligning
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-6">
+            No readings available for today yet. The cosmic energies are still aligning.
+          </p>
+          <button
+            onClick={handleRefresh}
+            className="inline-flex items-center px-4 py-2 rounded-full bg-purple-600 text-white hover:bg-purple-700 transition-colors"
+          >
+            <RefreshCw size={16} className="mr-2" />
+            Check Again
+          </button>
+        </motion.div>
       </div>
     );
   }
 
-  const cardStyle = `
-    group relative px-8 py-6 transition-all duration-300
-    bg-white dark:bg-gray-900 backdrop-blur-sm
-    hover:scale-[1.01] hover:bg-white/95 dark:hover:bg-gray-900/95
-    border-b border-gray-200 dark:border-gray-800
-    last:border-b-0
-  `;
-
-  const renderArrayContent = (items: any[]) => {
-    // Handle array of objects
-    if (items.length > 0 && typeof items[0] === 'object') {
+  const renderValue = (value: any): JSX.Element | JSX.Element[] | string => {
+    if (Array.isArray(value)) {
       return (
-        <div className="space-y-3 w-full">
-          {items.map((item, index) => (
+        <div className="space-y-4">
+          {value.map((item, index) => (
             <div key={index} className="rounded-lg bg-purple-50/50 p-4 dark:bg-purple-900/10">
-              {Object.entries(item).map(([key, value]) => (
-                <div key={key} className="mb-2 last:mb-0">
-                  <span className="font-medium text-purple-700 dark:text-purple-300">
-                    {key.split('_').map(w => w[0].toUpperCase() + w.slice(1)).join(' ')}:
-                  </span>
-                  <span className="ml-2 text-gray-700 dark:text-gray-300">
-                    {Array.isArray(value) ? value.join(', ') : String(value)}
-                  </span>
-                </div>
-              ))}
+              {typeof item === 'object' && item !== null ? (
+                Object.entries(item).map(([key, val]) => (
+                  <div key={key} className="mb-2 last:mb-0">
+                    <span className="font-medium text-purple-700 dark:text-purple-300">
+                      {key.split('_').map(w => w[0].toUpperCase() + w.slice(1)).join(' ')}:
+                    </span>
+                    <span className="ml-2 text-gray-700 dark:text-gray-300">
+                      {String(val)}
+                    </span>
+                  </div>
+                ))
+              ) : (
+                <span className="text-gray-700 dark:text-gray-300">{String(item)}</span>
+              )}
             </div>
           ))}
         </div>
       );
-    }
-
-    const stringItems = items.map(item => {
-      if (typeof item === 'string') return item;
-      if (typeof item === 'number') return item.toString();
-      if (typeof item === 'object' && item !== null) return JSON.stringify(item);
-      return String(item);
-    });
-
-    const isThreeWordArray = stringItems.every(
-      item => item.split(' ').length <= 3
-    );
-
-    if (isThreeWordArray) {
-      return stringItems.map((item, index) => (
-        <span
-          key={index}
-          className="mb-2 mr-2 inline-flex items-center gap-1.5 rounded-full bg-purple-100/80 py-1 pl-2 pr-3 text-sm font-medium text-purple-700 transition-all duration-300 hover:-translate-y-0.5 hover:bg-purple-200/90 dark:bg-purple-900/30 dark:text-purple-300 dark:hover:bg-purple-800/40"
-        >
-          {item}
-        </span>
-      ));
-    } else {
-      return (
-        <ul className="ml-1 list-none space-y-3">
-          {stringItems.map((item, index) => (
-            <li
-              key={index}
-              className="group/item -ml-2 flex items-start gap-3 rounded-lg p-2 transition-all duration-300 hover:bg-purple-50 dark:hover:bg-purple-900/20"
-            >
-              <span className="mt-1 text-purple-400 dark:text-purple-500">✦</span>
-              <span className="text-gray-700 transition-colors duration-300 group-hover/item:text-purple-700 dark:text-gray-200 dark:group-hover/item:text-purple-300">
-                {item}
-              </span>
-            </li>
-          ))}
-        </ul>
-      );
-    }
-  };
-
-  const renderValue = (value: any): JSX.Element | JSX.Element[] => {
-    if (Array.isArray(value)) {
-      return <div className="flex flex-wrap gap-2">{renderArrayContent(value)}</div>;
     } else if (typeof value === 'object' && value !== null) {
-      // Special handling for dosha_balance
-      if ('vata' in value || 'pitta' in value || 'kapha' in value) {
+      // Handle dosha objects with level and advice
+      if ('level' in value && 'advice' in value) {
         return (
-          <div className="grid gap-4 md:grid-cols-3">
-            {Object.entries(value).map(([doshaName, doshaInfo]) => (
-              <div key={doshaName} className="rounded-lg bg-purple-50/50 p-5 dark:bg-purple-900/10 transition-all duration-300 hover:shadow-md">
-                <h4 className="mb-3 text-lg font-medium capitalize text-gray-800 dark:text-gray-100 flex items-center">
-                  <span className="mr-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400">
-                    {doshaName === 'vata' ? '🍃' : doshaName === 'pitta' ? '🔥' : '💧'}
-                  </span>
-                  {doshaName.charAt(0).toUpperCase() + doshaName.slice(1)}
-                </h4>
-                {typeof doshaInfo === 'object' && doshaInfo !== null && (
-                  <>
-                    <div className="mb-3 flex items-center">
-                      <span className="text-sm font-medium text-purple-700 dark:text-purple-300">Level:</span>
-                      <span className="ml-2 rounded-full bg-purple-100 px-3 py-1 text-sm font-medium text-purple-700 dark:bg-purple-800/40 dark:text-purple-300">
-                        {((doshaInfo as any).level).charAt(0).toUpperCase() + ((doshaInfo as any).level).slice(1)}
-                      </span>
-                    </div>
-                    <div className="border-l-2 border-purple-200 pl-4 dark:border-purple-800/30">
-                      <p className="text-gray-600 dark:text-gray-300">
-                        {(doshaInfo as any).advice}
-                      </p>
-                    </div>
-                  </>
-                )}
-              </div>
-            ))}
+          <div className="space-y-3">
+            <div className="flex items-center">
+              <span className="font-medium text-purple-700 dark:text-purple-300">Level:</span>
+              <span className="ml-2 rounded-full bg-purple-100 px-3 py-1 text-sm font-medium text-purple-700 dark:bg-purple-800/40 dark:text-purple-300">
+                {(value.level as string).charAt(0).toUpperCase() + (value.level as string).slice(1)}
+              </span>
+            </div>
+            <div className="border-l-2 border-purple-200 pl-4 dark:border-purple-800/30">
+              <p className="text-gray-600 dark:text-gray-300">
+                {value.advice as string}
+              </p>
+            </div>
           </div>
         );
       }
@@ -195,24 +239,32 @@ export function DailyStars({ userId }: DailyStarsProps) {
             <h4 className="mb-2 text-base font-medium text-gray-800 dark:text-gray-100">
               Mood Cycles
             </h4>
-            <div className="space-y-3">
+            <div className="grid gap-3 sm:grid-cols-2">
               {value.mood_cycles.map((item: any, index: number) => (
-                <div key={index} className="rounded-lg bg-purple-50/50 p-4 dark:bg-purple-900/10 border-l-4 border-purple-200 dark:border-purple-800/30">
-                  <div className="mb-2 flex items-center">
+                <motion.div 
+                  key={index} 
+                  className="rounded-lg bg-purple-50/50 p-4 dark:bg-purple-900/10 hover:shadow-md transition-all duration-300"
+                  whileHover={{ 
+                    scale: 1.03, 
+                    backgroundColor: "rgba(168, 85, 247, 0.08)",
+                    boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)" 
+                  }}
+                >
+                  <div className="mb-2">
                     <span className="font-medium text-purple-700 dark:text-purple-300">Quality:</span>
                     <span className="ml-2 text-gray-700 dark:text-gray-300">{item.quality.charAt(0).toUpperCase() + item.quality.slice(1)}</span>
                   </div>
-                  <div className="mb-2 flex items-center">
+                  <div className="mb-2">
                     <span className="font-medium text-purple-700 dark:text-purple-300">Time Window:</span>
                     <span className="ml-2 text-gray-700 dark:text-gray-300">{item.time_window}</span>
                   </div>
                   {item.planetary_influence && (
-                    <div className="flex items-center">
+                    <div>
                       <span className="font-medium text-purple-700 dark:text-purple-300">Planetary Influence:</span>
                       <span className="ml-2 text-gray-700 dark:text-gray-300">{item.planetary_influence}</span>
                     </div>
                   )}
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -228,7 +280,15 @@ export function DailyStars({ userId }: DailyStarsProps) {
             </h4>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {value.crystal_recommendations.map((item: any, index: number) => (
-                <div key={index} className="rounded-lg bg-purple-50/50 p-4 dark:bg-purple-900/10 hover:shadow-md transition-all duration-300">
+                <motion.div 
+                  key={index} 
+                  className="rounded-lg bg-purple-50/50 p-4 dark:bg-purple-900/10 hover:shadow-md transition-all duration-300"
+                  whileHover={{ 
+                    scale: 1.03, 
+                    backgroundColor: "rgba(168, 85, 247, 0.08)",
+                    boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)" 
+                  }}
+                >
                   <div className="mb-2">
                     <span className="font-medium text-purple-700 dark:text-purple-300">Stone:</span>
                     <span className="ml-2 text-gray-700 dark:text-gray-300">{item.stone.charAt(0).toUpperCase() + item.stone.slice(1)}</span>
@@ -243,7 +303,7 @@ export function DailyStars({ userId }: DailyStarsProps) {
                       <span className="ml-2 text-gray-700 dark:text-gray-300">{item.purpose.charAt(0).toUpperCase() + item.purpose.slice(1)}</span>
                     </div>
                   )}
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -269,31 +329,122 @@ export function DailyStars({ userId }: DailyStarsProps) {
       );
     } else if (typeof value === 'string') {
       return (
-        <p className="border-l-2 border-purple-200 pl-4 text-base leading-relaxed text-gray-600 transition-colors duration-300 hover:border-purple-400 dark:border-purple-800/30 dark:text-gray-300 dark:hover:border-purple-600/50">
+        <motion.p 
+          className="border-l-2 border-purple-200 pl-4 text-base leading-relaxed text-gray-600 transition-colors duration-300 hover:border-purple-400 dark:border-purple-800/30 dark:text-gray-300 dark:hover:border-purple-600/50"
+          whileHover={{ x: 3, borderLeftColor: "rgb(168, 85, 247)" }}
+        >
           {value.charAt(0).toUpperCase() + value.slice(1)}
-        </p>
+        </motion.p>
       );
     }
-    return <>{String(value).charAt(0).toUpperCase() + String(value).slice(1)}</>;
+    return String(value).charAt(0).toUpperCase() + String(value).slice(1);
   };
 
   return (
-    <div>
-      {todayReadings &&
-        Object.entries(todayReadings).map(([key, value]) => (
-          <div key={key} className={cardStyle}>
-            <h3 className="mb-5 flex items-center gap-2 text-xl font-medium text-gray-900 dark:text-white">
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400">
-                ✧
-              </span>
-              {key
-                .split('_')
-                .map(word => word.charAt(0).toLowerCase() + word.slice(1))
-                .join(' ')}
-            </h3>
-            {renderValue(value)}
-          </div>
-        ))}
+    <div className="space-y-6 px-4 py-6">
+      {/* Refreshing indicator */}
+      <AnimatePresence>
+        {refreshing && (
+          <motion.div 
+            className="flex justify-center"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+          >
+            <div className="px-4 py-2 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full text-sm flex items-center">
+              <Sparkles className="mr-2 animate-pulse" size={16} />
+              Refreshing your cosmic guidance...
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Content */}
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="space-y-6"
+      >
+        {todayReadings &&
+          Object.entries(todayReadings).map(([key, value], index) => (
+            <motion.div 
+              key={key} 
+              variants={cardVariants}
+              className="rounded-xl bg-white dark:bg-gray-900 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden"
+            >
+              {/* Improved header styling for better visibility */}
+              <div className="bg-gradient-to-r from-purple-500/10 to-indigo-500/10 dark:from-purple-900/20 dark:to-indigo-900/20 px-6 py-4 border-b border-purple-100 dark:border-purple-900/30">
+                <h3 className="flex items-center gap-2 text-xl font-semibold text-gray-900 dark:text-white">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400">
+                    ✧
+                  </span>
+                  {key
+                    .split('_')
+                    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(' ')}
+                </h3>
+              </div>
+              
+              {/* Content section with improved styling for dosha elements */}
+              <div className="px-6 py-5">
+                {typeof value === 'object' && value !== null && !Array.isArray(value) && 
+                 Object.keys(value).length > 0 && 
+                 Object.keys(value).every(k => ['वात', 'पित्त', 'कफ'].includes(k)) ? (
+                  <div className="space-y-6">
+                    {Object.entries(value).map(([doshaKey, doshaValue]) => (
+                      <div key={doshaKey} className="space-y-3">
+                        {/* Enhanced dosha header */}
+                        <h4 className="text-lg font-medium text-purple-700 dark:text-purple-400 flex items-center">
+                          <span className="inline-block h-2 w-2 rounded-full bg-purple-500 mr-2"></span>
+                          {doshaKey}
+                        </h4>
+                        
+                        {/* Dosha content with improved styling */}
+                        {typeof doshaValue === 'object' && doshaValue !== null && (
+                          <div className="ml-4 space-y-4">
+                            {Object.entries(doshaValue as object).map(([subKey, subValue]) => (
+                              <div key={subKey} className="space-y-2">
+                                <h5 className="text-base font-medium text-gray-700 dark:text-gray-300 flex items-center">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-purple-300 dark:bg-purple-700 mr-2"></span>
+                                  {subKey}
+                                </h5>
+                                <div className="ml-3.5 border-l-2 border-purple-200 dark:border-purple-800/30 pl-4">
+                                  <p className="text-gray-600 dark:text-gray-400">
+                                    {String(subValue)}
+                                  </p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  renderValue(value)
+                )}
+              </div>
+            </motion.div>
+          ))}
+      </motion.div>
+      
+      {/* Refresh button */}
+      <div className="flex justify-center pt-4">
+        <button
+          onClick={handleRefresh}
+          disabled={refreshing}
+          className={`px-4 py-2 rounded-full flex items-center ${refreshing 
+            ? 'bg-purple-100 text-purple-400 dark:bg-purple-900/30 dark:text-purple-300' 
+            : 'bg-purple-100 text-purple-600 hover:bg-purple-200 dark:bg-purple-900/30 dark:text-purple-400 dark:hover:bg-purple-800/40'}`}
+        >
+          <RefreshCw 
+            size={18} 
+            className={`mr-2 ${refreshing ? 'animate-spin' : ''}`} 
+          />
+          {refreshing ? 'Refreshing...' : 'Refresh Readings'}
+        </button>
+      </div>
     </div>
   );
 }
