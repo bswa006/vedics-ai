@@ -48,6 +48,7 @@ export const useUserData = () => {
         preferred_language: profileResponse.preferred_language,
         area_of_interests: profileResponse.area_of_interests,
         long_term_reading_status: profileResponse.long_term_reading_status,
+        email_opt_in: profileResponse.email_opt_in,
         is_deleted: profileResponse.is_deleted,
         created_at: profileResponse.created_at,
         updated_at: profileResponse.updated_at

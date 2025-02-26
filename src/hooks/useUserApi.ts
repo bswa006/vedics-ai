@@ -7,6 +7,7 @@ interface UpdateProfileData {
   place_of_birth?: string;
   preferred_language?: string;
   area_of_interests?: string[];
+  email_opt_in?: boolean;
 }
 
 export const useUserApi = () => {

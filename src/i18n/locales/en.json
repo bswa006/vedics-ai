@@ -47,7 +47,8 @@
     "yes": "yes",
     "no": "no",
     "confirm": "confirm",
-    "logout": "Logout"
+    "logout": "Logout",
+    "saved": "Saved"
   },
   "login": {
     "errors": {
@@ -102,7 +103,11 @@
     "firstNameHelp": "Your given name or first name",
     "lastNamePlaceholder": "Enter your last name",
     "lastNameHelp": "Your family name or surname",
-    "preferredLanguageHelp": "Choose your preferred language for the app"
+    "preferredLanguageHelp": "Choose your preferred language for the app",
+    "emailNotifications": "Email Notifications",
+    "emailNotificationsDescription": "Receive important updates and insights via email",
+    "emailNotificationsEnabled": "You will receive email notifications about important updates",
+    "emailNotificationsDisabled": "You will not receive email notifications"
   },
   "birthDetails": {
     "birthDate": "birth date",

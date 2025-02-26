@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { AlertCircle, Calendar, Languages, User as UserIcon } from 'lucide-react';
+import { AlertCircle, Calendar, Languages, User as UserIcon, Bell } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../services/api';
@@ -30,6 +30,7 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
     place_of_birth: user.place_of_birth || '',
     preferred_language: user.preferred_language,
     area_of_interests: user.area_of_interests || [],
+    email_opt_in: user.email_opt_in || false,
   });
 
   const formRef = useRef<HTMLFormElement>(null);
@@ -86,6 +87,7 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
         place_of_birth: formData.place_of_birth,
         preferred_language: formData.preferred_language,
         area_of_interests: formData.area_of_interests,
+        email_opt_in: formData.email_opt_in,
       });
 
       await onUpdate();
@@ -268,6 +270,33 @@ export function EditableProfile({ user, onUpdate, onCancel }: EditableProfilePro
                   <p className="mt-2 text-sm font-medium text-red-500">{fieldErrors.place_of_birth}</p>
                 )}
                 </div>
+              </div>
+              <div className="space-y-2 mt-4">
+                <div className="flex items-center justify-between">
+                  <label className="flex items-center gap-3 text-sm font-medium text-gray-300">
+                    <Bell className="h-4 w-4 text-celestialLilac/70" />
+                    {t('profile.emailNotifications')}
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, email_opt_in: !formData.email_opt_in })}
+                    className={`relative inline-flex h-7 w-14 cursor-pointer items-center rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-celestialLilac/40 ${
+                      formData.email_opt_in ? 'bg-celestialLilac' : 'bg-gray-700'
+                    }`}
+                    aria-label={formData.email_opt_in ? t('common.disable') : t('common.enable')}
+                  >
+                    <span
+                      className={`${
+                        formData.email_opt_in ? 'translate-x-8' : 'translate-x-1'
+                      } inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300`}
+                    />
+                  </button>
+                </div>
+                <p className="text-sm text-gray-400">
+                  {formData.email_opt_in 
+                    ? t('profile.emailNotificationsEnabled') 
+                    : t('profile.emailNotificationsDisabled')}
+                </p>
               </div>
             </div>
           </div>

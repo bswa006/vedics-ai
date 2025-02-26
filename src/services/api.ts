@@ -90,6 +90,7 @@ export interface UserProfile {
   preferred_language: string;
   area_of_interests: string[];
   long_term_reading_status: string;
+  email_opt_in: boolean;
   is_deleted: boolean;
   created_at: string;
   updated_at: string;

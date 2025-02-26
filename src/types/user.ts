@@ -4,6 +4,7 @@ export interface UserDetails {
   first_name: string;
   last_name: string;
   email: string;
+  email_opt_in: boolean;
 }
 
 export interface User {
@@ -18,6 +19,7 @@ export interface User {
   is_deleted: boolean;
   created_at: string;
   updated_at: string;
+  email_opt_in?: boolean;
 }
 
 export interface UserProfile {

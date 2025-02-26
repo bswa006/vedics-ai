@@ -58,7 +58,29 @@ export function PredictionContent({
   `;
 
   const renderArrayContent = (items: any[], className?: string) => {
-    // Convert items to strings and ensure they are valid
+    // Handle array of objects
+    if (items.length > 0 && typeof items[0] === 'object') {
+      return (
+        <div className="space-y-3 w-full">
+          {items.map((item, index) => (
+            <div key={index} className="rounded-lg bg-purple-50/50 p-4 dark:bg-purple-900/10">
+              {Object.entries(item).map(([key, value]) => (
+                <div key={key} className="mb-2 last:mb-0">
+                  <span className="font-medium text-purple-700 dark:text-purple-300">
+                    {key.split('_').map(w => w[0].toUpperCase() + w.slice(1)).join(' ')}:
+                  </span>
+                  <span className="ml-2 text-gray-700 dark:text-gray-300">
+                    {Array.isArray(value) ? value.join(', ') : String(value)}
+                  </span>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    // Existing string array handling
     const stringItems = items.map(item => {
       if (typeof item === 'string') return item;
       if (typeof item === 'number') return item.toString();
@@ -72,37 +94,126 @@ export function PredictionContent({
       return stringItems.map((item, index) => (
         <span
           key={index}
-          className={
-            className ||
-            'mb-2 mr-2 inline-flex items-center gap-1.5 rounded-full bg-purple-100/80 py-1 pl-2 pr-3 text-sm font-medium text-purple-700 transition-all duration-300 hover:-translate-y-0.5 hover:bg-purple-200/90 dark:bg-purple-900/30 dark:text-purple-300 dark:hover:bg-purple-800/40'
-          }
+          className={className || `mb-2 mr-2 inline-flex items-center gap-1.5 rounded-full bg-purple-100/80 py-1 pl-2 pr-3 text-sm font-medium text-purple-700 transition-all duration-300 hover:-translate-y-0.5 hover:bg-purple-200/90 dark:bg-purple-900/30 dark:text-purple-300 dark:hover:bg-purple-800/40`}
         >
           {item}
         </span>
       ));
-    } else {
-      return (
-        <ul className="ml-1 list-none space-y-3">
-          {stringItems.map((item, index) => (
-            <li
-              key={index}
-              className="group/item -ml-2 flex items-start gap-3 rounded-lg p-2 transition-all duration-300 hover:bg-purple-50 dark:hover:bg-purple-900/20"
-            >
-              <span className="mt-1 text-purple-400 dark:text-purple-500">✦</span>
-              <span className="text-gray-700 transition-colors duration-300 group-hover/item:text-purple-700 dark:text-gray-200 dark:group-hover/item:text-purple-300">
-                {item}
-              </span>
-            </li>
-          ))}
-        </ul>
-      );
     }
+
+    return (
+      <ul className="ml-1 list-none space-y-3">
+        {stringItems.map((item, index) => (
+          <li
+            key={index}
+            className="group/item -ml-2 flex items-start gap-3 rounded-lg p-2 transition-all duration-300 hover:bg-purple-50 dark:hover:bg-purple-900/20"
+          >
+            <span className="mt-1 text-purple-400 dark:text-purple-500">✦</span>
+            <span className="text-gray-700 transition-colors duration-300 group-hover/item:text-purple-700 dark:text-gray-200 dark:group-hover/item:text-purple-300">
+              {item}
+            </span>
+          </li>
+        ))}
+      </ul>
+    );
   };
 
   const renderValue = (value: any, key: string): JSX.Element | JSX.Element[] => {
     if (Array.isArray(value)) {
+      // Handle array of objects with specific structures
+      if (typeof value[0] === 'object') {
+        return (
+          <div className="space-y-4">
+            {value.map((item, index) => {
+              // Handle mood_cycles structure
+              if ('quality' in item && 'time_window' in item) {
+                return (
+                  <div 
+                    key={index} 
+                    className="rounded-lg bg-purple-50/50 p-4 dark:bg-purple-900/10"
+                  >
+                    <div className="mb-2">
+                      <span className="font-medium text-purple-700 dark:text-purple-300">Quality: </span>
+                      <span className="text-gray-700 dark:text-gray-300">{item.quality}</span>
+                    </div>
+                    <div className="mb-2">
+                      <span className="font-medium text-purple-700 dark:text-purple-300">Time Window: </span>
+                      <span className="text-gray-700 dark:text-gray-300">{item.time_window}</span>
+                    </div>
+                    {item.planetary_influence && (
+                      <div>
+                        <span className="font-medium text-purple-700 dark:text-purple-300">Planetary Influence: </span>
+                        <span className="text-gray-700 dark:text-gray-300">{item.planetary_influence}</span>
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+              // Handle crystal_recommendations structure
+              if ('stone' in item && 'usage' in item) {
+                return (
+                  <div 
+                    key={index} 
+                    className="rounded-lg bg-purple-50/50 p-4 dark:bg-purple-900/10"
+                  >
+                    <div className="mb-2">
+                      <span className="font-medium text-purple-700 dark:text-purple-300">Stone: </span>
+                      <span className="text-gray-700 dark:text-gray-300">{item.stone}</span>
+                    </div>
+                    <div className="mb-2">
+                      <span className="font-medium text-purple-700 dark:text-purple-300">Usage: </span>
+                      <span className="text-gray-700 dark:text-gray-300">{item.usage}</span>
+                    </div>
+                    {item.purpose && (
+                      <div>
+                        <span className="font-medium text-purple-700 dark:text-purple-300">Purpose: </span>
+                        <span className="text-gray-700 dark:text-gray-300">{item.purpose}</span>
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+              // Default object rendering
+              return (
+                <div 
+                  key={index} 
+                  className="rounded-lg bg-purple-50/50 p-4 dark:bg-purple-900/10"
+                >
+                  {Object.entries(item).map(([subKey, subValue]) => (
+                    <div key={subKey} className="mb-2">
+                      <span className="font-medium text-purple-700 dark:text-purple-300">
+                        {subKey.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}:
+                      </span>
+                      <span className="ml-2 text-gray-700 dark:text-gray-300">
+                        {String(subValue)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              );
+            })}
+          </div>
+        );
+      }
+      // Handle regular arrays
       return <div className="flex flex-wrap gap-2">{renderArrayContent(value)}</div>;
     } else if (typeof value === 'object' && value !== null) {
+      // Handle nested objects with potential levels
+      if (value.level && value.advice) {
+        return (
+          <div className="mb-4 rounded-lg bg-purple-50/50 p-4 dark:bg-purple-900/10">
+            <div className="mb-2">
+              <span className="font-medium text-purple-700 dark:text-purple-300">Level: </span>
+              <span className="text-gray-700 dark:text-gray-300">{value.level}</span>
+            </div>
+            <div>
+              <span className="font-medium text-purple-700 dark:text-purple-300">Advice: </span>
+              <span className="text-gray-700 dark:text-gray-300">{value.advice}</span>
+            </div>
+          </div>
+        );
+      }
+      // Handle regular nested objects
       return Object.entries(value).map(([subKey, subValue]) => (
         <div key={subKey} className="mt-4">
           <h4 className="mb-3 flex items-center gap-2 text-base font-medium text-gray-800 dark:text-gray-100">

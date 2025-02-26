@@ -1,16 +1,48 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { AlertCircle, Calendar, Languages, MapPin, User as UserIcon } from 'lucide-react';
-import { useState } from 'react';
+import { AlertCircle, Calendar, Languages, MapPin, User as UserIcon, Bell, CheckCircle } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useUserDataContext } from '../../contexts/UserDataContext';
 import { theme } from '../../styles/theme';
 import { utcToLocal } from '../../utils/dateTime';
 import { EditableProfile } from './EditableProfile';
+import { useUserApi } from '../../hooks/useUserApi';
+import { useNavigate } from 'react-router-dom';
+import { User } from '../../types/user';
 
 export function Profile() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { userData, error, fetchUserData, loading } = useUserDataContext();
+  const { updateProfile } = useUserApi();
   const [isEditing, setIsEditing] = useState(false);
+  const [isEmailEnabled, setIsEmailEnabled] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  useEffect(() => {
+    if (userData) {
+      setIsEmailEnabled(!!userData.email_opt_in);
+    }
+  }, [userData]);
+
+  const handleEmailToggle = async () => {
+    if (!userData) return;
+    
+    setIsUpdating(true);
+    try {
+      await updateProfile(userData.id, {
+        email_opt_in: !isEmailEnabled
+      });
+      setIsEmailEnabled(!isEmailEnabled);
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 3000);
+    } catch (error) {
+      console.error('Failed to update email preferences:', error);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
 
   if (error) {
     return (
@@ -76,36 +108,92 @@ export function Profile() {
               exit={{ opacity: 0 }}
               className="space-y-8"
             >
-              {/* Header */}
-              <div className="flex items-center justify-between">
-                <div className="space-y-1">
-                  <motion.h1
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="text-3xl font-light tracking-tight text-white"
-                    style={{
-                      fontFamily: theme.typography.heading.fontFamily,
-                      fontWeight: theme.typography.heading.weights.medium,
-                    }}
+              {/* Header with Email Notifications */}
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-1">
+                    <motion.h1
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      className="text-3xl font-light tracking-tight text-white"
+                    >
+                      {t('profile.title')}
+                    </motion.h1>
+                    <p className="text-gray-300">{t('profile.subtitle')}</p>
+                  </div>
+
+                  <motion.button
+                    onClick={() => setIsEditing(true)}
+                    className="group relative overflow-hidden rounded-xl p-[1px]"
+                    style={{ background: theme.gradients.primary }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                   >
-                    {t('profile.title')}
-                  </motion.h1>
-                  <p className="text-gray-300">{t('profile.subtitle')}</p>
+                    <div className="bg-midnightIndigo relative rounded-xl px-6 py-2 transition-all group-hover:bg-transparent">
+                      <span className="relative z-10 text-sm font-medium text-white">
+                        {t('profile.edit')}
+                      </span>
+                    </div>
+                  </motion.button>
                 </div>
 
-                <motion.button
-                  onClick={() => setIsEditing(true)}
-                  className="group relative overflow-hidden rounded-xl p-[1px]"
-                  style={{ background: theme.gradients.primary }}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                {/* Email Notifications Toggle */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl"
                 >
-                  <div className="bg-midnightIndigo relative rounded-xl px-6 py-2 transition-all group-hover:bg-transparent">
-                    <span className="relative z-10 text-sm font-medium text-white">
-                      {t('profile.edit')}
-                    </span>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="rounded-full bg-purple-100/10 p-3">
+                        <Bell className="h-5 w-5 text-purple-300" />
+                      </div>
+                      <div>
+                        <h3 className="text-base font-medium text-white">
+                          {t('profile.emailNotifications')}
+                        </h3>
+                        <p className="text-sm text-gray-400">
+                          {isEmailEnabled 
+                            ? t('profile.emailNotificationsEnabled') 
+                            : t('profile.emailNotificationsDisabled')}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-3">
+                      {showSuccess && (
+                        <motion.div
+                          initial={{ opacity: 0, x: 20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0 }}
+                          className="text-sm text-green-400 flex items-center"
+                        >
+                          <CheckCircle className="h-4 w-4 mr-1" />
+                          {t('common.saved')}
+                        </motion.div>
+                      )}
+                      
+                      <button
+                        onClick={handleEmailToggle}
+                        disabled={isUpdating}
+                        className={`relative inline-flex h-7 w-14 cursor-pointer items-center rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-purple-400 ${
+                          isEmailEnabled ? 'bg-purple-600' : 'bg-gray-700'
+                        }`}
+                      >
+                        {isUpdating && (
+                          <span className="absolute inset-0 flex items-center justify-center">
+                            <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
+                          </span>
+                        )}
+                        <span
+                          className={`${
+                            isEmailEnabled ? 'translate-x-8' : 'translate-x-1'
+                          } inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300`}
+                        />
+                      </button>
+                    </div>
                   </div>
-                </motion.button>
+                </motion.div>
               </div>
 
               {/* Profile Cards */}
@@ -188,7 +276,6 @@ export function Profile() {
                     </h3>
                     <div className="space-y-6">
                       {[
-
                         {
                           label: 'preferredLanguage',
                           value: userData.preferred_language,
